@@ -58,6 +58,14 @@
         -webkit-font-smoothing: antialiased;
       }
 
+      *::-webkit-scrollbar {
+        display: none;
+      }
+      * {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+
       body,
       .phone-container,
       .chat-header,
@@ -448,8 +456,6 @@
         width: 100%;
         height: 100%;
         background: var(--modal-overlay);
-        -webkit-backdrop-filter: blur(2px);
-        backdrop-filter: blur(2px);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -694,7 +700,9 @@
         background: var(--input-bg);
         cursor: pointer;
         white-space: nowrap;
-        transition: background 0.2s, color 0.2s;
+        transition:
+          background 0.2s,
+          color 0.2s;
       }
       .filter-tag.active {
         background: var(--text-main);
@@ -716,7 +724,7 @@
         background: var(--bg-color);
         border: 1px solid var(--border-color);
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         display: none;
         flex-direction: column;
         z-index: 150;
@@ -782,6 +790,13 @@
         font-weight: 600;
         color: var(--text-main);
       }
+      .folder-header.selected {
+        background-color: var(--text-sub);
+        color: var(--bg-color);
+      }
+      .folder-header.selected .folder-chevron {
+        color: var(--bg-color);
+      }
       .folder-header .folder-chevron {
         width: 14px;
         height: 14px;
@@ -816,7 +831,14 @@
         transition: background-color 0.2s;
       }
       .card-item.selected {
-        background-color: var(--border-color);
+        background-color: var(--text-sub);
+      }
+      .card-item.selected .card-text {
+        color: var(--bg-color);
+      }
+      .card-item.selected .card-tag-mini {
+        color: var(--bg-color);
+        border-color: var(--bg-color);
       }
 
       .card-content {
@@ -843,7 +865,7 @@
         border-radius: 4px;
         flex-shrink: 0;
       }
-      
+
       .sentinel {
         height: 20px;
         text-align: center;
@@ -1287,7 +1309,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Settings modal -->
     <div class="modal-overlay" id="settingsModal" style="z-index: 110">
       <div class="modal-content">
@@ -1299,6 +1321,32 @@
             id="readNoReplyToggle"
             onclick="toggleReadNoReply()"
           ></div>
+        </div>
+        <div class="setting-item">
+          <span class="setting-label">Reply Frequency</span>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <input
+              type="range"
+              id="replyFreqSlider"
+              min="10"
+              max="100"
+              value="50"
+              style="
+                width: 90px;
+                height: 4px;
+                accent-color: var(--text-main);
+                outline: none;
+                cursor: pointer;
+              "
+              oninput="updateReplyFreq()"
+            />
+            <span
+              class="setting-value"
+              id="replyFreqValue"
+              style="min-width: 32px; text-align: right"
+              >50%</span
+            >
+          </div>
         </div>
         <div class="setting-item">
           <span class="setting-label">Auto Reply Cards</span>
@@ -1323,52 +1371,165 @@
 
     <!-- Word card library modal -->
     <div class="modal-overlay" id="wordCardModal" style="z-index: 120">
-      <div class="modal-content" style="width: 320px; height: 85%; padding: 15px;">
-        
+      <div
+        class="modal-content"
+        style="width: 320px; height: 85%; padding: 15px"
+      >
         <!-- Header: Back Btn, Title, Top Icons -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-shrink: 0;">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+          "
+        >
           <!-- Back Button -->
           <svg
-            width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            style="cursor: pointer; color: var(--icon-color);"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            style="cursor: pointer; color: var(--icon-color)"
             onclick="backToSettings()"
           >
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
-          
-          <div class="modal-title" style="margin: 0; flex: 1; text-align: left; padding-left: 10px;">Word Cards</div>
-          
+
+          <div
+            class="modal-title"
+            style="
+              margin: 0;
+              flex: 1;
+              text-align: left;
+              padding-left: 10px;
+              cursor: pointer;
+            "
+            onclick="scrollToTagStart()"
+            title="Scroll to All"
+          >
+            Word Cards
+          </div>
+
           <!-- Top Icons -->
           <div class="card-top-icons">
             <!-- Tag Batch -->
-            <svg id="icon-tag" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="batchTagCards()" title="Batch Tag">
-              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+            <svg
+              id="icon-tag"
+              style="display: none"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              onclick="batchTagCards()"
+              title="Batch Tag"
+            >
+              <path
+                d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"
+              ></path>
               <line x1="7" y1="7" x2="7.01" y2="7"></line>
             </svg>
             <!-- Delete Batch -->
-            <svg id="icon-delete" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="batchDeleteCards()" title="Delete Selected">
+            <svg
+              id="icon-delete"
+              style="display: none"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              onclick="batchDeleteCards()"
+              title="Delete Selected"
+            >
               <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <path
+                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+              ></path>
             </svg>
-            
+            <!-- Select All Batch -->
+            <svg
+              id="icon-select-all"
+              style="display: none"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              onclick="selectAllCards()"
+              title="Select All"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="8 12 11 15 16 9"></polyline>
+            </svg>
+
+            <!-- Tools / Database -->
+            <svg
+              id="icon-tools"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              onclick="openCardDataModal()"
+              title="Card Tools"
+            >
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+              ></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+
             <!-- Select Mode Toggle -->
-            <svg id="icon-select" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="toggleSelectMode()" title="Select Mode">
+            <svg
+              id="icon-select"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              onclick="toggleSelectMode()"
+              title="Select Mode"
+            >
               <path d="M9 11l3 3L22 4"></path>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              <path
+                d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+              ></path>
             </svg>
             <!-- Import -->
-            <svg id="icon-import" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="importCardsTxt()" title="Import">
+            <svg
+              id="icon-import"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              onclick="importCardsTxt()"
+              title="Import"
+            >
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
             <!-- Export -->
-            <svg id="icon-export" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="exportCardsTxt()" title="Export">
+            <svg
+              id="icon-export"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              onclick="exportCardsTxt()"
+              title="Export"
+            >
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="17 8 12 3 7 8"></polyline>
               <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
-            <input type="file" id="importCardFile" accept=".txt" style="display: none" onchange="handleImportCards(event)"/>
+            <input
+              type="file"
+              id="importCardFile"
+              accept=".txt"
+              style="display: none"
+              onchange="handleImportCards(event)"
+            />
           </div>
         </div>
 
@@ -1382,7 +1543,10 @@
         <div class="card-list" id="cardList"></div>
 
         <!-- Add card input bar -->
-        <div class="sleek-actions" style="display: flex; margin-top: 10px; flex-shrink: 0;">
+        <div
+          class="sleek-actions"
+          style="display: flex; margin-top: 10px; flex-shrink: 0"
+        >
           <input
             type="text"
             class="modal-input"
@@ -1396,7 +1560,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Batch tag modal -->
     <div class="modal-overlay" id="tagPromptModal" style="z-index: 130">
       <div class="modal-content" style="width: 240px">
@@ -1408,6 +1572,11 @@
           placeholder="e.g. daily, question..."
           autocomplete="off"
         />
+        <div
+          class="saves-list"
+          id="quickTagList"
+          style="max-height: 100px; margin-top: 5px"
+        ></div>
         <div class="modal-actions sleek-actions">
           <button
             class="modal-btn btn-cancel"
@@ -1426,10 +1595,22 @@
     <div class="modal-overlay" id="addTagModal" style="z-index: 130">
       <div class="modal-content" style="width: 240px">
         <div class="modal-title">New Tag</div>
-        <input type="text" class="modal-input" id="addTagInput" autocomplete="off" />
+        <input
+          type="text"
+          class="modal-input"
+          id="addTagInput"
+          autocomplete="off"
+        />
         <div class="modal-actions sleek-actions">
-          <button class="modal-btn btn-cancel" onclick="closeModal('addTagModal')">Cancel</button>
-          <button class="modal-btn btn-save" onclick="confirmAddTag()">Add</button>
+          <button
+            class="modal-btn btn-cancel"
+            onclick="closeModal('addTagModal')"
+          >
+            Cancel
+          </button>
+          <button class="modal-btn btn-save" onclick="confirmAddTag()">
+            Add
+          </button>
         </div>
       </div>
     </div>
@@ -1438,13 +1619,118 @@
     <div class="modal-overlay" id="tagManageModal" style="z-index: 130">
       <div class="modal-content" style="width: 240px">
         <div class="modal-title">Manage Tag</div>
-        <input type="text" class="modal-input" id="manageTagInput" autocomplete="off" />
-        <div class="modal-actions sleek-actions" style="flex-direction: column;">
-          <div style="display: flex; gap: 8px; width: 100%;">
-            <button class="modal-btn btn-cancel" onclick="closeModal('tagManageModal')">Cancel</button>
-            <button class="modal-btn btn-save" onclick="saveTagRename()">Save</button>
+        <input
+          type="text"
+          class="modal-input"
+          id="manageTagInput"
+          autocomplete="off"
+        />
+        <div class="modal-actions sleek-actions" style="flex-direction: column">
+          <div style="display: flex; gap: 8px; width: 100%">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('tagManageModal')"
+            >
+              Cancel
+            </button>
+            <button class="modal-btn btn-save" onclick="saveTagRename()">
+              Save
+            </button>
           </div>
-          <button class="modal-btn btn-danger" style="width: 100%;" onclick="deleteCurrentTag()">Delete Tag</button>
+          <button
+            class="modal-btn btn-danger"
+            style="width: 100%"
+            onclick="deleteCurrentTag()"
+          >
+            Delete Tag
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Card Data & Tools Modal -->
+    <div class="modal-overlay" id="cardDataModal" style="z-index: 130">
+      <div class="modal-content">
+        <div class="modal-title">Card Presets & Tools</div>
+        <div
+          class="modal-subtitle"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <span>Presets</span>
+          <span
+            style="cursor: pointer; color: var(--text-main)"
+            onclick="openSaveCardNameModal()"
+            >+ Save Current</span
+          >
+        </div>
+        <div class="saves-list" id="cardSavesList"></div>
+        <div class="modal-subtitle">Tools</div>
+        <div class="modal-actions sleek-actions">
+          <button class="modal-btn btn-danger" onclick="deduplicateCards()">
+            One-Click Deduplicate
+          </button>
+        </div>
+        <div class="modal-actions">
+          <button
+            class="modal-btn btn-save"
+            onclick="closeModal('cardDataModal')"
+            style="width: 100%"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Card Preset Name Modal -->
+    <div class="modal-overlay" id="saveCardNameModal" style="z-index: 140">
+      <div class="modal-content">
+        <div class="modal-title">Name Your Preset</div>
+        <input
+          type="text"
+          class="modal-input"
+          id="saveCardNameInput"
+          placeholder="e.g. English Vocab"
+          autocomplete="off"
+        />
+        <div class="modal-actions sleek-actions">
+          <button
+            class="modal-btn btn-cancel"
+            onclick="closeModal('saveCardNameModal')"
+          >
+            Cancel
+          </button>
+          <button class="modal-btn btn-save" onclick="saveCurrentCards()">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal-overlay" id="alertModal" style="z-index: 150">
+      <div class="modal-content" style="width: 220px">
+        <div class="modal-title" style="margin-bottom: 10px">Notice</div>
+        <div
+          id="alertMessage"
+          style="
+            font-size: 12px;
+            text-align: center;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+          "
+        ></div>
+        <div class="modal-actions sleek-actions">
+          <button
+            class="modal-btn btn-save"
+            onclick="closeModal('alertModal')"
+            style="width: 100%"
+          >
+            OK
+          </button>
         </div>
       </div>
     </div>
@@ -1489,13 +1775,26 @@
         addTagInput: document.getElementById("addTagInput"),
         manageTagInput: document.getElementById("manageTagInput"),
         allTagDropdown: document.getElementById("allTagDropdown"),
-        
+
         // Word Card Icons
         iconTag: document.getElementById("icon-tag"),
         iconDelete: document.getElementById("icon-delete"),
         iconSelect: document.getElementById("icon-select"),
         iconImport: document.getElementById("icon-import"),
         iconExport: document.getElementById("icon-export"),
+
+        iconSelectAll: document.getElementById("icon-select-all"),
+        iconTools: document.getElementById("icon-tools"),
+        quickTagList: document.getElementById("quickTagList"),
+        cardDataModal: document.getElementById("cardDataModal"),
+        saveCardNameModal: document.getElementById("saveCardNameModal"),
+        saveCardNameInput: document.getElementById("saveCardNameInput"),
+        cardSavesList: document.getElementById("cardSavesList"),
+        alertModal: document.getElementById("alertModal"),
+        alertMessage: document.getElementById("alertMessage"),
+
+        replyFreqSlider: document.getElementById("replyFreqSlider"),
+        replyFreqValue: document.getElementById("replyFreqValue"),
       };
 
       // ==================== Storage Helper ====================
@@ -1545,17 +1844,37 @@
         isCharPerspective: false,
         currentFilterTag: "All",
         isSelectMode: false,
-        chatSettings: Storage.get("chatSettings", { readNoReply: false }),
+        chatSettings: Storage.get("chatSettings", {
+          readNoReply: false,
+          replyFrequency: 50,
+        }),
+        chattiness: Math.random(), // 每次刷新随机生成的话痨度 (0.0~1.0)
+        charReplying: false, // Char 是否正在处理回复
+        interruptFlag: false, // 用户打断标记
+        userSpamCount: 0, // 用户连续发送消息次数
+        lastUserMessageText: "",
         wordCards: Storage.get("wordCards", []),
         customTags: Storage.get("customTags", []),
         expandedFolders: new Set(),
-        managingTag: null
+        managingTag: null,
       };
 
       // ==================== Initialization ====================
       if (state.chatSettings.readNoReply)
         DOM.readNoReplyToggle.classList.add("active");
       updateActiveCardCount();
+
+      if (DOM.replyFreqSlider) {
+        DOM.replyFreqSlider.value = state.chatSettings.replyFrequency || 50;
+        DOM.replyFreqValue.textContent = DOM.replyFreqSlider.value + "%";
+      }
+
+      function updateReplyFreq() {
+        const val = DOM.replyFreqSlider.value;
+        DOM.replyFreqValue.textContent = val + "%";
+        state.chatSettings.replyFrequency = parseInt(val);
+        Storage.set("chatSettings", state.chatSettings);
+      }
 
       // ==================== Utility Functions ====================
       function generateId() {
@@ -1568,7 +1887,13 @@
         return div.innerHTML;
       }
 
-      function createMessageElement(text, className, isQuote = false, quoteId = null) {
+      function createMessageElement(
+        text,
+        className,
+        isQuote = false,
+        quoteId = null,
+        quoteText = null,
+      ) {
         const messageDiv = document.createElement("div");
         messageDiv.className = `message ${className}`;
         messageDiv.id = generateId();
@@ -1577,7 +1902,9 @@
           const quoteDiv = document.createElement("div");
           quoteDiv.classList.add("quote-box");
           quoteDiv.setAttribute("data-target-id", quoteId);
-          quoteDiv.textContent = text.length > 20 ? text.substring(0, 20) + "..." : text;
+          const qt = quoteText || text;
+          quoteDiv.textContent =
+            qt.length > 20 ? qt.substring(0, 20) + "..." : qt;
           messageDiv.appendChild(quoteDiv);
         }
 
@@ -1701,7 +2028,10 @@
           closeToolbar();
         if (!e.target.closest(".plus-menu") && !e.target.closest(".icon-btn"))
           closePlusMenu();
-        if (!e.target.closest(".card-filter-bar") && !e.target.closest("#allTagDropdown")) {
+        if (
+          !e.target.closest(".card-filter-bar") &&
+          !e.target.closest("#allTagDropdown")
+        ) {
           DOM.allTagDropdown.classList.remove("active");
         }
       });
@@ -1848,7 +2178,6 @@
       }
 
       /* ================= Auto Reply & Typing ================= */
-      let isReplying = false;
 
       function showTypingIndicator() {
         if (document.getElementById("typingIndicator")) return;
@@ -1865,44 +2194,185 @@
         if (indicator) indicator.remove();
       }
 
-      async function triggerAutoReply() {
-        if (isReplying) return;
-        const enabledCards = state.wordCards.filter((c) => c.enabled);
-        if (enabledCards.length === 0) return;
-
-        if (state.chatSettings.readNoReply && Math.random() < 0.3) return;
-
-        isReplying = true;
-        const msgCount = Math.random() < 0.7 ? 1 : 2;
-
-        for (let i = 0; i < msgCount; i++) {
-          const thinkTime = 800 + Math.random() * 1700;
-          showTypingIndicator();
-          await sleep(thinkTime);
-          hideTypingIndicator();
-
-          const drawCount = Math.random() < 0.2 ? 2 : 1;
-          let replyText = "";
-          for (let j = 0; j < drawCount; j++) {
-            const randomCard =
-              enabledCards[Math.floor(Math.random() * enabledCards.length)].text;
-            replyText += (j > 0 ? " " : "") + randomCard;
-          }
-          receiveAutoMessage(replyText);
-
-          if (i < msgCount - 1) {
-            await sleep(400 + Math.random() * 600);
-          }
-        }
-        isReplying = false;
-      }
-
-      function receiveAutoMessage(text) {
+      /* ================= Human-like Auto Reply Engine ================= */
+      function receiveAutoMessage(text, quoteId = null, quoteText = null) {
         addTimestampIfNeeded();
-        const messageDiv = createMessageElement(text, "received");
+        const messageDiv = createMessageElement(
+          text,
+          "received",
+          !!quoteId,
+          quoteId,
+          quoteText,
+        );
         DOM.chatMain.appendChild(messageDiv);
         scrollToBottom();
         saveChatHistory();
+      }
+
+      function findOlderMessageTarget(forceUser = false) {
+        const messages = Array.from(
+          DOM.chatMain.querySelectorAll(
+            ".message:not(.recalled-msg):not(.typing-indicator)",
+          ),
+        );
+        if (messages.length <= 2) return null;
+
+        messages.pop(); // 移除最新的一条，不引用刚发的
+
+        let validMessages = forceUser
+          ? messages.filter((m) => m.classList.contains("sent"))
+          : messages;
+        if (validMessages.length === 0) return null;
+
+        return validMessages[Math.floor(Math.random() * validMessages.length)];
+      }
+
+      async function processInterrupt(draftText) {
+        state.interruptFlag = false;
+        hideTypingIndicator();
+
+        // 判定已抽取的字卡是否发送 (70% 概率坚持发出去)
+        if (draftText && Math.random() < 0.7) {
+          receiveAutoMessage(draftText);
+          // 发送后，稍微停顿，然后针对用户的新消息重新开始思考
+          await sleep(800);
+        }
+
+        state.charReplying = false;
+        triggerAutoReply(state.lastUserMessageText); // 重新开始逻辑
+        return true;
+      }
+
+      async function generateCharContent(enabledCards) {
+        let finalContent = "";
+        let isCombining = true;
+
+        while (isCombining) {
+          let cardAccepted = false;
+          let cardText = "";
+
+          while (!cardAccepted) {
+            if (state.interruptFlag)
+              return { interrupted: true, text: finalContent };
+
+            cardText =
+              enabledCards[Math.floor(Math.random() * enabledCards.length)]
+                .text;
+            cardAccepted = Math.random() < 0.8; // 80% 满意该卡
+
+            if (!cardAccepted) {
+              // 犹豫拟真：显示输入中... 突然停止... 重新思考
+              showTypingIndicator();
+              await sleep(300 + Math.random() * 500);
+              hideTypingIndicator();
+              await sleep(400 + Math.random() * 600);
+            }
+          }
+
+          finalContent += (finalContent ? " " : "") + cardText;
+
+          // 组合句判定 (30% 概率追加)
+          isCombining = Math.random() < 0.3;
+          if (isCombining) await sleep(200); // 决定追加前的微小停顿
+        }
+        return { interrupted: false, text: finalContent };
+      }
+
+      async function triggerAutoReply(userMessageText) {
+        if (state.charReplying) return;
+        state.charReplying = true;
+        state.interruptFlag = false;
+
+        const enabledCards = state.wordCards.filter((c) => c.enabled);
+        if (enabledCards.length === 0) {
+          state.charReplying = false;
+          return;
+        }
+
+        // 1. 真实阅读延迟
+        const readDelay = userMessageText
+          ? Math.min(userMessageText.length * 40, 2500)
+          : 1000;
+        await sleep(readDelay + Math.random() * 500);
+        if (state.interruptFlag) {
+          await processInterrupt("");
+          return;
+        }
+
+        // 2. 回复意愿判定
+        if (state.chatSettings.readNoReply) {
+          const replyChance = 0.4 + state.chattiness * 0.5; // 受话痨度影响
+          if (Math.random() > replyChance) {
+            state.charReplying = false;
+            state.userSpamCount = 0;
+            return; // 已读不回
+          }
+        }
+
+        // 3. 消息构建与连发循环
+        let msgIndex = 0;
+        // 基础概率受设置中的频率影响 (50% 频率对应 0.8 基础概率)
+        let baseProb = 0.8 + (state.chatSettings.replyFrequency - 50) * 0.005;
+
+        while (true) {
+          if (state.interruptFlag) {
+            await processInterrupt("");
+            return;
+          }
+
+          // 连发概率衰减判定 (第一条不受限，后续每次递减 20%)
+          let currentProb = baseProb - msgIndex * 0.2;
+          if (msgIndex > 0 && Math.random() > currentProb) break;
+
+          // 4. 引用判定
+          let quoteId = null;
+          let quoteText = null;
+          if (msgIndex === 0) {
+            let targetMsg = null;
+            if (state.userSpamCount >= 3) {
+              targetMsg = findOlderMessageTarget(true); // 刷屏必引用用户
+            } else if (Math.random() < 0.15) {
+              targetMsg = findOlderMessageTarget(false); // 15% 随机引用历史
+            }
+
+            if (targetMsg) {
+              quoteId = targetMsg.id;
+              const textNode = targetMsg.querySelector(".msg-text");
+              quoteText = textNode ? textNode.textContent : "";
+            }
+          }
+
+          // 5. 大脑思考：抽卡
+          let contentResult = await generateCharContent(enabledCards);
+          if (contentResult.interrupted) {
+            await processInterrupt(contentResult.text);
+            return;
+          }
+
+          let finalContent = contentResult.text;
+
+          // 6. 拟真输出：打字延迟
+          showTypingIndicator();
+          const typeDelay = Math.min(finalContent.length * 80, 3500) + 400;
+          await sleep(typeDelay);
+
+          if (state.interruptFlag) {
+            await processInterrupt(finalContent);
+            return;
+          }
+
+          hideTypingIndicator();
+
+          // 发送
+          receiveAutoMessage(finalContent, quoteId, quoteText);
+          msgIndex++;
+          state.userSpamCount = 0; // 成功回复，清除刷屏计数
+
+          // 连发间隔停顿
+          await sleep(600 + Math.random() * 800);
+        }
+
+        state.charReplying = false;
       }
 
       /* Send Message */
@@ -1917,6 +2387,7 @@
           state.isCharPerspective ? "received" : "sent",
           !!state.quotingText,
           state.quotingMsgId,
+          state.quotingText,
         );
 
         if (state.quotingText && state.quotingMsgId) {
@@ -1928,10 +2399,16 @@
         scrollToBottom();
         saveChatHistory();
 
+        // 打断与自动回复逻辑
         if (!state.isCharPerspective) {
-          setTimeout(() => {
-            triggerAutoReply();
-          }, 50);
+          state.lastUserMessageText = text;
+          state.userSpamCount++;
+
+          if (state.charReplying) {
+            state.interruptFlag = true; // 触发打断
+          } else {
+            setTimeout(() => triggerAutoReply(text), 50);
+          }
         }
       }
 
@@ -2133,12 +2610,12 @@
 
       /* ================= Settings & Word Cards ================= */
       function openSettingsModal() {
-        closeModal('wordCardModal');
+        closeModal("wordCardModal");
         DOM.settingsModal.classList.add("active");
       }
-      
+
       function backToSettings() {
-        closeModal('wordCardModal');
+        closeModal("wordCardModal");
         DOM.settingsModal.classList.add("active");
       }
 
@@ -2160,27 +2637,57 @@
       let cardObserver = null;
 
       function openWordCardModal() {
-        closeModal('settingsModal');
+        closeModal("settingsModal");
         state.currentFilterTag = "All";
         state.isSelectMode = false;
-        
+
         updateTopIcons();
         renderTagFilterBar();
         renderCardList();
-        
+
         DOM.wordCardModal.classList.add("active");
       }
-      
+
       function updateTopIcons() {
         if (state.isSelectMode) {
           DOM.iconTag.style.display = "block";
           DOM.iconDelete.style.display = "block";
+          DOM.iconSelectAll.style.display = "block";
+          DOM.iconTools.style.display = "none";
+          DOM.iconImport.style.display = "none";
+          DOM.iconExport.style.display = "none";
           DOM.iconSelect.style.color = "var(--text-sub)";
         } else {
           DOM.iconTag.style.display = "none";
           DOM.iconDelete.style.display = "none";
+          DOM.iconSelectAll.style.display = "none";
+          DOM.iconTools.style.display = "block";
+          DOM.iconImport.style.display = "block";
+          DOM.iconExport.style.display = "block";
           DOM.iconSelect.style.color = "var(--icon-color)";
         }
+      }
+
+      function selectAllCards() {
+        const visibleCards = document.querySelectorAll(".card-item");
+        const visibleHeaders = document.querySelectorAll(".folder-header");
+        const allSelected = Array.from(visibleCards).every((el) =>
+          el.classList.contains("selected"),
+        );
+
+        visibleCards.forEach((el) => {
+          if (allSelected) el.classList.remove("selected");
+          else el.classList.add("selected");
+        });
+
+        visibleHeaders.forEach((el) => {
+          if (allSelected) el.classList.remove("selected");
+          else el.classList.add("selected");
+        });
+      }
+
+      function scrollToTagStart() {
+        DOM.tagFilterBar.scrollTo({ left: 0, behavior: "smooth" });
       }
 
       function saveCards() {
@@ -2188,7 +2695,7 @@
         Storage.set("customTags", state.customTags);
         updateActiveCardCount();
       }
-      
+
       function getAllUniqueTags() {
         const cardTags = state.wordCards.map((c) => c.tag.toLowerCase());
         return [...new Set([...cardTags, ...state.customTags])];
@@ -2205,8 +2712,9 @@
         DOM.tagFilterBar.innerHTML = displayTags
           .map((t) => {
             const displayName = t.charAt(0).toUpperCase() + t.slice(1);
-            const isActive = t.toLowerCase() === state.currentFilterTag.toLowerCase();
-            
+            const isActive =
+              t.toLowerCase() === state.currentFilterTag.toLowerCase();
+
             let addIconHTML = "";
             if (t === "All" && isActive) {
               addIconHTML = `<svg class="add-tag-icon" onclick="openAddTagModal(event)" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
@@ -2217,10 +2725,19 @@
                     </div>`;
           })
           .join("");
+        const activeTagEl =
+          DOM.tagFilterBar.querySelector(".filter-tag.active");
+        if (activeTagEl) {
+          activeTagEl.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+          });
+        }
       }
 
       function handleTagClick(tag, event) {
-        if (event.target.closest('.add-tag-icon')) return; 
+        if (event.target.closest(".add-tag-icon")) return;
 
         if (state.currentFilterTag.toLowerCase() === tag.toLowerCase()) {
           if (tag === "All") {
@@ -2240,13 +2757,18 @@
           DOM.allTagDropdown.classList.remove("active");
         } else {
           const uniqueTags = getAllUniqueTags();
-          const displayTags = ["default", ...uniqueTags.filter((t) => t !== "default")];
-          
-          DOM.allTagDropdown.innerHTML = displayTags.map(t => {
-            const displayName = t.charAt(0).toUpperCase() + t.slice(1);
-            return `<div class="tag-dropdown-item" onclick="setFilterTag('${t}')">${displayName}</div>`;
-          }).join("");
-          
+          const displayTags = [
+            "default",
+            ...uniqueTags.filter((t) => t !== "default"),
+          ];
+
+          DOM.allTagDropdown.innerHTML = displayTags
+            .map((t) => {
+              const displayName = t.charAt(0).toUpperCase() + t.slice(1);
+              return `<div class="tag-dropdown-item" onclick="setFilterTag('${t}')">${displayName}</div>`;
+            })
+            .join("");
+
           DOM.allTagDropdown.classList.add("active");
         }
       }
@@ -2290,13 +2812,15 @@
           return;
         }
 
-        state.wordCards.forEach(c => {
+        state.wordCards.forEach((c) => {
           if (c.tag.toLowerCase() === state.managingTag.toLowerCase()) {
             c.tag = newTag;
           }
         });
-        
-        state.customTags = state.customTags.filter(t => t !== state.managingTag);
+
+        state.customTags = state.customTags.filter(
+          (t) => t !== state.managingTag,
+        );
         if (!state.customTags.includes(newTag)) {
           state.customTags.push(newTag);
         }
@@ -2307,13 +2831,15 @@
       }
 
       function deleteCurrentTag() {
-        state.wordCards.forEach(c => {
+        state.wordCards.forEach((c) => {
           if (c.tag.toLowerCase() === state.managingTag.toLowerCase()) {
             c.tag = "default";
           }
         });
-        state.customTags = state.customTags.filter(t => t !== state.managingTag);
-        
+        state.customTags = state.customTags.filter(
+          (t) => t !== state.managingTag,
+        );
+
         saveCards();
         setFilterTag("All");
         closeModal("tagManageModal");
@@ -2322,16 +2848,63 @@
       function toggleSelectMode() {
         state.isSelectMode = !state.isSelectMode;
         if (!state.isSelectMode) {
-          document.querySelectorAll('.card-item.selected').forEach(el => el.classList.remove('selected'));
+          document
+            .querySelectorAll(".card-item.selected")
+            .forEach((el) => el.classList.remove("selected"));
+          document
+            .querySelectorAll(".folder-header.selected")
+            .forEach((el) => el.classList.remove("selected"));
         }
         updateTopIcons();
       }
-      
+
       function handleCardClick(realIndex, event) {
-        if (event.target.closest('.toggle-switch')) return;
+        if (event.target.closest(".toggle-switch")) return;
         if (state.isSelectMode) {
           const cardEl = event.currentTarget;
-          cardEl.classList.toggle('selected');
+          cardEl.classList.toggle("selected");
+
+          // 联动更新所在文件夹的选中颜色
+          const folderContent = cardEl.closest(".folder-content");
+          if (folderContent) {
+            const folderId = folderContent.id.replace("folder-content-", "");
+            const header = document.getElementById(`folder-header-${folderId}`);
+            if (header) {
+              const allCards = folderContent.querySelectorAll(".card-item");
+              const allSelected = Array.from(allCards).every((c) =>
+                c.classList.contains("selected"),
+              );
+              if (allSelected && allCards.length > 0) {
+                header.classList.add("selected");
+              } else {
+                header.classList.remove("selected");
+              }
+            }
+          }
+        }
+      }
+
+      function handleFolderClick(tag, folderId, event) {
+        if (state.isSelectMode) {
+          event.stopPropagation();
+          const content = document.getElementById(`folder-content-${folderId}`);
+          const header = document.getElementById(`folder-header-${folderId}`);
+          if (content && header) {
+            const cards = content.querySelectorAll(".card-item");
+            const allSelected = Array.from(cards).every((c) =>
+              c.classList.contains("selected"),
+            );
+
+            if (allSelected) {
+              cards.forEach((c) => c.classList.remove("selected"));
+              header.classList.remove("selected");
+            } else {
+              cards.forEach((c) => c.classList.add("selected"));
+              header.classList.add("selected");
+            }
+          }
+        } else {
+          setFilterTag(tag);
         }
       }
 
@@ -2340,7 +2913,7 @@
         const content = document.getElementById(`folder-content-${folderId}`);
         const header = document.getElementById(`folder-header-${folderId}`);
         if (!content) return;
-        
+
         const isOpen = content.classList.contains("open");
         if (isOpen) {
           content.classList.remove("open");
@@ -2355,14 +2928,16 @@
 
       function toggleFolderCards(tag, event) {
         event.stopPropagation();
-        const cardsInTag = state.wordCards.filter(c => c.tag.toLowerCase() === tag.toLowerCase());
+        const cardsInTag = state.wordCards.filter(
+          (c) => c.tag.toLowerCase() === tag.toLowerCase(),
+        );
         if (cardsInTag.length === 0) return;
 
-        const allEnabled = cardsInTag.every(c => c.enabled);
-        state.wordCards.forEach(c => {
-            if (c.tag.toLowerCase() === tag.toLowerCase()) {
-                c.enabled = !allEnabled;
-            }
+        const allEnabled = cardsInTag.every((c) => c.enabled);
+        state.wordCards.forEach((c) => {
+          if (c.tag.toLowerCase() === tag.toLowerCase()) {
+            c.enabled = !allEnabled;
+          }
         });
         saveCards();
         renderCardList();
@@ -2383,39 +2958,44 @@
       function renderCardsChunked(container, cardsArray, startIndex = 0) {
         const chunkSize = 50;
         const chunk = cardsArray.slice(startIndex, startIndex + chunkSize);
-        
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = chunk.map(createCardHTML).join('');
+
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = chunk.map(createCardHTML).join("");
         while (tempDiv.firstChild) {
           container.appendChild(tempDiv.firstChild);
         }
-        
+
         if (startIndex + chunkSize < cardsArray.length) {
-          const sentinel = document.createElement('div');
-          sentinel.className = 'sentinel';
-          sentinel.textContent = 'Loading more...';
+          const sentinel = document.createElement("div");
+          sentinel.className = "sentinel";
+          sentinel.textContent = "Loading more...";
           container.appendChild(sentinel);
-          
+
           if (!cardObserver) {
-            cardObserver = new IntersectionObserver((entries) => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  const target = entry.target;
-                  cardObserver.unobserve(target);
-                  target.remove();
-                  
-                  const nextIndex = parseInt(target.dataset.nextIndex);
-                  const containerId = target.dataset.containerId;
-                  const cont = document.getElementById(containerId);
-                  if (cont) {
-                     renderCardsChunked(cont, cont._cardsArray, nextIndex);
+            cardObserver = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    const target = entry.target;
+                    cardObserver.unobserve(target);
+                    target.remove();
+
+                    const nextIndex = parseInt(target.dataset.nextIndex);
+                    const containerId = target.dataset.containerId;
+                    const cont = document.getElementById(containerId);
+                    if (cont) {
+                      renderCardsChunked(cont, cont._cardsArray, nextIndex);
+                    }
                   }
-                }
-              });
-            }, { root: DOM.cardList, rootMargin: '100px' });
+                });
+              },
+              { root: DOM.cardList, rootMargin: "100px" },
+            );
           }
-          
-          if (!container.id) container.id = 'container-' + Math.random().toString(36).substr(2, 9);
+
+          if (!container.id)
+            container.id =
+              "container-" + Math.random().toString(36).substr(2, 9);
           sentinel.dataset.nextIndex = startIndex + chunkSize;
           sentinel.dataset.containerId = container.id;
           container._cardsArray = cardsArray;
@@ -2430,63 +3010,71 @@
         DOM.cardList.innerHTML = "";
 
         if (state.wordCards.length === 0) {
-          DOM.cardList.innerHTML = '<div style="text-align:center; font-size:11px; color:var(--text-sub); padding: 20px 0;">No cards here.</div>';
+          DOM.cardList.innerHTML =
+            '<div style="text-align:center; font-size:11px; color:var(--text-sub); padding: 20px 0;">No cards here.</div>';
           return;
         }
 
-        const mappedCards = state.wordCards.map((card, index) => ({
-          ...card,
-          realIndex: index,
-        })).reverse();
+        const mappedCards = state.wordCards
+          .map((card, index) => ({
+            ...card,
+            realIndex: index,
+          }))
+          .reverse();
 
         if (state.currentFilterTag.toLowerCase() === "all") {
           const groups = {};
-          mappedCards.forEach(c => {
+          mappedCards.forEach((c) => {
             const t = c.tag.toLowerCase();
-            if(!groups[t]) groups[t] = [];
+            if (!groups[t]) groups[t] = [];
             groups[t].push(c);
           });
-          
-          Object.keys(groups).sort().forEach(tag => {
-            const folderId = "tag-" + tag.replace(/\s+/g, '-');
-            const isOpen = state.expandedFolders.has(folderId);
-            const allEnabled = groups[tag].every(c => c.enabled);
-            const folderName = tag.charAt(0).toUpperCase() + tag.slice(1);
 
-            const folderHTML = `
+          Object.keys(groups)
+            .sort()
+            .forEach((tag) => {
+              const folderId = "tag-" + tag.replace(/\s+/g, "-");
+              const isOpen = state.expandedFolders.has(folderId);
+              const allEnabled = groups[tag].every((c) => c.enabled);
+              const folderName = tag.charAt(0).toUpperCase() + tag.slice(1);
+
+              const folderHTML = `
               <div class="folder-group">
-                <div class="folder-header ${isOpen ? 'open' : ''}" id="folder-header-${folderId}">
+                <div class="folder-header ${isOpen ? "open" : ""}" id="folder-header-${folderId}">
                   <svg class="folder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="toggleFolder('${folderId}', event)">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
-                  <span class="folder-title" onclick="setFilterTag('${tag}')">${folderName} (${groups[tag].length})</span>
-                  <div class="toggle-switch ${allEnabled ? 'active' : ''}" style="transform:scale(0.7); transform-origin:right center;" onclick="toggleFolderCards('${tag}', event)"></div>
+                  <span class="folder-title" onclick="handleFolderClick('${tag}', '${folderId}', event)">${folderName} (${groups[tag].length})</span>
+                  <div class="toggle-switch ${allEnabled ? "active" : ""}" style="transform:scale(0.7); transform-origin:right center;" onclick="toggleFolderCards('${tag}', event)"></div>
                 </div>
-                <div class="folder-content ${isOpen ? 'open' : ''}" id="folder-content-${folderId}"></div>
+                <div class="folder-content ${isOpen ? "open" : ""}" id="folder-content-${folderId}"></div>
               </div>
             `;
-            DOM.cardList.insertAdjacentHTML('beforeend', folderHTML);
-            
-            const contentContainer = document.getElementById(`folder-content-${folderId}`);
-            renderCardsChunked(contentContainer, groups[tag]);
-          });
-          
+              DOM.cardList.insertAdjacentHTML("beforeend", folderHTML);
+
+              const contentContainer = document.getElementById(
+                `folder-content-${folderId}`,
+              );
+              renderCardsChunked(contentContainer, groups[tag]);
+            });
         } else {
           const filteredCards = mappedCards.filter(
             (c) => c.tag.toLowerCase() === state.currentFilterTag.toLowerCase(),
           );
-          
+
           if (filteredCards.length === 0) {
-            DOM.cardList.innerHTML = '<div style="text-align:center; font-size:11px; color:var(--text-sub); padding: 20px 0;">No cards here.</div>';
+            DOM.cardList.innerHTML =
+              '<div style="text-align:center; font-size:11px; color:var(--text-sub); padding: 20px 0;">No cards here.</div>';
             return;
           }
-          
+
           renderCardsChunked(DOM.cardList, filteredCards);
         }
       }
 
       function toggleCardEnable(realIndex) {
-        state.wordCards[realIndex].enabled = !state.wordCards[realIndex].enabled;
+        state.wordCards[realIndex].enabled =
+          !state.wordCards[realIndex].enabled;
         saveCards();
         renderCardList();
       }
@@ -2501,25 +3089,37 @@
         if (!cardText) return;
         state.wordCards.push({ text: cardText, tag: tag, enabled: true });
         DOM.newCardInput.value = "";
-        
+
         if (state.currentFilterTag === "All") {
-          state.expandedFolders.add("tag-" + tag.toLowerCase().replace(/\s+/g, '-'));
+          state.expandedFolders.add(
+            "tag-" + tag.toLowerCase().replace(/\s+/g, "-"),
+          );
         }
-        
+
         saveCards();
         renderTagFilterBar();
         renderCardList();
       }
 
       function getSelectedRealIndices() {
-        return Array.from(document.querySelectorAll('.card-item.selected')).map(el => parseInt(el.dataset.index));
+        return Array.from(document.querySelectorAll(".card-item.selected")).map(
+          (el) => parseInt(el.dataset.index),
+        );
       }
 
       function batchDeleteCards() {
         const indices = getSelectedRealIndices();
         if (indices.length === 0) return;
-        state.wordCards = state.wordCards.filter((_, i) => !indices.includes(i));
-        
+        state.wordCards = state.wordCards.filter(
+          (_, i) => !indices.includes(i),
+        );
+
+        // 清理空 tag
+        const activeTags = new Set(
+          state.wordCards.map((c) => c.tag.toLowerCase()),
+        );
+        state.customTags = state.customTags.filter((t) => activeTags.has(t));
+
         saveCards();
         renderTagFilterBar();
         renderCardList();
@@ -2529,6 +3129,18 @@
       function batchTagCards() {
         if (getSelectedRealIndices().length === 0) return;
         DOM.newTagInput.value = "";
+
+        // 渲染快速选择 Tag 列表
+        const tags = getAllUniqueTags();
+        DOM.quickTagList.innerHTML = tags
+          .map(
+            (t) =>
+              `<div class="save-item" style="cursor:pointer; padding:6px;" onclick="DOM.newTagInput.value='${t}'">
+             <span class="save-name">${t}</span>
+           </div>`,
+          )
+          .join("");
+
         DOM.tagPromptModal.classList.add("active");
         DOM.newTagInput.focus();
       }
@@ -2537,15 +3149,17 @@
         const newTag = DOM.newTagInput.value.trim() || "default";
         const indices = getSelectedRealIndices();
         indices.forEach((i) => (state.wordCards[i].tag = newTag.toLowerCase()));
-        
+
         if (!state.customTags.includes(newTag.toLowerCase())) {
           state.customTags.push(newTag.toLowerCase());
         }
 
         if (state.currentFilterTag === "All") {
-          state.expandedFolders.add("tag-" + newTag.toLowerCase().replace(/\s+/g, '-'));
+          state.expandedFolders.add(
+            "tag-" + newTag.toLowerCase().replace(/\s+/g, "-"),
+          );
         }
-        
+
         saveCards();
         renderTagFilterBar();
         renderCardList();
@@ -2558,7 +3172,9 @@
         const tags = getAllUniqueTags();
         let content = "";
         tags.forEach((tag) => {
-          const cardsInTag = state.wordCards.filter((c) => c.tag.toLowerCase() === tag);
+          const cardsInTag = state.wordCards.filter(
+            (c) => c.tag.toLowerCase() === tag,
+          );
           if (cardsInTag.length > 0) {
             content += `<${tag}>\n`;
             cardsInTag.forEach((c) => (content += `${c.text}\n`));
@@ -2591,7 +3207,8 @@
             const openMatch = line.match(/^<([^/]+)>$/);
             if (openMatch) {
               currentTag = openMatch[1].trim().toLowerCase();
-              if (!state.customTags.includes(currentTag)) state.customTags.push(currentTag);
+              if (!state.customTags.includes(currentTag))
+                state.customTags.push(currentTag);
               return;
             }
             const closeMatch = line.match(/^<\/([^>]+)>$/);
@@ -2611,6 +3228,112 @@
           event.target.value = "";
         };
         reader.readAsText(file);
+      }
+
+      /* ================= Card Presets & Tools ================= */
+      function getCardSaves() {
+        return Storage.get("cardSaves", []);
+      }
+
+      function setCardSaves(saves) {
+        Storage.set("cardSaves", saves);
+      }
+
+      function openCardDataModal() {
+        renderCardSavesList();
+        DOM.cardDataModal.classList.add("active");
+      }
+
+      function renderCardSavesList() {
+        const saves = getCardSaves();
+        if (saves.length === 0) {
+          DOM.cardSavesList.innerHTML =
+            '<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:10px;">No presets found.</div>';
+          return;
+        }
+        DOM.cardSavesList.innerHTML = saves
+          .reverse()
+          .map(
+            (save) => `
+            <div class="save-item">
+              <div class="save-info">
+                <span class="save-name">${escapeHtml(save.name)}</span>
+                <span class="save-time">${save.time} | ${save.cards.length} cards</span>
+              </div>
+              <div class="save-actions">
+                <button class="save-btn-small" onclick="loadCardSave('${save.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></button>
+                <button class="save-btn-small" onclick="deleteCardSave('${save.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+              </div>
+            </div>
+          `,
+          )
+          .join("");
+      }
+
+      function openSaveCardNameModal() {
+        DOM.saveCardNameInput.value = "";
+        DOM.saveCardNameModal.classList.add("active");
+        DOM.saveCardNameInput.focus();
+      }
+
+      function saveCurrentCards() {
+        let name = DOM.saveCardNameInput.value.trim() || "Unnamed Preset";
+        const saves = getCardSaves();
+        saves.push({
+          id: generateId(),
+          name: name,
+          cards: JSON.parse(JSON.stringify(state.wordCards)),
+          customTags: JSON.parse(JSON.stringify(state.customTags)),
+          time: new Date().toLocaleDateString(),
+        });
+        setCardSaves(saves);
+        closeModal("saveCardNameModal");
+        renderCardSavesList();
+      }
+
+      function loadCardSave(id) {
+        const save = getCardSaves().find((s) => s.id === id);
+        if (save) {
+          state.wordCards = save.cards || [];
+          state.customTags = save.customTags || [];
+          saveCards();
+          setFilterTag("All");
+          closeModal("cardDataModal");
+        }
+      }
+
+      function deleteCardSave(id) {
+        const saves = getCardSaves().filter((s) => s.id !== id);
+        setCardSaves(saves);
+        renderCardSavesList();
+      }
+
+      function deduplicateCards() {
+        const uniqueTexts = new Set();
+        const newCards = [];
+        let dupCount = 0;
+
+        state.wordCards.forEach((c) => {
+          if (uniqueTexts.has(c.text)) {
+            dupCount++;
+          } else {
+            uniqueTexts.add(c.text);
+            newCards.push(c);
+          }
+        });
+
+        if (dupCount > 0) {
+          state.wordCards = newCards;
+          saveCards();
+          renderTagFilterBar();
+          renderCardList();
+          DOM.alertMessage.textContent = `Successfully removed ${dupCount} duplicate card(s).`;
+        } else {
+          DOM.alertMessage.textContent = "No duplicate content found.";
+        }
+
+        closeModal("cardDataModal");
+        DOM.alertModal.classList.add("active");
       }
     </script>
   </body>
