@@ -623,6 +623,7 @@
         cursor: pointer;
         padding: 2px;
       }
+
       /* Settings & Word Card styles */
       .setting-item {
         display: flex;
@@ -674,13 +675,17 @@
         display: flex;
         overflow-x: auto;
         gap: 6px;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         padding-bottom: 4px;
+        flex-shrink: 0;
+        position: relative;
       }
       .card-filter-bar::-webkit-scrollbar {
         height: 0;
       }
       .filter-tag {
+        display: flex;
+        align-items: center;
         padding: 4px 10px;
         border-radius: 12px;
         font-size: 11px;
@@ -689,47 +694,116 @@
         background: var(--input-bg);
         cursor: pointer;
         white-space: nowrap;
-        transition:
-          background 0.2s,
-          color 0.2s;
+        transition: background 0.2s, color 0.2s;
       }
       .filter-tag.active {
         background: var(--text-main);
         color: var(--bg-color);
       }
+      .add-tag-icon {
+        margin-left: 4px;
+        opacity: 0.8;
+      }
+      .add-tag-icon:hover {
+        opacity: 1;
+      }
 
-      .card-toolbar {
+      /* Tag Dropdown */
+      .tag-dropdown {
+        position: absolute;
+        top: 90px;
+        left: 15px;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        display: none;
+        flex-direction: column;
+        z-index: 150;
+        max-height: 200px;
+        overflow-y: auto;
+        min-width: 120px;
+      }
+      .tag-dropdown.active {
         display: flex;
-        justify-content: space-between;
+      }
+      .tag-dropdown-item {
+        padding: 8px 12px;
+        font-size: 12px;
+        color: var(--text-main);
+        cursor: pointer;
+      }
+      .tag-dropdown-item:hover {
+        background: var(--input-bg);
+      }
+
+      /* Word Card Right Top Toolbar */
+      .card-top-icons {
+        display: flex;
+        gap: 10px;
         align-items: center;
-        margin-bottom: 10px;
         color: var(--icon-color);
       }
-      .card-toolbar-icons {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-      }
-      .card-toolbar svg {
+      .card-top-icons svg {
         width: 16px;
         height: 16px;
         cursor: pointer;
         transition: opacity 0.2s;
       }
-      .card-toolbar svg:hover {
+      .card-top-icons svg:hover {
         opacity: 0.6;
       }
 
+      /* Word Card List & Folders */
       .card-list {
-        max-height: 320px;
+        flex: 1;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 4px;
+        padding-right: 2px;
       }
       .card-list::-webkit-scrollbar {
         width: 0;
       }
+
+      .folder-group {
+        margin-bottom: 4px;
+      }
+      .folder-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        background: var(--input-bg);
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+      .folder-header .folder-chevron {
+        width: 14px;
+        height: 14px;
+        transition: transform 0.2s;
+      }
+      .folder-header.open .folder-chevron {
+        transform: rotate(90deg);
+      }
+      .folder-title {
+        flex: 1;
+      }
+      .folder-content {
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        padding-left: 10px;
+        margin-top: 4px;
+      }
+      .folder-content.open {
+        display: flex;
+      }
+
       .card-item {
         display: flex;
         align-items: center;
@@ -738,18 +812,11 @@
         padding: 6px 10px;
         border-radius: 8px;
         min-height: 32px;
-      }
-      .card-checkbox {
-        display: none;
-        accent-color: var(--text-main);
-        width: 14px;
-        height: 14px;
         cursor: pointer;
-        margin: 0;
-        flex-shrink: 0;
+        transition: background-color 0.2s;
       }
-      .card-list.select-mode .card-checkbox {
-        display: block;
+      .card-item.selected {
+        background-color: var(--border-color);
       }
 
       .card-content {
@@ -776,6 +843,15 @@
         border-radius: 4px;
         flex-shrink: 0;
       }
+      
+      .sentinel {
+        height: 20px;
+        text-align: center;
+        font-size: 10px;
+        color: var(--text-sub);
+        padding: 4px;
+      }
+
       /* Typing indicator animation */
       .typing-dots {
         display: flex;
@@ -1211,6 +1287,7 @@
         </div>
       </div>
     </div>
+    
     <!-- Settings modal -->
     <div class="modal-overlay" id="settingsModal" style="z-index: 110">
       <div class="modal-content">
@@ -1246,128 +1323,66 @@
 
     <!-- Word card library modal -->
     <div class="modal-overlay" id="wordCardModal" style="z-index: 120">
-      <div class="modal-content" style="width: 320px; padding: 15px">
-        <!-- Header: title and import/export -->
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-          "
-        >
-          <div class="modal-title" style="margin: 0">Word Cards</div>
-          <div style="display: flex; gap: 12px; color: var(--icon-color)">
-            <!-- Import SVG -->
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              style="cursor: pointer"
-              onclick="importCardsTxt()"
-            >
+      <div class="modal-content" style="width: 320px; height: 85%; padding: 15px;">
+        
+        <!-- Header: Back Btn, Title, Top Icons -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-shrink: 0;">
+          <!-- Back Button -->
+          <svg
+            width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            style="cursor: pointer; color: var(--icon-color);"
+            onclick="backToSettings()"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          
+          <div class="modal-title" style="margin: 0; flex: 1; text-align: left; padding-left: 10px;">Word Cards</div>
+          
+          <!-- Top Icons -->
+          <div class="card-top-icons">
+            <!-- Tag Batch -->
+            <svg id="icon-tag" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="batchTagCards()" title="Batch Tag">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+            <!-- Delete Batch -->
+            <svg id="icon-delete" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="batchDeleteCards()" title="Delete Selected">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            
+            <!-- Select Mode Toggle -->
+            <svg id="icon-select" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="toggleSelectMode()" title="Select Mode">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            <!-- Import -->
+            <svg id="icon-import" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="importCardsTxt()" title="Import">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <!-- Export SVG -->
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              style="cursor: pointer"
-              onclick="exportCardsTxt()"
-            >
+            <!-- Export -->
+            <svg id="icon-export" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="exportCardsTxt()" title="Export">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="17 8 12 3 7 8"></polyline>
               <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
-            <input
-              type="file"
-              id="importCardFile"
-              accept=".txt"
-              style="display: none"
-              onchange="handleImportCards(event)"
-            />
+            <input type="file" id="importCardFile" accept=".txt" style="display: none" onchange="handleImportCards(event)"/>
           </div>
         </div>
 
         <!-- Tag filter bar -->
         <div class="card-filter-bar" id="tagFilterBar"></div>
 
-        <!-- Toolbar: select, select all, tag, delete -->
-        <div class="card-toolbar">
-          <div class="card-toolbar-icons">
-            <!-- Select Mode -->
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              onclick="toggleSelectMode()"
-            >
-              <path d="M9 11l3 3L22 4"></path>
-              <path
-                d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
-              ></path>
-            </svg>
-            <!-- Select All (shown in select mode only) -->
-            <svg
-              id="selectAllIcon"
-              style="display: none"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              onclick="toggleSelectAllCards()"
-            >
-              <polyline points="9 11 12 14 22 4"></polyline>
-              <path
-                d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
-              ></path>
-            </svg>
-          </div>
-          <div class="card-toolbar-icons">
-            <!-- Tag -->
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              onclick="batchTagCards()"
-            >
-              <path
-                d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"
-              ></path>
-              <line x1="7" y1="7" x2="7.01" y2="7"></line>
-            </svg>
-            <!-- Delete -->
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              onclick="batchDeleteCards()"
-            >
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path
-                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-              ></path>
-            </svg>
-          </div>
-        </div>
+        <!-- Tag Dropdown for "All" -->
+        <div id="allTagDropdown" class="tag-dropdown"></div>
 
-        <!-- Card list -->
+        <!-- Card list (Scrollable area) -->
         <div class="card-list" id="cardList"></div>
 
         <!-- Add card input bar -->
-        <div class="sleek-actions" style="display: flex; margin-top: 10px">
+        <div class="sleek-actions" style="display: flex; margin-top: 10px; flex-shrink: 0;">
           <input
             type="text"
             class="modal-input"
@@ -1379,17 +1394,9 @@
             Add
           </button>
         </div>
-        <div class="modal-actions" style="margin-top: 10px">
-          <button
-            class="modal-btn btn-save"
-            onclick="closeModal('wordCardModal')"
-            style="width: 100%"
-          >
-            Close
-          </button>
-        </div>
       </div>
     </div>
+    
     <!-- Batch tag modal -->
     <div class="modal-overlay" id="tagPromptModal" style="z-index: 130">
       <div class="modal-content" style="width: 240px">
@@ -1411,6 +1418,33 @@
           <button class="modal-btn btn-save" onclick="confirmBatchTag()">
             Save
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add custom tag modal -->
+    <div class="modal-overlay" id="addTagModal" style="z-index: 130">
+      <div class="modal-content" style="width: 240px">
+        <div class="modal-title">New Tag</div>
+        <input type="text" class="modal-input" id="addTagInput" autocomplete="off" />
+        <div class="modal-actions sleek-actions">
+          <button class="modal-btn btn-cancel" onclick="closeModal('addTagModal')">Cancel</button>
+          <button class="modal-btn btn-save" onclick="confirmAddTag()">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage single tag modal -->
+    <div class="modal-overlay" id="tagManageModal" style="z-index: 130">
+      <div class="modal-content" style="width: 240px">
+        <div class="modal-title">Manage Tag</div>
+        <input type="text" class="modal-input" id="manageTagInput" autocomplete="off" />
+        <div class="modal-actions sleek-actions" style="flex-direction: column;">
+          <div style="display: flex; gap: 8px; width: 100%;">
+            <button class="modal-btn btn-cancel" onclick="closeModal('tagManageModal')">Cancel</button>
+            <button class="modal-btn btn-save" onclick="saveTagRename()">Save</button>
+          </div>
+          <button class="modal-btn btn-danger" style="width: 100%;" onclick="deleteCurrentTag()">Delete Tag</button>
         </div>
       </div>
     </div>
@@ -1448,9 +1482,20 @@
         settingsModal: document.getElementById("settingsModal"),
         wordCardModal: document.getElementById("wordCardModal"),
         tagPromptModal: document.getElementById("tagPromptModal"),
+        addTagModal: document.getElementById("addTagModal"),
+        tagManageModal: document.getElementById("tagManageModal"),
         saveNameInput: document.getElementById("saveNameInput"),
         newTagInput: document.getElementById("newTagInput"),
-        selectAllIcon: document.getElementById("selectAllIcon"),
+        addTagInput: document.getElementById("addTagInput"),
+        manageTagInput: document.getElementById("manageTagInput"),
+        allTagDropdown: document.getElementById("allTagDropdown"),
+        
+        // Word Card Icons
+        iconTag: document.getElementById("icon-tag"),
+        iconDelete: document.getElementById("icon-delete"),
+        iconSelect: document.getElementById("icon-select"),
+        iconImport: document.getElementById("icon-import"),
+        iconExport: document.getElementById("icon-export"),
       };
 
       // ==================== Storage Helper ====================
@@ -1460,7 +1505,6 @@
             const item = localStorage.getItem(key);
             return item ? JSON.parse(item) : defaultValue;
           } catch (e) {
-            console.error(`Storage.get("${key}") failed:`, e);
             return defaultValue;
           }
         },
@@ -1469,7 +1513,6 @@
             localStorage.setItem(key, JSON.stringify(value));
             return true;
           } catch (e) {
-            console.error(`Storage.set("${key}") failed:`, e);
             return false;
           }
         },
@@ -1478,7 +1521,6 @@
             localStorage.removeItem(key);
             return true;
           } catch (e) {
-            console.error(`Storage.remove("${key}") failed:`, e);
             return false;
           }
         },
@@ -1487,7 +1529,6 @@
             localStorage.clear();
             return true;
           } catch (e) {
-            console.error("Storage.clear() failed:", e);
             return false;
           }
         },
@@ -1504,9 +1545,11 @@
         isCharPerspective: false,
         currentFilterTag: "All",
         isSelectMode: false,
-        isAllSelected: false,
         chatSettings: Storage.get("chatSettings", { readNoReply: false }),
         wordCards: Storage.get("wordCards", []),
+        customTags: Storage.get("customTags", []),
+        expandedFolders: new Set(),
+        managingTag: null
       };
 
       // ==================== Initialization ====================
@@ -1525,12 +1568,7 @@
         return div.innerHTML;
       }
 
-      function createMessageElement(
-        text,
-        className,
-        isQuote = false,
-        quoteId = null,
-      ) {
+      function createMessageElement(text, className, isQuote = false, quoteId = null) {
         const messageDiv = document.createElement("div");
         messageDiv.className = `message ${className}`;
         messageDiv.id = generateId();
@@ -1539,8 +1577,7 @@
           const quoteDiv = document.createElement("div");
           quoteDiv.classList.add("quote-box");
           quoteDiv.setAttribute("data-target-id", quoteId);
-          quoteDiv.textContent =
-            text.length > 20 ? text.substring(0, 20) + "..." : text;
+          quoteDiv.textContent = text.length > 20 ? text.substring(0, 20) + "..." : text;
           messageDiv.appendChild(quoteDiv);
         }
 
@@ -1664,6 +1701,9 @@
           closeToolbar();
         if (!e.target.closest(".plus-menu") && !e.target.closest(".icon-btn"))
           closePlusMenu();
+        if (!e.target.closest(".card-filter-bar") && !e.target.closest("#allTagDropdown")) {
+          DOM.allTagDropdown.classList.remove("active");
+        }
       });
 
       /* Message Interaction */
@@ -1883,13 +1923,11 @@
           cancelQuote();
         }
 
-        // 1. Append user message to bottom of chat
         DOM.chatMain.appendChild(messageDiv);
         DOM.chatInput.value = "";
         scrollToBottom();
         saveChatHistory();
 
-        // 2. Trigger auto reply after a brief delay to ensure DOM has rendered
         if (!state.isCharPerspective) {
           setTimeout(() => {
             triggerAutoReply();
@@ -2024,7 +2062,6 @@
         renderSavesList();
       }
 
-      /* Export Data */
       function getChatDataForExport() {
         const data = [];
         for (let node of DOM.chatMain.children) {
@@ -2072,7 +2109,6 @@
         URL.revokeObjectURL(url);
       }
 
-      /* Clear & Reset */
       function openConfirmClear() {
         DOM.confirmClearModal.classList.add("active");
       }
@@ -2097,6 +2133,12 @@
 
       /* ================= Settings & Word Cards ================= */
       function openSettingsModal() {
+        closeModal('wordCardModal');
+        DOM.settingsModal.classList.add("active");
+      }
+      
+      function backToSettings() {
+        closeModal('wordCardModal');
         DOM.settingsModal.classList.add("active");
       }
 
@@ -2115,27 +2157,45 @@
       }
 
       /* ================= Word Card Management ================= */
+      let cardObserver = null;
+
       function openWordCardModal() {
+        closeModal('settingsModal');
         state.currentFilterTag = "All";
         state.isSelectMode = false;
-        state.isAllSelected = false;
-        DOM.cardList.classList.remove("select-mode");
-        DOM.selectAllIcon.style.display = "none";
-
+        
+        updateTopIcons();
         renderTagFilterBar();
         renderCardList();
+        
         DOM.wordCardModal.classList.add("active");
+      }
+      
+      function updateTopIcons() {
+        if (state.isSelectMode) {
+          DOM.iconTag.style.display = "block";
+          DOM.iconDelete.style.display = "block";
+          DOM.iconSelect.style.color = "var(--text-sub)";
+        } else {
+          DOM.iconTag.style.display = "none";
+          DOM.iconDelete.style.display = "none";
+          DOM.iconSelect.style.color = "var(--icon-color)";
+        }
       }
 
       function saveCards() {
         Storage.set("wordCards", state.wordCards);
+        Storage.set("customTags", state.customTags);
         updateActiveCardCount();
+      }
+      
+      function getAllUniqueTags() {
+        const cardTags = state.wordCards.map((c) => c.tag.toLowerCase());
+        return [...new Set([...cardTags, ...state.customTags])];
       }
 
       function renderTagFilterBar() {
-        const uniqueTags = [
-          ...new Set(state.wordCards.map((c) => c.tag.toLowerCase())),
-        ];
+        const uniqueTags = getAllUniqueTags();
         const displayTags = [
           "All",
           "default",
@@ -2145,70 +2205,288 @@
         DOM.tagFilterBar.innerHTML = displayTags
           .map((t) => {
             const displayName = t.charAt(0).toUpperCase() + t.slice(1);
-            const isActive =
-              t.toLowerCase() === state.currentFilterTag.toLowerCase();
-            return `<div class="filter-tag ${isActive ? "active" : ""}" onclick="setFilterTag('${t}')">${displayName}</div>`;
+            const isActive = t.toLowerCase() === state.currentFilterTag.toLowerCase();
+            
+            let addIconHTML = "";
+            if (t === "All" && isActive) {
+              addIconHTML = `<svg class="add-tag-icon" onclick="openAddTagModal(event)" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+            }
+
+            return `<div class="filter-tag ${isActive ? "active" : ""}" onclick="handleTagClick('${t}', event)">
+                      ${displayName} ${addIconHTML}
+                    </div>`;
           })
           .join("");
       }
 
+      function handleTagClick(tag, event) {
+        if (event.target.closest('.add-tag-icon')) return; 
+
+        if (state.currentFilterTag.toLowerCase() === tag.toLowerCase()) {
+          if (tag === "All") {
+            toggleAllDropdown();
+          } else if (tag.toLowerCase() !== "default") {
+            openTagManageModal(tag);
+          }
+        } else {
+          DOM.allTagDropdown.classList.remove("active");
+          setFilterTag(tag);
+        }
+      }
+
+      function toggleAllDropdown() {
+        const isActive = DOM.allTagDropdown.classList.contains("active");
+        if (isActive) {
+          DOM.allTagDropdown.classList.remove("active");
+        } else {
+          const uniqueTags = getAllUniqueTags();
+          const displayTags = ["default", ...uniqueTags.filter((t) => t !== "default")];
+          
+          DOM.allTagDropdown.innerHTML = displayTags.map(t => {
+            const displayName = t.charAt(0).toUpperCase() + t.slice(1);
+            return `<div class="tag-dropdown-item" onclick="setFilterTag('${t}')">${displayName}</div>`;
+          }).join("");
+          
+          DOM.allTagDropdown.classList.add("active");
+        }
+      }
+
       function setFilterTag(tag) {
         state.currentFilterTag = tag;
+        DOM.allTagDropdown.classList.remove("active");
         renderTagFilterBar();
         renderCardList();
       }
 
-      function toggleSelectMode() {
-        state.isSelectMode = !state.isSelectMode;
-        DOM.cardList.classList.toggle("select-mode", state.isSelectMode);
-        DOM.selectAllIcon.style.display = state.isSelectMode ? "block" : "none";
+      function openAddTagModal(e) {
+        e.stopPropagation();
+        DOM.addTagInput.value = "";
+        DOM.addTagModal.classList.add("active");
+        DOM.addTagInput.focus();
       }
 
-      function toggleSelectAllCards() {
-        state.isAllSelected = !state.isAllSelected;
-        document
-          .querySelectorAll(".card-checkbox")
-          .forEach((cb) => (cb.checked = state.isAllSelected));
-      }
-
-      function renderCardList() {
-        let filteredCards = state.wordCards.map((card, index) => ({
-          ...card,
-          realIndex: index,
-        }));
-
-        if (state.currentFilterTag.toLowerCase() !== "all") {
-          filteredCards = filteredCards.filter(
-            (c) => c.tag.toLowerCase() === state.currentFilterTag.toLowerCase(),
-          );
+      function confirmAddTag() {
+        const newTag = DOM.addTagInput.value.trim().toLowerCase();
+        if (newTag && newTag !== "all") {
+          if (!state.customTags.includes(newTag)) {
+            state.customTags.push(newTag);
+            saveCards();
+          }
+          setFilterTag(newTag);
         }
+        closeModal("addTagModal");
+      }
 
-        if (filteredCards.length === 0) {
-          DOM.cardList.innerHTML =
-            '<div style="text-align:center; font-size:11px; color:var(--text-sub); padding: 20px 0;">No cards here.</div>';
+      function openTagManageModal(tag) {
+        state.managingTag = tag;
+        DOM.manageTagInput.value = tag.charAt(0).toUpperCase() + tag.slice(1);
+        DOM.tagManageModal.classList.add("active");
+      }
+
+      function saveTagRename() {
+        const newTag = DOM.manageTagInput.value.trim().toLowerCase();
+        if (!newTag || newTag === "all" || newTag === state.managingTag) {
+          closeModal("tagManageModal");
           return;
         }
 
-        DOM.cardList.innerHTML = filteredCards
-          .reverse()
-          .map(
-            (card) => `
-            <div class="card-item">
-              <input type="checkbox" class="card-checkbox" data-index="${card.realIndex}">
-              <div class="card-content">
-                <span class="card-text">${escapeHtml(card.text)}</span>
-              </div>
-              <span class="card-tag-mini">${card.tag}</span>
-              <div class="toggle-switch ${card.enabled ? "active" : ""}" style="transform:scale(0.6); transform-origin:right center;" onclick="toggleCardEnable(${card.realIndex})"></div>
+        state.wordCards.forEach(c => {
+          if (c.tag.toLowerCase() === state.managingTag.toLowerCase()) {
+            c.tag = newTag;
+          }
+        });
+        
+        state.customTags = state.customTags.filter(t => t !== state.managingTag);
+        if (!state.customTags.includes(newTag)) {
+          state.customTags.push(newTag);
+        }
+
+        saveCards();
+        setFilterTag(newTag);
+        closeModal("tagManageModal");
+      }
+
+      function deleteCurrentTag() {
+        state.wordCards.forEach(c => {
+          if (c.tag.toLowerCase() === state.managingTag.toLowerCase()) {
+            c.tag = "default";
+          }
+        });
+        state.customTags = state.customTags.filter(t => t !== state.managingTag);
+        
+        saveCards();
+        setFilterTag("All");
+        closeModal("tagManageModal");
+      }
+
+      function toggleSelectMode() {
+        state.isSelectMode = !state.isSelectMode;
+        if (!state.isSelectMode) {
+          document.querySelectorAll('.card-item.selected').forEach(el => el.classList.remove('selected'));
+        }
+        updateTopIcons();
+      }
+      
+      function handleCardClick(realIndex, event) {
+        if (event.target.closest('.toggle-switch')) return;
+        if (state.isSelectMode) {
+          const cardEl = event.currentTarget;
+          cardEl.classList.toggle('selected');
+        }
+      }
+
+      function toggleFolder(folderId, event) {
+        event.stopPropagation();
+        const content = document.getElementById(`folder-content-${folderId}`);
+        const header = document.getElementById(`folder-header-${folderId}`);
+        if (!content) return;
+        
+        const isOpen = content.classList.contains("open");
+        if (isOpen) {
+          content.classList.remove("open");
+          header.classList.remove("open");
+          state.expandedFolders.delete(folderId);
+        } else {
+          content.classList.add("open");
+          header.classList.add("open");
+          state.expandedFolders.add(folderId);
+        }
+      }
+
+      function toggleFolderCards(tag, event) {
+        event.stopPropagation();
+        const cardsInTag = state.wordCards.filter(c => c.tag.toLowerCase() === tag.toLowerCase());
+        if (cardsInTag.length === 0) return;
+
+        const allEnabled = cardsInTag.every(c => c.enabled);
+        state.wordCards.forEach(c => {
+            if (c.tag.toLowerCase() === tag.toLowerCase()) {
+                c.enabled = !allEnabled;
+            }
+        });
+        saveCards();
+        renderCardList();
+      }
+
+      function createCardHTML(card) {
+        return `
+          <div class="card-item" data-index="${card.realIndex}" onclick="handleCardClick(${card.realIndex}, event)">
+            <div class="card-content">
+              <span class="card-text">${escapeHtml(card.text)}</span>
             </div>
-          `,
-          )
-          .join("");
+            <span class="card-tag-mini">${card.tag}</span>
+            <div class="toggle-switch ${card.enabled ? "active" : ""}" style="transform:scale(0.6); transform-origin:right center;" onclick="toggleCardEnable(${card.realIndex})"></div>
+          </div>
+        `;
+      }
+
+      function renderCardsChunked(container, cardsArray, startIndex = 0) {
+        const chunkSize = 50;
+        const chunk = cardsArray.slice(startIndex, startIndex + chunkSize);
+        
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = chunk.map(createCardHTML).join('');
+        while (tempDiv.firstChild) {
+          container.appendChild(tempDiv.firstChild);
+        }
+        
+        if (startIndex + chunkSize < cardsArray.length) {
+          const sentinel = document.createElement('div');
+          sentinel.className = 'sentinel';
+          sentinel.textContent = 'Loading more...';
+          container.appendChild(sentinel);
+          
+          if (!cardObserver) {
+            cardObserver = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  const target = entry.target;
+                  cardObserver.unobserve(target);
+                  target.remove();
+                  
+                  const nextIndex = parseInt(target.dataset.nextIndex);
+                  const containerId = target.dataset.containerId;
+                  const cont = document.getElementById(containerId);
+                  if (cont) {
+                     renderCardsChunked(cont, cont._cardsArray, nextIndex);
+                  }
+                }
+              });
+            }, { root: DOM.cardList, rootMargin: '100px' });
+          }
+          
+          if (!container.id) container.id = 'container-' + Math.random().toString(36).substr(2, 9);
+          sentinel.dataset.nextIndex = startIndex + chunkSize;
+          sentinel.dataset.containerId = container.id;
+          container._cardsArray = cardsArray;
+          cardObserver.observe(sentinel);
+        }
+      }
+
+      function renderCardList() {
+        if (cardObserver) {
+          cardObserver.disconnect();
+        }
+        DOM.cardList.innerHTML = "";
+
+        if (state.wordCards.length === 0) {
+          DOM.cardList.innerHTML = '<div style="text-align:center; font-size:11px; color:var(--text-sub); padding: 20px 0;">No cards here.</div>';
+          return;
+        }
+
+        const mappedCards = state.wordCards.map((card, index) => ({
+          ...card,
+          realIndex: index,
+        })).reverse();
+
+        if (state.currentFilterTag.toLowerCase() === "all") {
+          const groups = {};
+          mappedCards.forEach(c => {
+            const t = c.tag.toLowerCase();
+            if(!groups[t]) groups[t] = [];
+            groups[t].push(c);
+          });
+          
+          Object.keys(groups).sort().forEach(tag => {
+            const folderId = "tag-" + tag.replace(/\s+/g, '-');
+            const isOpen = state.expandedFolders.has(folderId);
+            const allEnabled = groups[tag].every(c => c.enabled);
+            const folderName = tag.charAt(0).toUpperCase() + tag.slice(1);
+
+            const folderHTML = `
+              <div class="folder-group">
+                <div class="folder-header ${isOpen ? 'open' : ''}" id="folder-header-${folderId}">
+                  <svg class="folder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="toggleFolder('${folderId}', event)">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                  <span class="folder-title" onclick="setFilterTag('${tag}')">${folderName} (${groups[tag].length})</span>
+                  <div class="toggle-switch ${allEnabled ? 'active' : ''}" style="transform:scale(0.7); transform-origin:right center;" onclick="toggleFolderCards('${tag}', event)"></div>
+                </div>
+                <div class="folder-content ${isOpen ? 'open' : ''}" id="folder-content-${folderId}"></div>
+              </div>
+            `;
+            DOM.cardList.insertAdjacentHTML('beforeend', folderHTML);
+            
+            const contentContainer = document.getElementById(`folder-content-${folderId}`);
+            renderCardsChunked(contentContainer, groups[tag]);
+          });
+          
+        } else {
+          const filteredCards = mappedCards.filter(
+            (c) => c.tag.toLowerCase() === state.currentFilterTag.toLowerCase(),
+          );
+          
+          if (filteredCards.length === 0) {
+            DOM.cardList.innerHTML = '<div style="text-align:center; font-size:11px; color:var(--text-sub); padding: 20px 0;">No cards here.</div>';
+            return;
+          }
+          
+          renderCardsChunked(DOM.cardList, filteredCards);
+        }
       }
 
       function toggleCardEnable(realIndex) {
-        state.wordCards[realIndex].enabled =
-          !state.wordCards[realIndex].enabled;
+        state.wordCards[realIndex].enabled = !state.wordCards[realIndex].enabled;
         saveCards();
         renderCardList();
       }
@@ -2223,29 +2501,29 @@
         if (!cardText) return;
         state.wordCards.push({ text: cardText, tag: tag, enabled: true });
         DOM.newCardInput.value = "";
+        
+        if (state.currentFilterTag === "All") {
+          state.expandedFolders.add("tag-" + tag.toLowerCase().replace(/\s+/g, '-'));
+        }
+        
         saveCards();
         renderTagFilterBar();
         renderCardList();
       }
 
       function getSelectedRealIndices() {
-        const indices = [];
-        document.querySelectorAll(".card-checkbox").forEach((cb) => {
-          if (cb.checked) indices.push(parseInt(cb.dataset.index));
-        });
-        return indices;
+        return Array.from(document.querySelectorAll('.card-item.selected')).map(el => parseInt(el.dataset.index));
       }
 
       function batchDeleteCards() {
         const indices = getSelectedRealIndices();
         if (indices.length === 0) return;
-        state.wordCards = state.wordCards.filter(
-          (_, i) => !indices.includes(i),
-        );
-        state.isAllSelected = false;
+        state.wordCards = state.wordCards.filter((_, i) => !indices.includes(i));
+        
         saveCards();
         renderTagFilterBar();
         renderCardList();
+        if (state.isSelectMode) toggleSelectMode();
       }
 
       function batchTagCards() {
@@ -2259,24 +2537,33 @@
         const newTag = DOM.newTagInput.value.trim() || "default";
         const indices = getSelectedRealIndices();
         indices.forEach((i) => (state.wordCards[i].tag = newTag.toLowerCase()));
+        
+        if (!state.customTags.includes(newTag.toLowerCase())) {
+          state.customTags.push(newTag.toLowerCase());
+        }
+
+        if (state.currentFilterTag === "All") {
+          state.expandedFolders.add("tag-" + newTag.toLowerCase().replace(/\s+/g, '-'));
+        }
+        
         saveCards();
         renderTagFilterBar();
         renderCardList();
         closeModal("tagPromptModal");
+        if (state.isSelectMode) toggleSelectMode();
       }
 
       function exportCardsTxt() {
         if (state.wordCards.length === 0) return;
-        const tags = [
-          ...new Set(state.wordCards.map((c) => c.tag.toLowerCase())),
-        ];
+        const tags = getAllUniqueTags();
         let content = "";
         tags.forEach((tag) => {
-          content += `<${tag}>\n`;
-          state.wordCards
-            .filter((c) => c.tag.toLowerCase() === tag)
-            .forEach((c) => (content += `${c.text}\n`));
-          content += `</${tag}>\n\n`;
+          const cardsInTag = state.wordCards.filter((c) => c.tag.toLowerCase() === tag);
+          if (cardsInTag.length > 0) {
+            content += `<${tag}>\n`;
+            cardsInTag.forEach((c) => (content += `${c.text}\n`));
+            content += `</${tag}>\n\n`;
+          }
         });
         const blob = new Blob([content], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
@@ -2304,6 +2591,7 @@
             const openMatch = line.match(/^<([^/]+)>$/);
             if (openMatch) {
               currentTag = openMatch[1].trim().toLowerCase();
+              if (!state.customTags.includes(currentTag)) state.customTags.push(currentTag);
               return;
             }
             const closeMatch = line.match(/^<\/([^>]+)>$/);
