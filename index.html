@@ -110,15 +110,10 @@
       }
 
       .phone-container {
-        width: 340px;
-        height: 680px;
         background-color: var(--bg-color);
-        border-radius: 30px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        border: 8px solid #333;
         position: relative;
       }
 
@@ -443,7 +438,9 @@
         opacity: 0;
         pointer-events: none;
         z-index: 100;
-        transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .plus-menu.active {
         transform: translateY(0);
@@ -910,7 +907,9 @@
         font-weight: 500;
         border-radius: 6px;
         cursor: pointer;
-        transition: background 0.2s, color 0.2s;
+        transition:
+          background 0.2s,
+          color 0.2s;
         font-family: inherit;
       }
       .freq-btn.active {
@@ -1185,7 +1184,11 @@
               id="avatarFile"
               accept="image/*"
               title="Upload Image"
-              onchange="if(this.files[0]){saveAvatar();}"
+              onchange="
+                if (this.files[0]) {
+                  saveAvatar();
+                }
+              "
             />
           </div>
           <div class="modal-actions">
@@ -1312,7 +1315,7 @@
             id="saveNameInput"
             placeholder="e.g. Draft 1"
             autocomplete="off"
-            onkeypress="if(event.key==='Enter') saveCurrentChat()"
+            onkeypress="if (event.key === 'Enter') saveCurrentChat();"
           />
           <div class="modal-actions sleek-actions">
             <button
@@ -1389,14 +1392,31 @@
             onclick="toggleReadNoReply()"
           ></div>
         </div>
-        <div class="setting-item" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+        <div
+          class="setting-item"
+          style="flex-direction: column; align-items: flex-start; gap: 8px"
+        >
           <span class="setting-label">Reply Frequency</span>
           <div class="freq-segmented" id="replyFreqSegmented">
-            <button class="freq-btn" data-value="10" onclick="setReplyFreq(10)">Rare</button>
-            <button class="freq-btn" data-value="30" onclick="setReplyFreq(30)">Low</button>
-            <button class="freq-btn active" data-value="50" onclick="setReplyFreq(50)">Normal</button>
-            <button class="freq-btn" data-value="70" onclick="setReplyFreq(70)">Often</button>
-            <button class="freq-btn" data-value="90" onclick="setReplyFreq(90)">High</button>
+            <button class="freq-btn" data-value="10" onclick="setReplyFreq(10)">
+              Rare
+            </button>
+            <button class="freq-btn" data-value="30" onclick="setReplyFreq(30)">
+              Low
+            </button>
+            <button
+              class="freq-btn active"
+              data-value="50"
+              onclick="setReplyFreq(50)"
+            >
+              Normal
+            </button>
+            <button class="freq-btn" data-value="70" onclick="setReplyFreq(70)">
+              Often
+            </button>
+            <button class="freq-btn" data-value="90" onclick="setReplyFreq(90)">
+              High
+            </button>
           </div>
         </div>
         <div class="setting-item">
@@ -1604,7 +1624,7 @@
             id="newCardInput"
             placeholder="Add new card..."
             style="flex: 1; padding: 6px"
-            onkeypress="if(event.key==='Enter') addWordCard()"
+            onkeypress="if (event.key === 'Enter') addWordCard();"
           />
           <button class="modal-btn btn-save" onclick="addWordCard()">
             Add
@@ -1623,7 +1643,7 @@
           id="newTagInput"
           placeholder="e.g. daily, question..."
           autocomplete="off"
-          onkeypress="if(event.key==='Enter') confirmBatchTag()"
+          onkeypress="if (event.key === 'Enter') confirmBatchTag();"
         />
         <div
           class="saves-list"
@@ -1653,7 +1673,7 @@
           class="modal-input"
           id="addTagInput"
           autocomplete="off"
-          onkeypress="if(event.key==='Enter') confirmAddTag()"
+          onkeypress="if (event.key === 'Enter') confirmAddTag();"
         />
         <div class="modal-actions sleek-actions">
           <button
@@ -1678,7 +1698,7 @@
           class="modal-input"
           id="manageTagInput"
           autocomplete="off"
-          onkeypress="if(event.key==='Enter') saveTagRename()"
+          onkeypress="if (event.key === 'Enter') saveTagRename();"
         />
         <div class="modal-actions sleek-actions" style="flex-direction: column">
           <div style="display: flex; gap: 8px; width: 100%">
@@ -1750,7 +1770,7 @@
           id="saveCardNameInput"
           placeholder="e.g. English Vocab"
           autocomplete="off"
-          onkeypress="if(event.key==='Enter') saveCurrentCards()"
+          onkeypress="if (event.key === 'Enter') saveCurrentCards();"
         />
         <div class="modal-actions sleek-actions">
           <button
@@ -1793,115 +1813,421 @@
 
     <!-- Theme Modal -->
     <div class="modal-overlay" id="themeModal" style="z-index: 160">
-      <div class="modal-content" style="width:300px; max-height:88%; padding:0; display:flex; flex-direction:column; overflow:hidden;">
-
+      <div
+        class="modal-content"
+        style="
+          width: 300px;
+          max-height: 88%;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        "
+      >
         <!-- Scrollable body -->
-        <div style="flex:1; overflow-y:auto; padding:16px 16px 0;">
-
+        <div style="flex: 1; overflow-y: auto; padding: 16px 16px 0">
           <!-- 1. Dark / Light toggle -->
-          <div class="setting-item" style="padding-top:4px; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:2px;">
+          <div
+            class="setting-item"
+            style="
+              padding-top: 4px;
+              border-bottom: 1px solid var(--border-color);
+              padding-bottom: 12px;
+              margin-bottom: 2px;
+            "
+          >
             <span class="setting-label">Dark Mode</span>
-            <div class="toggle-switch" id="themeDarkToggle" onclick="toggleTheme()"></div>
+            <div
+              class="toggle-switch"
+              id="themeDarkToggle"
+              onclick="toggleTheme()"
+            ></div>
           </div>
 
           <!-- 2. Theme Presets -->
-          <div class="modal-subtitle" style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+          <div
+            class="modal-subtitle"
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-top: 12px;
+            "
+          >
             <span>Presets</span>
-            <span style="cursor:pointer; color:var(--text-main); font-size:11px;" onclick="openSaveThemeModal()">+ Save Current</span>
+            <span
+              style="cursor: pointer; color: var(--text-main); font-size: 11px"
+              onclick="openSaveThemeModal()"
+              >+ Save Current</span
+            >
           </div>
-          <div class="saves-list" id="themeSavesList" style="max-height:100px;"></div>
-          <div class="modal-actions sleek-actions" style="margin-top:6px;">
-            <button class="modal-btn btn-cancel" onclick="exportTheme()">Export</button>
-            <div class="file-upload-wrapper" style="flex:1;">
-              <div class="file-upload-btn" style="padding:6px; font-size:11px; font-weight:600; text-align:center;">Import</div>
-              <input type="file" id="themeImportFile" accept=".json" onchange="importTheme(event)" />
+          <div
+            class="saves-list"
+            id="themeSavesList"
+            style="max-height: 100px"
+          ></div>
+          <div class="modal-actions sleek-actions" style="margin-top: 6px">
+            <button class="modal-btn btn-cancel" onclick="exportTheme()">
+              Export
+            </button>
+            <div class="file-upload-wrapper" style="flex: 1">
+              <div
+                class="file-upload-btn"
+                style="
+                  padding: 6px;
+                  font-size: 11px;
+                  font-weight: 600;
+                  text-align: center;
+                "
+              >
+                Import
+              </div>
+              <input
+                type="file"
+                id="themeImportFile"
+                accept=".json"
+                onchange="importTheme(event)"
+              />
             </div>
           </div>
 
           <!-- 3. Global CSS -->
-          <div class="modal-subtitle" style="margin-top:12px;">Custom CSS</div>
-          <div style="font-size:10px; color:var(--text-sub); margin-bottom:6px;">Replaces the entire &lt;style&gt; block. Leave blank to use default.</div>
-          <div style="position:relative;">
-            <textarea id="themeCustomCSS" class="modal-input" placeholder="/* paste full CSS here */" style="width:100%; height:80px; resize:none; font-family:monospace; font-size:11px; line-height:1.5; padding:8px; box-sizing:border-box; display:block;"></textarea>
-            <button onclick="openCSSExpand('themeCustomCSS','Custom CSS',applyCustomCSS)" title="Expand" style="position:absolute;bottom:6px;right:6px;background:none;border:none;cursor:pointer;color:var(--text-sub);padding:2px;display:flex;align-items:center;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          <div class="modal-subtitle" style="margin-top: 12px">Custom CSS</div>
+          <div
+            style="font-size: 10px; color: var(--text-sub); margin-bottom: 6px"
+          >
+            Replaces the entire &lt;style&gt; block. Leave blank to use default.
+          </div>
+          <div style="position: relative">
+            <textarea
+              id="themeCustomCSS"
+              class="modal-input"
+              placeholder="/* paste full CSS here */"
+              style="
+                width: 100%;
+                height: 80px;
+                resize: none;
+                font-family: monospace;
+                font-size: 11px;
+                line-height: 1.5;
+                padding: 8px;
+                box-sizing: border-box;
+                display: block;
+              "
+            ></textarea>
+            <button
+              onclick="
+                openCSSExpand('themeCustomCSS', 'Custom CSS', applyCustomCSS)
+              "
+              title="Expand"
+              style="
+                position: absolute;
+                bottom: 6px;
+                right: 6px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: var(--text-sub);
+                padding: 2px;
+                display: flex;
+                align-items: center;
+              "
+            >
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="15 3 21 3 21 9" />
+                <polyline points="9 21 3 21 3 15" />
+                <line x1="21" y1="3" x2="14" y2="10" />
+                <line x1="3" y1="21" x2="10" y2="14" />
+              </svg>
             </button>
           </div>
-          <div class="modal-actions sleek-actions" style="margin-top:4px;">
-            <button class="modal-btn btn-cancel" onclick="resetCustomCSS()">Reset</button>
-            <button class="modal-btn btn-save" onclick="applyCustomCSS()">Apply</button>
+          <div class="modal-actions sleek-actions" style="margin-top: 4px">
+            <button class="modal-btn btn-cancel" onclick="resetCustomCSS()">
+              Reset
+            </button>
+            <button class="modal-btn btn-save" onclick="applyCustomCSS()">
+              Apply
+            </button>
           </div>
 
           <!-- 4. Bubble CSS -->
-          <div class="modal-subtitle" style="margin-top:12px;">Bubble CSS</div>
-          <div style="font-size:10px; color:var(--text-sub); margin-bottom:6px;">Extra styles for <code style="font-size:10px;">.bubble</code>, <code style="font-size:10px;">.received .bubble</code>, <code style="font-size:10px;">.sent .bubble</code>.</div>
-          <div style="position:relative;">
-            <textarea id="themeBubbleCSS" class="modal-input" placeholder=".bubble { border-radius: 20px; }&#10;.sent .bubble { background: #7c3aed; }&#10;.received .bubble { background: #1e1e1e; }" style="width:100%; height:72px; resize:none; font-family:monospace; font-size:11px; line-height:1.5; padding:8px; box-sizing:border-box; display:block;"></textarea>
-            <button onclick="openCSSExpand('themeBubbleCSS','Bubble CSS',applyBubbleCSS)" title="Expand" style="position:absolute;bottom:6px;right:6px;background:none;border:none;cursor:pointer;color:var(--text-sub);padding:2px;display:flex;align-items:center;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          <div class="modal-subtitle" style="margin-top: 12px">Bubble CSS</div>
+          <div
+            style="font-size: 10px; color: var(--text-sub); margin-bottom: 6px"
+          >
+            Extra styles for <code style="font-size: 10px">.bubble</code>,
+            <code style="font-size: 10px">.received .bubble</code>,
+            <code style="font-size: 10px">.sent .bubble</code>.
+          </div>
+          <div style="position: relative">
+            <textarea
+              id="themeBubbleCSS"
+              class="modal-input"
+              placeholder=".bubble { border-radius: 20px; }&#10;.sent .bubble { background: #7c3aed; }&#10;.received .bubble { background: #1e1e1e; }"
+              style="
+                width: 100%;
+                height: 72px;
+                resize: none;
+                font-family: monospace;
+                font-size: 11px;
+                line-height: 1.5;
+                padding: 8px;
+                box-sizing: border-box;
+                display: block;
+              "
+            ></textarea>
+            <button
+              onclick="
+                openCSSExpand('themeBubbleCSS', 'Bubble CSS', applyBubbleCSS)
+              "
+              title="Expand"
+              style="
+                position: absolute;
+                bottom: 6px;
+                right: 6px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: var(--text-sub);
+                padding: 2px;
+                display: flex;
+                align-items: center;
+              "
+            >
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="15 3 21 3 21 9" />
+                <polyline points="9 21 3 21 3 15" />
+                <line x1="21" y1="3" x2="14" y2="10" />
+                <line x1="3" y1="21" x2="10" y2="14" />
+              </svg>
             </button>
           </div>
-          <div class="modal-actions sleek-actions" style="margin-top:4px;">
-            <button class="modal-btn btn-cancel" onclick="resetBubbleCSS()">Reset</button>
-            <button class="modal-btn btn-save" onclick="applyBubbleCSS()">Apply</button>
+          <div class="modal-actions sleek-actions" style="margin-top: 4px">
+            <button class="modal-btn btn-cancel" onclick="resetBubbleCSS()">
+              Reset
+            </button>
+            <button class="modal-btn btn-save" onclick="applyBubbleCSS()">
+              Apply
+            </button>
           </div>
 
           <!-- 5. Font -->
-          <div class="modal-subtitle" style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div
+            class="modal-subtitle"
+            style="
+              margin-top: 12px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
             <span>Fonts</span>
-            <span style="cursor:pointer; color:var(--text-main); font-size:11px;" onclick="openAddFontModal()">+ Add</span>
+            <span
+              style="cursor: pointer; color: var(--text-main); font-size: 11px"
+              onclick="openAddFontModal()"
+              >+ Add</span
+            >
           </div>
-          <div id="fontList" style="display:flex; flex-direction:column; gap:4px; max-height:100px; overflow-y:auto; margin-bottom:4px;"></div>
-
-        </div><!-- end scrollable body -->
+          <div
+            id="fontList"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+              max-height: 100px;
+              overflow-y: auto;
+              margin-bottom: 4px;
+            "
+          ></div>
+        </div>
+        <!-- end scrollable body -->
 
         <!-- Fixed Done button -->
-        <div style="padding:12px 16px; border-top:1px solid var(--border-color); flex-shrink:0; background:var(--bg-color);">
-          <button class="modal-btn btn-save" onclick="closeModal('themeModal')" style="width:100%">Done</button>
+        <div
+          style="
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+            background: var(--bg-color);
+          "
+        >
+          <button
+            class="modal-btn btn-save"
+            onclick="closeModal('themeModal')"
+            style="width: 100%"
+          >
+            Done
+          </button>
         </div>
-
       </div>
     </div>
 
     <!-- CSS Full-screen expand overlay (inside phone frame) -->
-    <div class="modal-overlay" id="cssExpandModal" style="z-index:180; align-items:stretch; justify-content:stretch; padding:0;">
-      <div style="width:100%; height:100%; background:var(--bg-color); display:flex; flex-direction:column;">
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--border-color); flex-shrink:0;">
-          <span id="cssExpandTitle" style="font-size:13px; font-weight:600; color:var(--text-main);"></span>
-          <button id="cssExpandSaveBtn" onclick="saveCSSExpand()" style="background:none; border:none; cursor:pointer; color:var(--text-main); display:flex; align-items:center;" title="Save">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <div
+      class="modal-overlay"
+      id="cssExpandModal"
+      style="
+        z-index: 180;
+        align-items: stretch;
+        justify-content: stretch;
+        padding: 0;
+      "
+    >
+      <div
+        style="
+          width: 100%;
+          height: 100%;
+          background: var(--bg-color);
+          display: flex;
+          flex-direction: column;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+          "
+        >
+          <span
+            id="cssExpandTitle"
+            style="font-size: 13px; font-weight: 600; color: var(--text-main)"
+          ></span>
+          <button
+            id="cssExpandSaveBtn"
+            onclick="saveCSSExpand()"
+            style="
+              background: none;
+              border: none;
+              cursor: pointer;
+              color: var(--text-main);
+              display: flex;
+              align-items: center;
+            "
+            title="Save"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
           </button>
         </div>
-        <textarea id="cssExpandTextarea" style="flex:1; width:100%; border:none; outline:none; background:var(--bg-color); color:var(--text-main); font-family:monospace; font-size:12px; line-height:1.6; padding:14px 16px; resize:none; box-sizing:border-box;"></textarea>
+        <textarea
+          id="cssExpandTextarea"
+          style="
+            flex: 1;
+            width: 100%;
+            border: none;
+            outline: none;
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            padding: 14px 16px;
+            resize: none;
+            box-sizing: border-box;
+          "
+        ></textarea>
       </div>
     </div>
 
     <!-- Save Theme Name Modal -->
-    <div class="modal-overlay" id="saveThemeModal" style="z-index:170">
-      <div class="modal-content" style="width:240px;">
+    <div class="modal-overlay" id="saveThemeModal" style="z-index: 170">
+      <div class="modal-content" style="width: 240px">
         <div class="modal-title">Name This Theme</div>
-        <input type="text" class="modal-input" id="saveThemeNameInput" placeholder="e.g. Dark Purple" autocomplete="off"
-          onkeypress="if(event.key==='Enter') saveCurrentTheme()" />
+        <input
+          type="text"
+          class="modal-input"
+          id="saveThemeNameInput"
+          placeholder="e.g. Dark Purple"
+          autocomplete="off"
+          onkeypress="if (event.key === 'Enter') saveCurrentTheme();"
+        />
         <div class="modal-actions sleek-actions">
-          <button class="modal-btn btn-cancel" onclick="closeModal('saveThemeModal')">Cancel</button>
-          <button class="modal-btn btn-save" onclick="saveCurrentTheme()">Save</button>
+          <button
+            class="modal-btn btn-cancel"
+            onclick="closeModal('saveThemeModal')"
+          >
+            Cancel
+          </button>
+          <button class="modal-btn btn-save" onclick="saveCurrentTheme()">
+            Save
+          </button>
         </div>
       </div>
     </div>
 
     <!-- Add Font Modal -->
-    <div class="modal-overlay" id="addFontModal" style="z-index:170">
-      <div class="modal-content" style="width:270px;">
+    <div class="modal-overlay" id="addFontModal" style="z-index: 170">
+      <div class="modal-content" style="width: 270px">
         <div class="modal-title">Add Font</div>
-        <input type="text" class="modal-input" id="fontNameInput" placeholder="Font name (e.g. My Font)" autocomplete="off" style="margin-bottom:8px;" />
-        <input type="text" class="modal-input" id="fontUrlInput" placeholder="URL to .ttf / .woff2 file" autocomplete="off" style="margin-bottom:6px;" />
-        <div style="text-align:center; font-size:10px; color:var(--text-sub); margin-bottom:6px;">OR</div>
+        <input
+          type="text"
+          class="modal-input"
+          id="fontNameInput"
+          placeholder="Font name (e.g. My Font)"
+          autocomplete="off"
+          style="margin-bottom: 8px"
+        />
+        <input
+          type="text"
+          class="modal-input"
+          id="fontUrlInput"
+          placeholder="URL to .ttf / .woff2 file"
+          autocomplete="off"
+          style="margin-bottom: 6px"
+        />
+        <div
+          style="
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+          "
+        >
+          OR
+        </div>
         <div class="file-upload-wrapper">
           <div class="file-upload-btn">Upload font file</div>
-          <input type="file" id="fontFileInput" accept=".ttf,.otf,.woff,.woff2" />
+          <input
+            type="file"
+            id="fontFileInput"
+            accept=".ttf,.otf,.woff,.woff2"
+          />
         </div>
-        <div class="modal-actions sleek-actions" style="margin-top:10px;">
-          <button class="modal-btn btn-cancel" onclick="closeModal('addFontModal')">Cancel</button>
+        <div class="modal-actions sleek-actions" style="margin-top: 10px">
+          <button
+            class="modal-btn btn-cancel"
+            onclick="closeModal('addFontModal')"
+          >
+            Cancel
+          </button>
           <button class="modal-btn btn-save" onclick="addFont()">Add</button>
         </div>
       </div>
@@ -2051,16 +2377,19 @@
 
       (function initFreqButtons() {
         const freqVal = state.chatSettings.replyFrequency || 50;
-        document.querySelectorAll('.freq-btn').forEach(btn => {
-          btn.classList.toggle('active', parseInt(btn.dataset.value) === freqVal);
+        document.querySelectorAll(".freq-btn").forEach((btn) => {
+          btn.classList.toggle(
+            "active",
+            parseInt(btn.dataset.value) === freqVal,
+          );
         });
       })();
 
       function setReplyFreq(val) {
         state.chatSettings.replyFrequency = val;
         Storage.set("chatSettings", state.chatSettings);
-        document.querySelectorAll('.freq-btn').forEach(btn => {
-          btn.classList.toggle('active', parseInt(btn.dataset.value) === val);
+        document.querySelectorAll(".freq-btn").forEach((btn) => {
+          btn.classList.toggle("active", parseInt(btn.dataset.value) === val);
         });
       }
 
@@ -2129,7 +2458,15 @@
         const msgDate = new Date(now);
         msgDate.setHours(0, 0, 0, 0);
         const diffDays = Math.round((today - msgDate) / 86400000);
-        const dateLabel = diffDays === 0 ? "Today" : diffDays === 1 ? "Yesterday" : now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        const dateLabel =
+          diffDays === 0
+            ? "Today"
+            : diffDays === 1
+              ? "Yesterday"
+              : now.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
         return `${dateLabel} ${timeStr}`;
       }
 
@@ -2494,10 +2831,12 @@
         }
 
         // Mark all unread sent messages as read (double tick)
-        DOM.chatMain.querySelectorAll('.message.sent .msg-ticks:not(.read)').forEach(el => {
-          el.classList.add('read');
-          el.innerHTML = `<svg width="16" height="8" viewBox="0 0 16 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 4,7 11,1"/><polyline points="5,4 8,7 15,1"/></svg>`;
-        });
+        DOM.chatMain
+          .querySelectorAll(".message.sent .msg-ticks:not(.read)")
+          .forEach((el) => {
+            el.classList.add("read");
+            el.innerHTML = `<svg width="16" height="8" viewBox="0 0 16 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 4,7 11,1"/><polyline points="5,4 8,7 15,1"/></svg>`;
+          });
 
         // 2. 回复意愿判定
         if (state.chatSettings.readNoReply) {
@@ -3544,47 +3883,47 @@
       /* ================= Theme Modal ================= */
 
       // IDs for the injected style tags
-      const CUSTOM_CSS_ID = 'user-custom-css';
-      const BUBBLE_CSS_ID = 'user-bubble-css';
-      const FONT_STYLE_ID = 'user-font-css';
+      const CUSTOM_CSS_ID = "user-custom-css";
+      const BUBBLE_CSS_ID = "user-bubble-css";
+      const FONT_STYLE_ID = "user-font-css";
 
       function openThemeModal() {
         // Sync dark toggle state
-        const isDark = DOM.html.getAttribute('data-theme') === 'dark';
-        DOM.themeDarkToggle.classList.toggle('active', isDark);
+        const isDark = DOM.html.getAttribute("data-theme") === "dark";
+        DOM.themeDarkToggle.classList.toggle("active", isDark);
 
         // Load textarea values from storage
-        DOM.themeCustomCSS.value = Storage.get('themeCustomCSS', '');
-        DOM.themeBubbleCSS.value = Storage.get('themeBubbleCSS', '');
+        DOM.themeCustomCSS.value = Storage.get("themeCustomCSS", "");
+        DOM.themeBubbleCSS.value = Storage.get("themeBubbleCSS", "");
 
         renderThemeSavesList();
         renderFontList();
-        DOM.themeModal.classList.add('active');
+        DOM.themeModal.classList.add("active");
       }
 
       /* --- Dark / Light --- */
       function toggleTheme() {
-        const isDark = DOM.html.getAttribute('data-theme') === 'dark';
+        const isDark = DOM.html.getAttribute("data-theme") === "dark";
         if (isDark) {
-          DOM.html.removeAttribute('data-theme');
+          DOM.html.removeAttribute("data-theme");
           DOM.themeBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>`;
-          Storage.set('chatTheme', 'light');
+          Storage.set("chatTheme", "light");
         } else {
-          DOM.html.setAttribute('data-theme', 'dark');
+          DOM.html.setAttribute("data-theme", "dark");
           DOM.themeBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>`;
-          Storage.set('chatTheme', 'dark');
+          Storage.set("chatTheme", "dark");
         }
         // Sync toggle inside modal if open
-        DOM.themeDarkToggle.classList.toggle('active', !isDark);
+        DOM.themeDarkToggle.classList.toggle("active", !isDark);
       }
 
       /* --- Custom CSS --- */
       function applyCustomCSS() {
         const css = DOM.themeCustomCSS.value.trim();
-        Storage.set('themeCustomCSS', css);
+        Storage.set("themeCustomCSS", css);
         let tag = document.getElementById(CUSTOM_CSS_ID);
         if (!tag) {
-          tag = document.createElement('style');
+          tag = document.createElement("style");
           tag.id = CUSTOM_CSS_ID;
           document.head.appendChild(tag);
         }
@@ -3592,8 +3931,8 @@
       }
 
       function resetCustomCSS() {
-        Storage.remove('themeCustomCSS');
-        DOM.themeCustomCSS.value = '';
+        Storage.remove("themeCustomCSS");
+        DOM.themeCustomCSS.value = "";
         const tag = document.getElementById(CUSTOM_CSS_ID);
         if (tag) tag.remove();
       }
@@ -3601,10 +3940,10 @@
       /* --- Bubble CSS --- */
       function applyBubbleCSS() {
         const css = DOM.themeBubbleCSS.value.trim();
-        Storage.set('themeBubbleCSS', css);
+        Storage.set("themeBubbleCSS", css);
         let tag = document.getElementById(BUBBLE_CSS_ID);
         if (!tag) {
-          tag = document.createElement('style');
+          tag = document.createElement("style");
           tag.id = BUBBLE_CSS_ID;
           document.head.appendChild(tag);
         }
@@ -3612,8 +3951,8 @@
       }
 
       function resetBubbleCSS() {
-        Storage.remove('themeBubbleCSS');
-        DOM.themeBubbleCSS.value = '';
+        Storage.remove("themeBubbleCSS");
+        DOM.themeBubbleCSS.value = "";
         const tag = document.getElementById(BUBBLE_CSS_ID);
         if (tag) tag.remove();
       }
@@ -3621,25 +3960,29 @@
       /* --- Theme Presets --- */
       function getThemeCapture() {
         return {
-          darkMode: DOM.html.getAttribute('data-theme') === 'dark',
-          customCSS: Storage.get('themeCustomCSS', ''),
-          bubbleCSS: Storage.get('themeBubbleCSS', ''),
-          fonts: Storage.get('chatFonts', []),
-          activeFont: Storage.get('chatActiveFont', null),
+          darkMode: DOM.html.getAttribute("data-theme") === "dark",
+          customCSS: Storage.get("themeCustomCSS", ""),
+          bubbleCSS: Storage.get("themeBubbleCSS", ""),
+          fonts: Storage.get("chatFonts", []),
+          activeFont: Storage.get("chatActiveFont", null),
         };
       }
 
-      function getThemeSaves() { return Storage.get('themeSaves', []); }
-      function setThemeSaves(s) { Storage.set('themeSaves', s); }
+      function getThemeSaves() {
+        return Storage.get("themeSaves", []);
+      }
+      function setThemeSaves(s) {
+        Storage.set("themeSaves", s);
+      }
 
       function openSaveThemeModal() {
-        DOM.saveThemeNameInput.value = '';
-        DOM.saveThemeModal.classList.add('active');
+        DOM.saveThemeNameInput.value = "";
+        DOM.saveThemeModal.classList.add("active");
         DOM.saveThemeNameInput.focus();
       }
 
       function saveCurrentTheme() {
-        const name = DOM.saveThemeNameInput.value.trim() || 'Unnamed Theme';
+        const name = DOM.saveThemeNameInput.value.trim() || "Unnamed Theme";
         const saves = getThemeSaves();
         saves.push({
           id: generateId(),
@@ -3648,17 +3991,22 @@
           data: getThemeCapture(),
         });
         setThemeSaves(saves);
-        closeModal('saveThemeModal');
+        closeModal("saveThemeModal");
         renderThemeSavesList();
       }
 
       function renderThemeSavesList() {
         const saves = getThemeSaves();
         if (saves.length === 0) {
-          DOM.themeSavesList.innerHTML = '<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:8px;">No presets saved.</div>';
+          DOM.themeSavesList.innerHTML =
+            '<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:8px;">No presets saved.</div>';
           return;
         }
-        DOM.themeSavesList.innerHTML = saves.slice().reverse().map(s => `
+        DOM.themeSavesList.innerHTML = saves
+          .slice()
+          .reverse()
+          .map(
+            (s) => `
           <div class="save-item">
             <div class="save-info">
               <span class="save-name">${escapeHtml(s.name)}</span>
@@ -3672,61 +4020,77 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
-          </div>`).join('');
+          </div>`,
+          )
+          .join("");
       }
 
       function loadThemeSave(id) {
-        const save = getThemeSaves().find(s => s.id === id);
+        const save = getThemeSaves().find((s) => s.id === id);
         if (!save) return;
         const d = save.data;
 
         // Apply dark mode
         if (d.darkMode) {
-          DOM.html.setAttribute('data-theme', 'dark');
+          DOM.html.setAttribute("data-theme", "dark");
           DOM.themeBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>`;
-          Storage.set('chatTheme', 'dark');
+          Storage.set("chatTheme", "dark");
         } else {
-          DOM.html.removeAttribute('data-theme');
+          DOM.html.removeAttribute("data-theme");
           DOM.themeBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>`;
-          Storage.set('chatTheme', 'light');
+          Storage.set("chatTheme", "light");
         }
-        DOM.themeDarkToggle.classList.toggle('active', !!d.darkMode);
+        DOM.themeDarkToggle.classList.toggle("active", !!d.darkMode);
 
         // Custom CSS
-        Storage.set('themeCustomCSS', d.customCSS || '');
-        DOM.themeCustomCSS.value = d.customCSS || '';
+        Storage.set("themeCustomCSS", d.customCSS || "");
+        DOM.themeCustomCSS.value = d.customCSS || "";
         let ct = document.getElementById(CUSTOM_CSS_ID);
         if (d.customCSS) {
-          if (!ct) { ct = document.createElement('style'); ct.id = CUSTOM_CSS_ID; document.head.appendChild(ct); }
+          if (!ct) {
+            ct = document.createElement("style");
+            ct.id = CUSTOM_CSS_ID;
+            document.head.appendChild(ct);
+          }
           ct.textContent = d.customCSS;
         } else if (ct) ct.remove();
 
         // Bubble CSS
-        Storage.set('themeBubbleCSS', d.bubbleCSS || '');
-        DOM.themeBubbleCSS.value = d.bubbleCSS || '';
+        Storage.set("themeBubbleCSS", d.bubbleCSS || "");
+        DOM.themeBubbleCSS.value = d.bubbleCSS || "";
         let bt = document.getElementById(BUBBLE_CSS_ID);
         if (d.bubbleCSS) {
-          if (!bt) { bt = document.createElement('style'); bt.id = BUBBLE_CSS_ID; document.head.appendChild(bt); }
+          if (!bt) {
+            bt = document.createElement("style");
+            bt.id = BUBBLE_CSS_ID;
+            document.head.appendChild(bt);
+          }
           bt.textContent = d.bubbleCSS;
         } else if (bt) bt.remove();
 
         // Fonts
-        if (d.fonts) { Storage.set('chatFonts', d.fonts); }
+        if (d.fonts) {
+          Storage.set("chatFonts", d.fonts);
+        }
         if (d.activeFont != null) applyFontById(d.activeFont, d.fonts || []);
         renderFontList();
       }
 
       function deleteThemeSave(id) {
-        setThemeSaves(getThemeSaves().filter(s => s.id !== id));
+        setThemeSaves(getThemeSaves().filter((s) => s.id !== id));
         renderThemeSavesList();
       }
 
       function exportTheme() {
         const data = getThemeCapture();
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+          type: "application/json",
+        });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'cardchat_theme.json'; a.click();
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "cardchat_theme.json";
+        a.click();
         URL.revokeObjectURL(url);
       }
 
@@ -3734,34 +4098,43 @@
         const file = event.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = e => {
+        reader.onload = (e) => {
           try {
             const d = JSON.parse(e.target.result);
             // Reuse loadThemeSave logic by constructing a fake save
-            loadThemeSave('__import__');
+            loadThemeSave("__import__");
             // Manually patch since id won't match:
             const saves = getThemeSaves();
-            saves.push({ id: '__import__', name: 'Imported', time: new Date().toLocaleDateString(), data: d });
+            saves.push({
+              id: "__import__",
+              name: "Imported",
+              time: new Date().toLocaleDateString(),
+              data: d,
+            });
             setThemeSaves(saves);
-            loadThemeSave('__import__');
+            loadThemeSave("__import__");
             // Clean up the temp entry
-            setThemeSaves(getThemeSaves().filter(s => s.id !== '__import__'));
+            setThemeSaves(getThemeSaves().filter((s) => s.id !== "__import__"));
             renderThemeSavesList();
-          } catch(_) {}
+          } catch (_) {}
         };
         reader.readAsText(file);
-        event.target.value = '';
+        event.target.value = "";
       }
 
       /* --- Font Management --- */
-      function getFonts() { return Storage.get('chatFonts', []); }
-      function setFonts(f) { Storage.set('chatFonts', f); }
+      function getFonts() {
+        return Storage.get("chatFonts", []);
+      }
+      function setFonts(f) {
+        Storage.set("chatFonts", f);
+      }
 
       function openAddFontModal() {
-        DOM.fontNameInput.value = '';
-        DOM.fontUrlInput.value = '';
-        DOM.fontFileInput.value = '';
-        DOM.addFontModal.classList.add('active');
+        DOM.fontNameInput.value = "";
+        DOM.fontUrlInput.value = "";
+        DOM.fontFileInput.value = "";
+        DOM.addFontModal.classList.add("active");
         DOM.fontNameInput.focus();
       }
 
@@ -3776,14 +4149,14 @@
           const id = generateId();
           fonts.push({ id, name, src });
           setFonts(fonts);
-          closeModal('addFontModal');
+          closeModal("addFontModal");
           renderFontList();
           applyFontById(id, fonts);
         };
 
         if (file) {
           const reader = new FileReader();
-          reader.onload = e => doAdd(e.target.result);
+          reader.onload = (e) => doAdd(e.target.result);
           reader.readAsDataURL(file);
         } else if (url) {
           doAdd(url);
@@ -3792,70 +4165,77 @@
 
       function applyFontById(id, fontsArr) {
         const fonts = fontsArr || getFonts();
-        const font = id ? fonts.find(f => f.id === id) : null;
+        const font = id ? fonts.find((f) => f.id === id) : null;
         let tag = document.getElementById(FONT_STYLE_ID);
         if (!font) {
           // Remove custom font, revert to system font
           if (tag) tag.remove();
-          Storage.set('chatActiveFont', null);
-          document.body.style.fontFamily = '';
+          Storage.set("chatActiveFont", null);
+          document.body.style.fontFamily = "";
           return;
         }
-        if (!tag) { tag = document.createElement('style'); tag.id = FONT_STYLE_ID; document.head.appendChild(tag); }
+        if (!tag) {
+          tag = document.createElement("style");
+          tag.id = FONT_STYLE_ID;
+          document.head.appendChild(tag);
+        }
         tag.textContent = `@font-face { font-family: '${font.name}'; src: url('${font.src}'); } * { font-family: '${font.name}', -apple-system, sans-serif !important; }`;
-        Storage.set('chatActiveFont', id);
+        Storage.set("chatActiveFont", id);
       }
 
       function deleteFont(id) {
-        const fonts = getFonts().filter(f => f.id !== id);
+        const fonts = getFonts().filter((f) => f.id !== id);
         setFonts(fonts);
-        const active = Storage.get('chatActiveFont');
+        const active = Storage.get("chatActiveFont");
         if (active === id) applyFontById(null, fonts);
         renderFontList();
       }
 
       function renderFontList() {
         const fonts = getFonts();
-        const activeId = Storage.get('chatActiveFont');
+        const activeId = Storage.get("chatActiveFont");
         if (fonts.length === 0) {
-          DOM.fontList.innerHTML = '<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:6px 0;">No custom fonts added.</div>';
+          DOM.fontList.innerHTML =
+            '<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:6px 0;">No custom fonts added.</div>';
           return;
         }
-        DOM.fontList.innerHTML = fonts.map(f => {
-          const isActive = f.id === activeId;
-          return `<div class="save-item" style="cursor:default;">
+        DOM.fontList.innerHTML = fonts
+          .map((f) => {
+            const isActive = f.id === activeId;
+            return `<div class="save-item" style="cursor:default;">
             <div class="save-info">
-              <span class="save-name" style="${isActive ? 'color:var(--text-main);' : ''}">${escapeHtml(f.name)}${isActive ? ' ✓' : ''}</span>
+              <span class="save-name" style="${isActive ? "color:var(--text-main);" : ""}">${escapeHtml(f.name)}${isActive ? " ✓" : ""}</span>
             </div>
             <div class="save-actions">
-              <button class="save-btn-small" title="${isActive ? 'Deactivate' : 'Use'}" onclick="${isActive ? "applyFontById(null)" : "applyFontById('" + f.id + "')"}; renderFontList()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="${isActive ? '20 6 9 17 4 12' : '9 11 12 14 20 6'}"/>${isActive ? '' : '<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>'}</svg>
+              <button class="save-btn-small" title="${isActive ? "Deactivate" : "Use"}" onclick="${isActive ? "applyFontById(null)" : "applyFontById('" + f.id + "')"}; renderFontList()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="${isActive ? "20 6 9 17 4 12" : "9 11 12 14 20 6"}"/>${isActive ? "" : '<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>'}</svg>
               </button>
               <button class="save-btn-small" title="Delete" onclick="deleteFont('${f.id}')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
           </div>`;
-        }).join('');
+          })
+          .join("");
       }
 
       /* --- Init: restore saved CSS / fonts on load --- */
       (function initTheme() {
-        const customCSS = Storage.get('themeCustomCSS', '');
+        const customCSS = Storage.get("themeCustomCSS", "");
         if (customCSS) {
-          const tag = document.createElement('style');
+          const tag = document.createElement("style");
           tag.id = CUSTOM_CSS_ID;
           tag.textContent = customCSS;
           document.head.appendChild(tag);
         }
-        const bubbleCSS = Storage.get('themeBubbleCSS', '');
+        const bubbleCSS = Storage.get("themeBubbleCSS", "");
         if (bubbleCSS) {
-          const tag = document.createElement('style');
+          const tag = document.createElement("style");
           tag.id = BUBBLE_CSS_ID;
           tag.textContent = bubbleCSS;
           document.head.appendChild(tag);
         }
-        const activeFont = Storage.get('chatActiveFont');
+        const activeFont = Storage.get("chatActiveFont");
         if (activeFont) applyFontById(activeFont, getFonts());
       })();
 
@@ -3868,8 +4248,8 @@
         _cssExpandApplyFn = applyFn;
         const source = document.getElementById(sourceId);
         DOM.cssExpandTitle.textContent = title;
-        DOM.cssExpandTextarea.value = source ? source.value : '';
-        DOM.cssExpandModal.classList.add('active');
+        DOM.cssExpandTextarea.value = source ? source.value : "";
+        DOM.cssExpandModal.classList.add("active");
         DOM.cssExpandTextarea.focus();
       }
 
@@ -3877,9 +4257,8 @@
         const source = document.getElementById(_cssExpandSourceId);
         if (source) source.value = DOM.cssExpandTextarea.value;
         if (_cssExpandApplyFn) _cssExpandApplyFn();
-        DOM.cssExpandModal.classList.remove('active');
+        DOM.cssExpandModal.classList.remove("active");
       }
-
     </script>
   </body>
 </html>
