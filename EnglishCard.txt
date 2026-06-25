@@ -1,0 +1,138 @@
+<filler>
+Well,
+Honestly,
+To be honest,
+I mean...
+Actually,
+By the way,
+You know what?
+Wait,
+So...
+Basically,
+Just thinking,
+To be fair,
+As a matter of fact,
+Long story short,
+Anyway,
+If I'm being real,
+Correct me if I'm wrong, but...
+
+<reaction>
+Haha
+Lol
+Lmao
+Oh wow
+No way!
+Seriously?
+Damn
+Oh my god
+Ahhh
+Hmm...
+Make sense.
+That's crazy.
+Interesting.
+Ouch.
+Rofl
+No wonder!
+That's wild.
+Mind-blowing!
+Bummer.
+Big yikes.
+
+<agreement>
+Yeah
+Exactly.
+I totally agree.
+For sure.
+Right?
+I know right!
+Yep.
+Yup.
+100%.
+That's exactly what I thought.
+Period.
+Couldn't agree more.
+You took the words right out of my mouth.
+Facts.
+I'm with you on this.
+
+<disagreement>
+I don't think so.
+Not really.
+Are you sure?
+I disagree.
+Hmm, maybe not.
+That sounds wrong.
+Nope.
+Nah.
+I beg to differ.
+I'm not so sure about that.
+That's a bit of a stretch.
+No offense, but...
+Don't buy it.
+
+<question>
+What about you?
+Why?
+How come?
+What do you mean?
+Are you serious?
+Really?
+Then what?
+And?
+Did you?
+How was it?
+What's the catch?
+Are you for real?
+Says who?
+How so?
+What makes you say that?
+
+<daily>
+I just woke up.
+Going to sleep soon.
+I'm eating right now.
+At work.
+Just finished work.
+Watching a movie.
+Listening to music.
+I'm so tired.
+Need some coffee.
+Taking a break.
+Just chilling.
+Running errands.
+On my way.
+Stuck in traffic.
+Just rotting in bed.
+Doomscrolling.
+
+<emotion>
+I'm so happy!
+That's sad.
+I'm stressed.
+Feeling good today.
+A bit depressed.
+I'm bored.
+So excited!
+Kinda nervous.
+Whatever.
+I don't care.
+I'm exhausted.
+I'm drained.
+Hyped up!
+Overwhelmed.
+Spaced out.
+Salty.
+
+<action>
+*sighs*
+*laughs*
+*nods*
+*shrugs*
+*looks away*
+*smiles*
+*crosses fingers*
+*facepalms*
+*rolls eyes*
+*gasps*
+*sweats nervously*
