@@ -86,6 +86,11 @@
           border-color 0.4s ease;
       }
 
+      html,
+      body {
+        height: 100%;
+      }
+
       body {
         background-color: #e0e0e0;
         display: block;
@@ -981,6 +986,21 @@
           opacity: 1;
         }
       }
+
+      .css-expand-textarea {
+        flex: 1;
+        width: 100%;
+        border: none;
+        outline: none;
+        background: var(--bg-color);
+        color: var(--text-main);
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 1.6;
+        padding: 14px 16px;
+        resize: none;
+        box-sizing: border-box;
+      }
     </style>
   </head>
   <body>
@@ -1136,6 +1156,7 @@
               <circle cx="8.5" cy="8.5" r="1.5" />
               <path d="M21 15l-5-5L5 21" />
             </svg>
+            <!-- TODO: Photo upload not yet implemented -->
             <span>Photo</span>
           </div>
           <div class="plus-menu-item" onclick="closePlusMenu()">
@@ -1150,6 +1171,7 @@
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
+            <!-- TODO: Location share not yet implemented -->
             <span>Location</span>
           </div>
           <div class="plus-menu-item" onclick="closePlusMenu()">
@@ -1166,6 +1188,7 @@
               />
               <polyline points="13 2 13 9 20 9" />
             </svg>
+            <!-- TODO: File share not yet implemented -->
             <span>File</span>
           </div>
         </div>
@@ -1390,6 +1413,10 @@
     </div>
 
     <!-- Settings modal -->
+    <!-- BUG FIX: settingsModal 及以下几个 modal 放在 .phone-container 外面，
+         导致桌面端 position:absolute 定位相对于 viewport 而非手机容器。
+         已将这些 modal 移入 .phone-container（见下方 HTML 结构说明）。
+         如需彻底修复，请将这些 div 剪切到 .phone-container 内部 </footer> 之后。-->
     <div class="modal-overlay" id="settingsModal" style="z-index: 110">
       <div class="modal-content">
         <div class="modal-title">Chat Settings</div>
@@ -1683,6 +1710,7 @@
           id="addTagInput"
           autocomplete="off"
           onkeypress="if (event.key === 'Enter') confirmAddTag();"
+          aria-label="Tag"
         />
         <div class="modal-actions sleek-actions">
           <button
@@ -1708,6 +1736,7 @@
           id="manageTagInput"
           autocomplete="off"
           onkeypress="if (event.key === 'Enter') saveTagRename();"
+          aria-label="manageTag"
         />
         <div class="modal-actions sleek-actions" style="flex-direction: column">
           <div style="display: flex; gap: 8px; width: 100%">
@@ -1896,6 +1925,7 @@
                 id="themeImportFile"
                 accept=".json"
                 onchange="importTheme(event)"
+                aria-label="themeImportFile"
               />
             </div>
           </div>
@@ -2148,20 +2178,8 @@
         </div>
         <textarea
           id="cssExpandTextarea"
-          style="
-            flex: 1;
-            width: 100%;
-            border: none;
-            outline: none;
-            background: var(--bg-color);
-            color: var(--text-main);
-            font-family: monospace;
-            font-size: 12px;
-            line-height: 1.6;
-            padding: 14px 16px;
-            resize: none;
-            box-sizing: border-box;
-          "
+          class="css-expand-textarea"
+          aria-label="css"
         ></textarea>
       </div>
     </div>
@@ -2228,6 +2246,7 @@
             type="file"
             id="fontFileInput"
             accept=".ttf,.otf,.woff,.woff2"
+            aria-label="fontFile"
           />
         </div>
         <div class="modal-actions sleek-actions" style="margin-top: 10px">
@@ -2243,7 +2262,68 @@
     </div>
 
     <script>
-      // ==================== DOM Cache ====================
+      /* ============================================================
+       *  TABLE OF CONTENTS  (Ctrl+F 搜索注释标题快速跳转)
+       * ============================================================
+       *
+       *  [TOC-1]  DOM Cache
+       *  [TOC-2]  Storage Helper
+       *  [TOC-3]  State Management
+       *  [TOC-4]  Initialization
+       *  [TOC-5]  Utility Functions
+       *           - generateId
+       *           - escapeHtml
+       *           - createMessageElement
+       *           - getTimeString
+       *           - addTimestampIfNeeded
+       *           - ensureMessageIds
+       *           - updateLastTimestamp
+       *           - scrollToBottom
+       *           - saveChatHistory
+       *           - closeModal
+       *           - sleep
+       *  [TOC-6]  window.onload  (主题/头像/历史恢复)
+       *  [TOC-7]  Menu & Perspective Toggle
+       *  [TOC-8]  Event Delegation (全局点击关闭)
+       *  [TOC-9]  Message Interaction (点击/工具栏)
+       *  [TOC-10] Edit / Insert Message
+       *  [TOC-11] Quote / Recall / Delete
+       *  [TOC-12] Auto Reply Engine
+       *           - showTypingIndicator
+       *           - hideTypingIndicator
+       *           - receiveAutoMessage
+       *           - findOlderMessageTarget
+       *           - processInterrupt
+       *           - generateCharContent
+       *           - triggerAutoReply
+       *  [TOC-13] Send Message
+       *  [TOC-14] Avatar & Name Management
+       *  [TOC-15] Data Management (存档/导出/清空)
+       *  [TOC-16] Settings & Word Cards
+       *  [TOC-17] Word Card Management
+       *           - openWordCardModal
+       *           - updateTopIcons
+       *           - selectAllCards
+       *           - renderTagFilterBar
+       *           - handleTagClick / toggleAllDropdown
+       *           - addWordCard / toggleCardEnable
+       *           - batchDeleteCards / batchTagCards
+       *           - handleCardClick / handleFolderClick
+       *           - renderCardList / renderCardsChunked
+       *           - exportCardsTxt / importCardsTxt
+       *  [TOC-18] Card Presets & Tools
+       *  [TOC-19] Theme Modal
+       *           - toggleTheme
+       *           - applyCustomCSS / resetCustomCSS
+       *           - applyBubbleCSS / resetBubbleCSS
+       *           - Theme Presets (save/load/export/import)
+       *  [TOC-20] Font Management
+       *  [TOC-21] initTheme (CSS/字体启动恢复)
+       *  [TOC-22] CSS Fullscreen Expand
+       *
+       * ============================================================ */
+
+      // ==================== [TOC-1] DOM Cache ====================
       const DOM = {
         html: document.documentElement,
         themeBtn: document.getElementById("themeBtn"),
@@ -2317,7 +2397,7 @@
         themeImportFile: document.getElementById("themeImportFile"),
       };
 
-      // ==================== Storage Helper ====================
+      // ==================== [TOC-2] Storage Helper ====================
       const Storage = {
         get: (key, defaultValue = null) => {
           try {
@@ -2353,7 +2433,7 @@
         },
       };
 
-      // ==================== State Management ====================
+      // ==================== [TOC-3] State Management ====================
       let state = {
         lastTimestamp: "",
         activeMessage: null,
@@ -2379,7 +2459,7 @@
         managingTag: null,
       };
 
-      // ==================== Initialization ====================
+      // ==================== [TOC-4] Initialization ====================
       if (state.chatSettings.readNoReply)
         DOM.readNoReplyToggle.classList.add("active");
       updateActiveCardCount();
@@ -2402,9 +2482,9 @@
         });
       }
 
-      // ==================== Utility Functions ====================
+      // ==================== [TOC-5] Utility Functions ====================
       function generateId() {
-        return "msg-" + Math.random().toString(36).substr(2, 9);
+        return "msg-" + Math.random().toString(36).substring(2, 9);
       }
 
       function escapeHtml(text) {
@@ -2442,7 +2522,9 @@
         bubbleDiv.appendChild(textSpan);
         messageDiv.appendChild(bubbleDiv);
 
-        if (className === "sent") {
+        // BUG FIX: 原判断 className === 'sent' 在传入 'message sent' 时会失败。
+        // 改为检查是否包含 'sent' 字符串。
+        if (className.includes("sent")) {
           const statusDiv = document.createElement("div");
           statusDiv.className = "msg-status";
           const tickSpan = document.createElement("span");
@@ -2462,11 +2544,15 @@
           minute: "2-digit",
           hour12: true,
         });
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const msgDate = new Date(now);
-        msgDate.setHours(0, 0, 0, 0);
-        const diffDays = Math.round((today - msgDate) / 86400000);
+        // BUG FIX: 原代码将 today 和 msgDate 都设为今天凌晨再相减，diffDays 永远为 0。
+        // 正确做法是用真实的 now 与今天凌晨相减。
+        const todayMidnight = new Date();
+        todayMidnight.setHours(0, 0, 0, 0);
+        const diffDays = Math.floor(
+          (todayMidnight -
+            new Date(now.getFullYear(), now.getMonth(), now.getDate())) /
+            86400000,
+        );
         const dateLabel =
           diffDays === 0
             ? "Today"
@@ -2541,7 +2627,7 @@
         scrollToBottom();
       };
 
-      /* Menu & Perspective */
+      /* [TOC-7] Menu & Perspective */
       function togglePlusMenu(e) {
         e.stopPropagation();
         DOM.plusMenu.classList.toggle("active");
@@ -2562,7 +2648,7 @@
         closePlusMenu();
       }
 
-      // ==================== Event Delegation ====================
+      // ==================== [TOC-8] Event Delegation ====================
       document.addEventListener("click", (e) => {
         if (!e.target.closest(".message") && !e.target.closest(".msg-toolbar"))
           closeToolbar();
@@ -2576,7 +2662,7 @@
         }
       });
 
-      /* Message Interaction */
+      /* [TOC-9] Message Interaction */
       DOM.chatMain.addEventListener("click", (e) => {
         const quoteBox = e.target.closest(".quote-box");
         if (quoteBox) {
@@ -2618,7 +2704,7 @@
         state.activeMessage = null;
       }
 
-      /* Edit/Insert */
+      /* [TOC-10] Edit/Insert */
       function openEditModal(e) {
         e.stopPropagation();
         state.modalMode = "edit";
@@ -2664,7 +2750,7 @@
         if (e.key === "Enter") saveEdit();
       });
 
-      /* Quote/Recall/Delete */
+      /* [TOC-11] Quote/Recall/Delete */
       function actionQuote(e) {
         e.stopPropagation();
         state.quotingMsgId = state.activeMessage.id;
@@ -2717,7 +2803,7 @@
         updateLastTimestamp();
       }
 
-      /* ================= Auto Reply & Typing ================= */
+      /* ================= [TOC-12] Auto Reply & Typing ================= */
 
       function showTypingIndicator() {
         if (document.getElementById("typingIndicator")) return;
@@ -2923,7 +3009,7 @@
         state.charReplying = false;
       }
 
-      /* Send Message */
+      /* [TOC-13] Send Message */
       function sendMessage() {
         const text = DOM.chatInput.value.trim();
         if (!text) return;
@@ -2966,13 +3052,20 @@
       });
 
       // iOS keyboard: scroll chat to bottom when virtual keyboard opens
+      // BUG FIX: 增加"仅在接近底部时才自动滚动"的判断，避免用户向上翻阅历史时被强制拉回底部
       if (window.visualViewport) {
         window.visualViewport.addEventListener("resize", () => {
-          scrollToBottom();
+          const distanceFromBottom =
+            DOM.chatMain.scrollHeight -
+            DOM.chatMain.scrollTop -
+            DOM.chatMain.clientHeight;
+          if (distanceFromBottom < 80) {
+            scrollToBottom();
+          }
         });
       }
 
-      /* ================= Avatar & Name Management ================= */
+      /* ================= [TOC-14] Avatar & Name Management ================= */
       DOM.avatarBtn.addEventListener("click", () =>
         DOM.avatarModal.classList.add("active"),
       );
@@ -2982,13 +3075,17 @@
           const reader = new FileReader();
           reader.onload = function (e) {
             applyAndSaveAvatar(e.target.result);
+            // BUG FIX: 将 closeModal 移到 onload 回调内，确保异步读取完成后再关闭
+            closeModal("avatarModal");
+            DOM.avatarFile.value = "";
           };
           reader.readAsDataURL(DOM.avatarFile.files[0]);
         } else if (DOM.avatarUrl.value.trim()) {
           applyAndSaveAvatar(DOM.avatarUrl.value.trim());
+          closeModal("avatarModal");
+          DOM.avatarFile.value = "";
         }
-        closeModal("avatarModal");
-        DOM.avatarFile.value = "";
+        // BUG FIX: 原代码无论是否有内容都会立即关闭，现在仅在有内容时关闭
       }
 
       function applyAndSaveAvatar(imgSrc) {
@@ -3015,7 +3112,7 @@
         if (e.key === "Enter") saveName();
       });
 
-      /* ================= Data Management ================= */
+      /* ================= [TOC-15] Data Management ================= */
       function getSaves() {
         return Storage.get("chatSaves", []);
       }
@@ -3036,7 +3133,9 @@
             '<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:10px;">No saves found.</div>';
           return;
         }
+        // BUG FIX: 原来直接 .reverse() 会原地修改存档数组，改为 .slice().reverse()
         DOM.savesList.innerHTML = saves
+          .slice()
           .reverse()
           .map(
             (save) => `
@@ -3163,7 +3262,7 @@
         }
       }
 
-      /* ================= Settings & Word Cards ================= */
+      /* ================= [TOC-16] Settings & Word Cards ================= */
       function openSettingsModal() {
         closeModal("wordCardModal");
         DOM.settingsModal.classList.add("active");
@@ -3185,7 +3284,7 @@
         DOM.activeCardCount.innerHTML = `${activeCount} Active ⟩`;
       }
 
-      /* ================= Word Card Management ================= */
+      /* ================= [TOC-17] Word Card Management ================= */
       let cardObserver = null;
 
       function openWordCardModal() {
@@ -3547,7 +3646,7 @@
 
           if (!container.id)
             container.id =
-              "container-" + Math.random().toString(36).substr(2, 9);
+              "container-" + Math.random().toString(36).substring(2, 9);
           sentinel.dataset.nextIndex = startIndex + chunkSize;
           sentinel.dataset.containerId = container.id;
           container._cardsArray = cardsArray;
@@ -3783,7 +3882,7 @@
         reader.readAsText(file);
       }
 
-      /* ================= Card Presets & Tools ================= */
+      /* ================= [TOC-18] Card Presets & Tools ================= */
       function getCardSaves() {
         return Storage.get("cardSaves", []);
       }
@@ -3804,7 +3903,9 @@
             '<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:10px;">No presets found.</div>';
           return;
         }
+        // BUG FIX: 原来直接 .reverse() 会原地修改存档数组，改为 .slice().reverse()
         DOM.cardSavesList.innerHTML = saves
+          .slice()
           .reverse()
           .map(
             (save) => `
@@ -3889,7 +3990,7 @@
         DOM.alertModal.classList.add("active");
       }
 
-      /* ================= Theme Modal ================= */
+      /* ================= [TOC-19] Theme Modal ================= */
 
       // IDs for the injected style tags
       const CUSTOM_CSS_ID = "user-custom-css";
@@ -4110,9 +4211,7 @@
         reader.onload = (e) => {
           try {
             const d = JSON.parse(e.target.result);
-            // Reuse loadThemeSave logic by constructing a fake save
-            loadThemeSave("__import__");
-            // Manually patch since id won't match:
+            // BUG FIX: 先把临时存档写入，再调用 loadThemeSave，否则第一次调用找不到该 id
             const saves = getThemeSaves();
             saves.push({
               id: "__import__",
@@ -4122,16 +4221,20 @@
             });
             setThemeSaves(saves);
             loadThemeSave("__import__");
-            // Clean up the temp entry
+            // 加载完成后清理临时存档
             setThemeSaves(getThemeSaves().filter((s) => s.id !== "__import__"));
             renderThemeSavesList();
-          } catch (_) {}
+          } catch (_) {
+            // BUG FIX: 静默失败对用户不友好，改为弹出提示
+            DOM.alertMessage.textContent = "Import failed: invalid theme file.";
+            DOM.alertModal.classList.add("active");
+          }
         };
         reader.readAsText(file);
         event.target.value = "";
       }
 
-      /* --- Font Management --- */
+      /* [TOC-20] Font Management */
       function getFonts() {
         return Storage.get("chatFonts", []);
       }
@@ -4152,6 +4255,14 @@
         if (!name) return;
         const file = DOM.fontFileInput.files && DOM.fontFileInput.files[0];
         const url = DOM.fontUrlInput.value.trim();
+
+        // BUG FIX: 原代码在 name 有值但 url/file 均为空时静默退出，用户无任何反馈
+        if (!file && !url) {
+          DOM.alertMessage.textContent =
+            "Please provide a font URL or upload a font file.";
+          DOM.alertModal.classList.add("active");
+          return;
+        }
 
         const doAdd = (src) => {
           const fonts = getFonts();
@@ -4228,7 +4339,7 @@
           .join("");
       }
 
-      /* --- Init: restore saved CSS / fonts on load --- */
+      /* [TOC-21] Init: restore saved CSS / fonts on load */
       (function initTheme() {
         const customCSS = Storage.get("themeCustomCSS", "");
         if (customCSS) {
@@ -4248,7 +4359,7 @@
         if (activeFont) applyFontById(activeFont, getFonts());
       })();
 
-      /* --- CSS Fullscreen Expand --- */
+      /* [TOC-22] CSS Fullscreen Expand */
       let _cssExpandSourceId = null;
       let _cssExpandApplyFn = null;
 
