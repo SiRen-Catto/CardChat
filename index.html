@@ -91,13 +91,41 @@
         height: 100%;
       }
 
+      html {
+        position: fixed;
+        overflow: hidden;
+        width: 100%;
+      }
+
       body {
         background-color: #e0e0e0;
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
-        height: 100%;
+        height: 100dvh;
         margin: 0;
         overflow: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+
+      /* 桌面端（参考静语：flex居中 + max-width卡片 + 阴影/圆角，
+         而非空境那种写死像素的"手机壳"） */
+      .phone-container {
+        background-color: var(--bg-color);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 100%;
+        max-width: 480px;
+        height: 100dvh;
+        max-height: 900px;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(0, 0, 0, 0.08);
       }
 
       @media (max-width: 480px) {
@@ -108,7 +136,9 @@
         }
         .phone-container {
           width: 100%;
+          max-width: none;
           height: 100dvh;
+          max-height: none;
           position: relative;
           display: flex;
           flex-direction: column;
@@ -119,14 +149,6 @@
         }
       }
 
-      .phone-container {
-        background-color: var(--bg-color);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-      }
-
       .chat-header {
         display: flex;
         align-items: center;
@@ -135,6 +157,7 @@
         border-bottom: 1px solid var(--border-color);
         background-color: var(--bg-color);
         z-index: 10;
+        flex-shrink: 0;
       }
       .header-left {
         display: flex;
@@ -1004,7 +1027,7 @@
     </style>
   </head>
   <body>
-    <div class="phone-container">
+    <div class="phone-container" id="phoneContainer">
       <header class="chat-header">
         <div class="header-left">
           <div class="avatar" id="avatarBtn"></div>
@@ -1410,13 +1433,8 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Settings modal -->
-    <!-- BUG FIX: settingsModal 及以下几个 modal 放在 .phone-container 外面，
-         导致桌面端 position:absolute 定位相对于 viewport 而非手机容器。
-         已将这些 modal 移入 .phone-container（见下方 HTML 结构说明）。
-         如需彻底修复，请将这些 div 剪切到 .phone-container 内部 </footer> 之后。-->
+      <!-- Settings modal -->
     <div class="modal-overlay" id="settingsModal" style="z-index: 110">
       <div class="modal-content">
         <div class="modal-title">Chat Settings</div>
@@ -2260,6 +2278,9 @@
         </div>
       </div>
     </div>
+    </div>
+    <!-- ↑ phone-container 闭合标签（已修复：原先在 settingsModal 之前提前闭合，
+         导致 12 个弹窗跑到 .phone-container 外面，桌面端会相对 viewport 定位错乱） -->
 
     <script>
       /* ============================================================
@@ -2326,6 +2347,7 @@
       // ==================== [TOC-1] DOM Cache ====================
       const DOM = {
         html: document.documentElement,
+        phoneContainer: document.getElementById("phoneContainer"),
         themeBtn: document.getElementById("themeBtn"),
         chatInput: document.getElementById("chatInput"),
         sendBtn: document.getElementById("sendBtn"),
@@ -3064,6 +3086,31 @@
           }
         });
       }
+
+      // 键盘弹出时保持顶部header固定不动：
+      // 手机浏览器（尤其iOS Safari）在输入框获得焦点时，即使body设了overflow:hidden，
+      // 系统仍可能把整个页面往上滚动以让输入框可见，这会把header顶出屏幕外。
+      // 这里用 visualViewport 实时把 .phone-container 的高度贴合"键盘弹出后真正可见的视口高度"，
+      // 并把页面滚动强制归零，让header始终锚定在可视区域顶部，只有中间chat-main区域跟着变矮。
+      function isMobileLayout() {
+        return window.matchMedia("(max-width: 480px)").matches;
+      }
+
+      function syncViewportForKeyboard() {
+        if (!window.visualViewport || !isMobileLayout()) return;
+        const vv = window.visualViewport;
+        DOM.phoneContainer.style.height = vv.height + "px";
+        // 纠正系统自动产生的页面滚动/偏移，防止header被顶出可视区域
+        window.scrollTo(0, 0);
+        if (DOM.html) DOM.html.scrollTop = 0;
+      }
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", syncViewportForKeyboard);
+        window.visualViewport.addEventListener("scroll", syncViewportForKeyboard);
+      }
+      window.addEventListener("resize", syncViewportForKeyboard);
+      syncViewportForKeyboard();
 
       /* ================= [TOC-14] Avatar & Name Management ================= */
       DOM.avatarBtn.addEventListener("click", () =>
