@@ -31,6 +31,7 @@
         --icon-color: #000000;
         --modal-overlay: rgba(0, 0, 0, 0.4);
         --highlight-bg: rgba(0, 0, 0, 0.08);
+        --desktop-backdrop: #e0e0e0;
       }
 
       [data-theme="dark"] {
@@ -46,6 +47,7 @@
         --icon-color: #ffffff;
         --modal-overlay: rgba(255, 255, 255, 0.1);
         --highlight-bg: rgba(255, 255, 255, 0.15);
+        --desktop-backdrop: #050505;
       }
 
       * {
@@ -98,7 +100,7 @@
       }
 
       body {
-        background-color: #e0e0e0;
+        background-color: var(--desktop-backdrop);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -109,6 +111,7 @@
         position: fixed;
         top: 0;
         left: 0;
+        transition: background-color 0.4s ease;
       }
 
       /* 桌面端（参考静语：flex居中 + max-width卡片 + 阴影/圆角，
@@ -2633,6 +2636,7 @@
           DOM.html.setAttribute("data-theme", "dark");
           DOM.themeBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>`;
         }
+        syncThemeColorMeta();
 
         const avatarImg = Storage.get("chatAvatarImg");
         if (avatarImg)
@@ -3088,10 +3092,10 @@
       }
 
       // 键盘弹出时保持顶部header固定不动：
-      // 手机浏览器（尤其iOS Safari）在输入框获得焦点时，即使body设了overflow:hidden，
-      // 系统仍可能把整个页面往上滚动以让输入框可见，这会把header顶出屏幕外。
-      // 这里用 visualViewport 实时把 .phone-container 的高度贴合"键盘弹出后真正可见的视口高度"，
-      // 并把页面滚动强制归零，让header始终锚定在可视区域顶部，只有中间chat-main区域跟着变矮。
+      // iOS Safari在输入框获得焦点时，会把"可视视口"相对"布局视口"整体下移一截来露出输入框，
+      // 即使body是position:fixed，也会跟着这个偏移一起被顶出屏幕（这就是"先整体上移"的那一下）。
+      // 用 visualViewport.offsetTop 实时算出这个偏移量，直接用 transform 把body拉回来对齐，
+      // 而不是等它先跳出去、再用 scrollTo 事后纠正——后者会有肉眼可见的"跳一下再弹回"的抽搐感。
       function isMobileLayout() {
         return window.matchMedia("(max-width: 480px)").matches;
       }
@@ -3100,9 +3104,9 @@
         if (!window.visualViewport || !isMobileLayout()) return;
         const vv = window.visualViewport;
         DOM.phoneContainer.style.height = vv.height + "px";
-        // 纠正系统自动产生的页面滚动/偏移，防止header被顶出可视区域
-        window.scrollTo(0, 0);
-        if (DOM.html) DOM.html.scrollTop = 0;
+        document.body.style.transform = vv.offsetTop
+          ? `translateY(${vv.offsetTop}px)`
+          : "";
       }
 
       if (window.visualViewport) {
@@ -4059,6 +4063,14 @@
       }
 
       /* --- Dark / Light --- */
+      // 同步 theme-color meta（决定PWA全屏模式下刘海/灵动岛区域及浏览器地址栏的颜色），
+      // 让状态栏颜色跟随深浅色主题走，而不是停留在写死的深色
+      function syncThemeColorMeta() {
+        const isDark = DOM.html.getAttribute("data-theme") === "dark";
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", isDark ? "#000000" : "#ffffff");
+      }
+
       function toggleTheme() {
         const isDark = DOM.html.getAttribute("data-theme") === "dark";
         if (isDark) {
@@ -4072,6 +4084,7 @@
         }
         // Sync toggle inside modal if open
         DOM.themeDarkToggle.classList.toggle("active", !isDark);
+        syncThemeColorMeta();
       }
 
       /* --- Custom CSS --- */
@@ -4198,6 +4211,7 @@
           Storage.set("chatTheme", "light");
         }
         DOM.themeDarkToggle.classList.toggle("active", !!d.darkMode);
+        syncThemeColorMeta();
 
         // Custom CSS
         Storage.set("themeCustomCSS", d.customCSS || "");
