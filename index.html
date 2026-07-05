@@ -1620,6 +1620,7 @@
                   id="proactiveIntervalInput"
                   class="stepper-input"
                   value="300"
+                  onchange="applyProactiveInterval()"
                 />
                 <div class="stepper-arrows">
                   <button
@@ -2425,6 +2426,7 @@
                       id="fontSizeInput"
                       class="stepper-input"
                       value="14"
+                      onchange="applyFontSize()"
                     />
                     <div class="stepper-arrows">
                       <button
@@ -3398,7 +3400,12 @@
 
       /* ================= Human-like Auto Reply Engine ================= */
       // 把一条自动回复内容真正渲染成消息并追加到聊天区、滚动、存档
-      function receiveAutoMessage(text, quoteId = null, quoteText = null) {
+      function receiveAutoMessage(
+        text,
+        quoteId = null,
+        quoteText = null,
+        isProactive = false,
+      ) {
         addTimestampIfNeeded();
         const messageDiv = createMessageElement(
           text,
@@ -3410,6 +3417,17 @@
         DOM.chatMain.appendChild(messageDiv);
         scrollToBottom();
         saveChatHistory();
+
+        // 只有"主动发起的这一条"才考虑弹通知，普通回复不弹
+        if (
+          isProactive &&
+          state.chatSettings.proactiveNotify &&
+          "Notification" in window &&
+          Notification.permission === "granted" &&
+          document.hidden
+        ) {
+          new Notification(DOM.userNameBtn.textContent, { body: text });
+        }
       }
 
       // 从历史消息里随机挑一条作为"引用"目标；forceUser=true 时只从用户发的消息里挑
@@ -3488,7 +3506,7 @@
 
       // 自动回复主流程：阅读延迟 -> 已读不回判定 -> 连发概率衰减循环
       // （每条消息内部走一次抽卡 -> 打字延迟 -> 发送），支持被新消息随时打断
-      async function triggerAutoReply(userMessageText) {
+      async function triggerAutoReply(userMessageText, isProactive = false) {
         if (state.charReplying) return;
         state.charReplying = true;
         state.interruptFlag = false;
@@ -3582,7 +3600,7 @@
           hideTypingIndicator();
 
           // 发送
-          receiveAutoMessage(finalContent, quoteId, quoteText);
+          receiveAutoMessage(finalContent, quoteId, quoteText, isProactive);
           msgIndex++;
           state.userSpamCount = 0; // 成功回复，清除刷屏计数
 
@@ -3960,30 +3978,21 @@
         state.nextProactiveCheckAt = Date.now() + seconds * 1000;
       }
 
-      // 时间到了，判定这一次要不要真的发一条消息
+      // 时间到了，判定这一次要不要主动说话；一旦判定要说，就直接复用
+      // "发消息后触发回复"的那一整套逻辑（打字延迟/连发/引用等，效果完全一致）
       function judgeProactiveMessage() {
-        scheduleNextProactiveCheck(); // 不管这次发不发，先把下一轮倒计时安排好
-        if (state.charReplying) return; // 对方正在打字回复中，这次先让路，不抢
+        scheduleNextProactiveCheck(); // 不管这次说不说，先把下一轮倒计时安排好
+        if (state.charReplying) return; // 对方正在打字回复中，这次先让路
+
         const enabledCards = state.wordCards.filter((c) => c.enabled);
         if (enabledCards.length === 0) return; // 没有启用的字卡，没内容可说
-        const chance = 0.5; // 到点后：50%几率真的说话，50%几率"判定了但没说"，想更爱说话就把这个数改大
-        if (Math.random() >= chance) return;
-        const card =
-          enabledCards[Math.floor(Math.random() * enabledCards.length)];
-        sendProactiveMessage(card.text);
-      }
 
-      // 真的把这条"主动消息"发出去，需要的话再弹一条系统通知
-      function sendProactiveMessage(text) {
-        receiveAutoMessage(text); // 复用已有的"渲染消息+滚动+存档"函数，跟自动回复走一样的流程
-        if (
-          state.chatSettings.proactiveNotify &&
-          "Notification" in window &&
-          Notification.permission === "granted" &&
-          document.hidden // 只有你不在看这个页面的时候才弹通知，正在看着就不用弹了
-        ) {
-          new Notification("CardChat", { body: text });
-        }
+        // 判定概率跟"回复频率(Reply Frequency)"挂钩，公式跟连发判定用的是同一套：
+        // 50(Normal) => 0.8；数值越高越容易主动开口，越低越少开口
+        const chance = 0.8 + (state.chatSettings.replyFrequency - 50) * 0.005;
+        if (Math.random() >= chance) return;
+
+        triggerAutoReply("", true); // 第二个参数true = 这是"主动发起"的，配合通知逻辑
       }
 
       let _proactiveTimerHandle = null;
