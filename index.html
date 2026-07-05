@@ -978,6 +978,48 @@
         color: var(--bg-color);
         font-weight: 600;
       }
+      .stepper {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .stepper-input {
+        width: 50px;
+        text-align: center;
+        padding: 6px 4px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        background: var(--input-bg);
+        color: var(--text-main);
+        font-size: 13px;
+      }
+      .stepper-arrows {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .stepper-btn {
+        width: 20px;
+        height: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: var(--input-bg);
+        border-radius: 3px;
+        cursor: pointer;
+        padding: 0;
+      }
+      .stepper-btn svg {
+        width: 10px;
+        height: 10px;
+        fill: none;
+        stroke: var(--text-sub);
+        stroke-width: 2;
+      }
+      .stepper-btn:active {
+        background: var(--border-color);
+      }
 
       /* Message read ticks */
       /* ==================== 消息已读状态勾选图标样式 ==================== */
@@ -1031,8 +1073,16 @@
       }
       .font-card-preview {
         font-size: 20px;
-        margin: 4px 0;
         color: var(--text-main);
+        height: 26px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--border-color);
       }
       .font-card-name {
         font-size: 10px;
@@ -1534,6 +1584,99 @@
       <div class="modal-overlay" id="settingsModal" style="z-index: 110">
         <div class="modal-content">
           <div class="modal-title">Chat Settings</div>
+          <div class="setting-item">
+            <span class="setting-label">Proactive Messages</span>
+            <div
+              class="toggle-switch"
+              id="proactiveToggle"
+              onclick="toggleProactiveMessages()"
+            ></div>
+          </div>
+          <div
+            id="proactiveDetails"
+            style="
+              display: none;
+              flex-direction: column;
+              gap: 10px;
+              padding: 4px 0 8px;
+              border-bottom: 1px solid var(--border-color);
+              margin-bottom: 4px;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <span class="setting-label" style="font-size: 12px"
+                >Check every (seconds)</span
+              >
+              <div class="stepper">
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  id="proactiveIntervalInput"
+                  class="stepper-input"
+                  value="300"
+                />
+                <div class="stepper-arrows">
+                  <button
+                    class="stepper-btn"
+                    onclick="
+                      stepNumberInput(
+                        'proactiveIntervalInput',
+                        10,
+                        30,
+                        3600,
+                        applyProactiveInterval,
+                      )
+                    "
+                  >
+                    <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6" /></svg>
+                  </button>
+                  <button
+                    class="stepper-btn"
+                    onclick="
+                      stepNumberInput(
+                        'proactiveIntervalInput',
+                        -10,
+                        30,
+                        3600,
+                        applyProactiveInterval,
+                      )
+                    "
+                  >
+                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" /></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <span class="setting-label" style="font-size: 12px"
+                >Background Notifications</span
+              >
+              <div
+                class="toggle-switch"
+                id="proactiveNotifyToggle"
+                onclick="toggleProactiveNotify()"
+              ></div>
+            </div>
+            <button
+              class="modal-btn btn-cancel"
+              style="width: 100%; font-size: 12px"
+              onclick="testProactiveNotification()"
+            >
+              Test Notification
+            </button>
+          </div>
           <div class="setting-item">
             <span class="setting-label">Read but no reply</span>
             <div
@@ -2267,6 +2410,99 @@
                 margin-bottom: 4px;
               "
             ></div>
+            <div style="display: flex; gap: 10px; margin-top: 4px">
+              <div
+                style="flex: 1; display: flex; flex-direction: column; gap: 4px"
+              >
+                <span class="setting-label" style="font-size: 11px"
+                  >Font Size</span
+                >
+                <div style="display: flex; align-items: center; gap: 4px">
+                  <div class="stepper">
+                    <input
+                      type="text"
+                      inputmode="numeric"
+                      id="fontSizeInput"
+                      class="stepper-input"
+                      value="14"
+                    />
+                    <div class="stepper-arrows">
+                      <button
+                        class="stepper-btn"
+                        onclick="
+                          stepNumberInput(
+                            'fontSizeInput',
+                            1,
+                            10,
+                            28,
+                            applyFontSize,
+                          )
+                        "
+                      >
+                        <svg viewBox="0 0 24 24">
+                          <path d="M6 15l6-6 6 6" />
+                        </svg>
+                      </button>
+                      <button
+                        class="stepper-btn"
+                        onclick="
+                          stepNumberInput(
+                            'fontSizeInput',
+                            -1,
+                            10,
+                            28,
+                            applyFontSize,
+                          )
+                        "
+                      >
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" /></svg>
+                      </button>
+                    </div>
+                    <span style="font-size: 11px; color: var(--text-sub)"
+                      >px</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div style="width: 1px; background: var(--border-color)"></div>
+              <div
+                style="flex: 1; display: flex; flex-direction: column; gap: 4px"
+              >
+                <span class="setting-label" style="font-size: 11px"
+                  >Line Height</span
+                >
+                <div class="freq-segmented" id="lineHeightSegmented">
+                  <button
+                    class="freq-btn"
+                    data-value="0.5"
+                    onclick="setLineHeight(0.5)"
+                  >
+                    0.5
+                  </button>
+                  <button
+                    class="freq-btn active"
+                    data-value="1"
+                    onclick="setLineHeight(1)"
+                  >
+                    1
+                  </button>
+                  <button
+                    class="freq-btn"
+                    data-value="1.5"
+                    onclick="setLineHeight(1.5)"
+                  >
+                    1.5
+                  </button>
+                  <button
+                    class="freq-btn"
+                    data-value="2"
+                    onclick="setLineHeight(2)"
+                  >
+                    2
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- end scrollable body -->
 
@@ -2585,6 +2821,12 @@
         editInput: document.getElementById("editInput"),
         editModalTitle: document.getElementById("editModalTitle"),
         readNoReplyToggle: document.getElementById("readNoReplyToggle"),
+        proactiveToggle: document.getElementById("proactiveToggle"),
+        proactiveDetails: document.getElementById("proactiveDetails"),
+        proactiveIntervalInput: document.getElementById(
+          "proactiveIntervalInput",
+        ),
+        proactiveNotifyToggle: document.getElementById("proactiveNotifyToggle"),
         activeCardCount: document.getElementById("activeCardCount"),
         cardList: document.getElementById("cardList"),
         newCardInput: document.getElementById("newCardInput"),
@@ -2635,6 +2877,7 @@
         themeCustomCSS: document.getElementById("themeCustomCSS"),
         themeBubbleCSS: document.getElementById("themeBubbleCSS"),
         fontList: document.getElementById("fontList"),
+        fontSizeInput: document.getElementById("fontSizeInput"),
         renameFontModal: document.getElementById("renameFontModal"),
         renameFontInput: document.getElementById("renameFontInput"),
         confirmDeleteFontModal: document.getElementById(
@@ -2700,7 +2943,11 @@
         chatSettings: Storage.get("chatSettings", {
           readNoReply: false,
           replyFrequency: 50,
+          proactiveEnabled: false, // 主动发消息 总开关
+          proactiveInterval: 300, // 判定间隔（秒）
+          proactiveNotify: false, // 后台通知 开关
         }),
+        nextProactiveCheckAt: 0, // 下一次判定的时间点（不需要存起来，每次开网页重新算）
         chattiness: Math.random(), // 每次刷新随机生成的话痨度 (0.0~1.0)
         charReplying: false, // Char 是否正在处理回复
         interruptFlag: false, // 用户打断标记
@@ -2718,6 +2965,14 @@
       // 功能：与初始化相关的小工具函数（如设置回复频率）
       if (state.chatSettings.readNoReply)
         DOM.readNoReplyToggle.classList.add("active");
+      if (state.chatSettings.proactiveEnabled) {
+        DOM.proactiveToggle.classList.add("active");
+        DOM.proactiveDetails.style.display = "flex";
+      }
+      if (state.chatSettings.proactiveNotify)
+        DOM.proactiveNotifyToggle.classList.add("active");
+      DOM.proactiveIntervalInput.value =
+        state.chatSettings.proactiveInterval || 300;
       updateActiveCardCount();
 
       (function initFreqButtons() {
@@ -2907,6 +3162,7 @@
         refreshAllTimestamps();
         updateLastTimestamp();
         scrollToBottom();
+        if (state.chatSettings.proactiveEnabled) startProactiveTimer();
       };
 
       /* [TOC-7] Menu & Perspective */
@@ -3626,6 +3882,133 @@
       }
 
       const backToSettings = openSettingsModal;
+
+      // 修改"主动发消息"的判定间隔（秒）并保存
+      function applyProactiveInterval() {
+        let val = parseInt(DOM.proactiveIntervalInput.value, 10);
+        if (isNaN(val)) val = 300;
+        val = Math.min(3600, Math.max(30, val));
+        DOM.proactiveIntervalInput.value = val;
+        state.chatSettings.proactiveInterval = val;
+        Storage.set("chatSettings", state.chatSettings);
+        if (state.chatSettings.proactiveEnabled) scheduleNextProactiveCheck();
+      }
+
+      // 打开/关闭"主动发消息"总开关
+      function toggleProactiveMessages() {
+        state.chatSettings.proactiveEnabled =
+          !state.chatSettings.proactiveEnabled;
+        DOM.proactiveToggle.classList.toggle(
+          "active",
+          state.chatSettings.proactiveEnabled,
+        );
+        DOM.proactiveDetails.style.display = state.chatSettings.proactiveEnabled
+          ? "flex"
+          : "none";
+        Storage.set("chatSettings", state.chatSettings);
+        if (state.chatSettings.proactiveEnabled) startProactiveTimer();
+        else stopProactiveTimer();
+      }
+
+      // 打开/关闭"后台通知"，打开时会先向浏览器申请通知权限
+      function toggleProactiveNotify() {
+        if (!state.chatSettings.proactiveNotify) {
+          if (!("Notification" in window)) {
+            DOM.alertMessage.textContent =
+              "This browser does not support notifications. On iOS, this can only work if you add this page to your Home Screen first (iOS 16.4 or later).";
+            DOM.alertModal.classList.add("active");
+            return;
+          }
+          Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              state.chatSettings.proactiveNotify = true;
+              DOM.proactiveNotifyToggle.classList.add("active");
+              Storage.set("chatSettings", state.chatSettings);
+            } else {
+              DOM.alertMessage.textContent =
+                "Notification permission was not granted. Please allow notifications for this site in your browser settings.";
+              DOM.alertModal.classList.add("active");
+            }
+          });
+          return;
+        }
+        state.chatSettings.proactiveNotify = false;
+        DOM.proactiveNotifyToggle.classList.remove("active");
+        Storage.set("chatSettings", state.chatSettings);
+      }
+
+      // 发一条测试通知，方便你直接确认这台设备到底支不支持
+      function testProactiveNotification() {
+        if (!("Notification" in window)) {
+          DOM.alertMessage.textContent =
+            "This browser does not support notifications.";
+          DOM.alertModal.classList.add("active");
+          return;
+        }
+        if (Notification.permission !== "granted") {
+          DOM.alertMessage.textContent =
+            "Please turn on Background Notifications first.";
+          DOM.alertModal.classList.add("active");
+          return;
+        }
+        new Notification("CardChat", { body: "This is a test notification." });
+      }
+
+      // 算出"下一次判定"是什么时候（用真实时间的毫秒数记录，不用担心中途被打断）
+      function scheduleNextProactiveCheck() {
+        const seconds = state.chatSettings.proactiveInterval || 300;
+        state.nextProactiveCheckAt = Date.now() + seconds * 1000;
+      }
+
+      // 时间到了，判定这一次要不要真的发一条消息
+      function judgeProactiveMessage() {
+        scheduleNextProactiveCheck(); // 不管这次发不发，先把下一轮倒计时安排好
+        if (state.charReplying) return; // 对方正在打字回复中，这次先让路，不抢
+        const enabledCards = state.wordCards.filter((c) => c.enabled);
+        if (enabledCards.length === 0) return; // 没有启用的字卡，没内容可说
+        const chance = 0.5; // 到点后：50%几率真的说话，50%几率"判定了但没说"，想更爱说话就把这个数改大
+        if (Math.random() >= chance) return;
+        const card =
+          enabledCards[Math.floor(Math.random() * enabledCards.length)];
+        sendProactiveMessage(card.text);
+      }
+
+      // 真的把这条"主动消息"发出去，需要的话再弹一条系统通知
+      function sendProactiveMessage(text) {
+        receiveAutoMessage(text); // 复用已有的"渲染消息+滚动+存档"函数，跟自动回复走一样的流程
+        if (
+          state.chatSettings.proactiveNotify &&
+          "Notification" in window &&
+          Notification.permission === "granted" &&
+          document.hidden // 只有你不在看这个页面的时候才弹通知，正在看着就不用弹了
+        ) {
+          new Notification("CardChat", { body: text });
+        }
+      }
+
+      let _proactiveTimerHandle = null;
+
+      // 启动"每隔几秒检查一次是否到点"的定时器
+      function startProactiveTimer() {
+        stopProactiveTimer();
+        scheduleNextProactiveCheck();
+        _proactiveTimerHandle = setInterval(() => {
+          if (Date.now() >= state.nextProactiveCheckAt) judgeProactiveMessage();
+        }, 5000);
+      }
+
+      // 关闭定时器
+      function stopProactiveTimer() {
+        if (_proactiveTimerHandle) clearInterval(_proactiveTimerHandle);
+        _proactiveTimerHandle = null;
+      }
+
+      // 从后台切回前台的瞬间，立刻补查一次，防止手机锁屏期间被系统"冻住"错过了判定时间
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden && state.chatSettings.proactiveEnabled) {
+          if (Date.now() >= state.nextProactiveCheckAt) judgeProactiveMessage();
+        }
+      });
 
       // 切换“已读不回”开关并持久化
       function toggleReadNoReply() {
@@ -4398,6 +4781,54 @@
       const CUSTOM_CSS_ID = "user-custom-css";
       const BUBBLE_CSS_ID = "user-bubble-css";
       const FONT_STYLE_ID = "user-font-css";
+      const TEXT_STYLE_ID = "user-text-style-css"; // 字号/行距专用的样式标签
+
+      // 把当前保存的字号/行距，写进一个独立的<style>标签里生效
+      function updateTextStyleTag() {
+        let tag = document.getElementById(TEXT_STYLE_ID);
+        if (!tag) {
+          tag = document.createElement("style");
+          tag.id = TEXT_STYLE_ID;
+          document.head.appendChild(tag);
+        }
+        const fontSize = Storage.get("chatFontSize", 14);
+        const lineHeight = Storage.get("chatLineHeight", 1);
+        tag.textContent = `.bubble, .msg-text, .quote-box { font-size: ${fontSize}px !important; line-height: ${lineHeight} !important; }`;
+      }
+
+      // 通用数字微调器：给指定输入框的数值加/减一格，限制在min~max之间，然后触发回调保存
+      function stepNumberInput(inputId, delta, min, max, onChange) {
+        const el = document.getElementById(inputId);
+        let val = parseFloat(el.value);
+        if (isNaN(val)) val = min;
+        val = Math.min(max, Math.max(min, val + delta));
+        el.value = val;
+        onChange();
+      }
+
+      // 修改聊天文字字号并保存
+      function applyFontSize() {
+        let val = parseInt(DOM.fontSizeInput.value, 10);
+        if (isNaN(val)) val = 14;
+        val = Math.min(28, Math.max(10, val));
+        DOM.fontSizeInput.value = val;
+        Storage.set("chatFontSize", val);
+        updateTextStyleTag();
+      }
+
+      // 修改聊天文字行距并保存
+      function setLineHeight(val) {
+        Storage.set("chatLineHeight", val);
+        document
+          .querySelectorAll("#lineHeightSegmented .freq-btn")
+          .forEach((btn) => {
+            btn.classList.toggle(
+              "active",
+              parseFloat(btn.dataset.value) === val,
+            );
+          });
+        updateTextStyleTag();
+      }
 
       // 打开主题设置弹窗
       function openThemeModal() {
@@ -4411,6 +4842,16 @@
 
         renderThemeSavesList();
         renderFontList();
+        DOM.fontSizeInput.value = Storage.get("chatFontSize", 14);
+        document
+          .querySelectorAll("#lineHeightSegmented .freq-btn")
+          .forEach((btn) => {
+            btn.classList.toggle(
+              "active",
+              parseFloat(btn.dataset.value) ===
+                Storage.get("chatLineHeight", 1),
+            );
+          });
         DOM.themeModal.classList.add("active");
       }
 
@@ -4876,6 +5317,7 @@
         }
         const activeFont = Storage.get("chatActiveFont");
         if (activeFont) applyFontById(activeFont, getFonts());
+        updateTextStyleTag();
       })();
 
       /* [TOC-22] CSS Fullscreen Expand */
