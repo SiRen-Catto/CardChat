@@ -18,6 +18,7 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <title>CardChat</title>
     <style>
+      /* ==================== 全局CSS变量：浅色/暗色主题配色 ==================== */
       :root {
         --bg-color: #ffffff;
         --text-main: #000000;
@@ -89,6 +90,7 @@
       }
 
       html,
+      /* ==================== 页面与手机外框布局（含桌面端居中卡片、iOS安全区适配） ==================== */
       body {
         height: 100%;
       }
@@ -99,7 +101,7 @@
       }
 
       body {
-        background-color: var(--bg-color);
+        background-color: var(--desktop-backdrop);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -148,6 +150,7 @@
         }
       }
 
+      /* ==================== 顶部导航栏（头像/昵称/主题切换按钮） ==================== */
       .chat-header {
         display: flex;
         align-items: center;
@@ -211,6 +214,7 @@
         justify-content: center;
       }
 
+      /* ==================== 聊天消息滚动区域 & 时间戳分隔条 ==================== */
       .chat-main {
         flex: 1;
         padding: 15px;
@@ -255,6 +259,7 @@
         }
       }
 
+      /* ==================== 消息气泡与状态（发送/接收样式、已读勾选、撤回态） ==================== */
       .message {
         display: flex;
         flex-direction: column;
@@ -315,6 +320,7 @@
         border-bottom-right-radius: 4px;
       }
 
+      /* ==================== 消息引用框样式 ==================== */
       .quote-box {
         font-size: 11px;
         color: var(--text-sub);
@@ -332,6 +338,15 @@
       .quote-box:hover {
         opacity: 0.8;
       }
+      /* 引用的原消息已被撤回/删除后使用：斜体弱化展示，且不可再点击跳转 */
+      .quote-box.quote-unavailable {
+        font-style: italic;
+        opacity: 0.65;
+        cursor: default;
+      }
+      .quote-box.quote-unavailable:hover {
+        opacity: 0.65;
+      }
       .message.recalled-msg {
         max-width: 100%;
         align-self: center;
@@ -347,6 +362,7 @@
         border-radius: 12px;
       }
 
+      /* ==================== 消息操作工具栏（编辑/引用/插入/撤回/删除按钮） ==================== */
       .msg-toolbar {
         position: absolute;
         bottom: 100%;
@@ -397,6 +413,7 @@
         height: 14px;
       }
 
+      /* ==================== 底部输入栏（输入框、发送按钮、“+”菜单入口） ==================== */
       .chat-footer {
         padding: 12px 15px;
         padding-bottom: max(12px, env(safe-area-inset-bottom));
@@ -458,6 +475,7 @@
         opacity: 0.5;
       }
 
+      /* ==================== “+”号功能菜单（图片/位置/文件等功能入口） ==================== */
       .plus-menu {
         position: absolute;
         bottom: 65px;
@@ -499,6 +517,7 @@
         background-color: var(--input-bg);
       }
 
+      /* ==================== 通用弹窗基础样式（遮罩层/内容容器/标题/按钮） ==================== */
       .modal-overlay {
         position: absolute;
         top: 0;
@@ -637,6 +656,7 @@
         font-size: 11px;
       }
 
+      /* ==================== 存档列表通用样式（聊天/字卡/主题存档共用） ==================== */
       .saves-list {
         display: flex;
         flex-direction: column;
@@ -681,6 +701,7 @@
       }
 
       /* Settings & Word Card styles */
+      /* ==================== 设置页列表项与开关控件样式 ==================== */
       .setting-item {
         display: flex;
         justify-content: space-between;
@@ -727,6 +748,7 @@
       }
 
       /* Word Card filter bar */
+      /* ==================== 字卡标签筛选栏样式 ==================== */
       .card-filter-bar {
         display: flex;
         overflow-x: auto;
@@ -796,6 +818,7 @@
       }
 
       /* Word Card Right Top Toolbar */
+      /* ==================== 字卡管理顶部工具图标 ==================== */
       .card-top-icons {
         display: flex;
         gap: 10px;
@@ -813,6 +836,7 @@
       }
 
       /* Word Card List & Folders */
+      /* ==================== 字卡列表/文件夹/单张卡片样式 ==================== */
       .card-list {
         flex: 1;
         overflow-y: auto;
@@ -925,6 +949,7 @@
       }
 
       /* Reply Frequency segmented control */
+      /* ==================== 自动回复速度分段选择器样式 ==================== */
       .freq-segmented {
         display: flex;
         width: 100%;
@@ -955,6 +980,7 @@
       }
 
       /* Message read ticks */
+      /* ==================== 消息已读状态勾选图标样式 ==================== */
       .msg-status {
         display: flex;
         justify-content: flex-end;
@@ -974,7 +1000,62 @@
         color: var(--text-main);
       }
 
+      /* Font card */
+      /* ==================== 字体卡片样式（横向滑动列表用） ==================== */
+      .font-card {
+        position: relative;
+        flex-shrink: 0;
+        width: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px 4px;
+        border-radius: 10px;
+        background-color: var(--input-bg);
+        border: 2px solid transparent;
+        cursor: pointer;
+      }
+      .font-card.active {
+        border-color: var(--text-main);
+      }
+      .font-card-check {
+        display: none;
+        position: absolute;
+        top: 3px;
+        right: 4px;
+        font-size: 10px;
+        color: var(--text-main);
+      }
+      .font-card.active .font-card-check {
+        display: block;
+      }
+      .font-card-preview {
+        font-size: 20px;
+        margin: 4px 0;
+        color: var(--text-main);
+      }
+      .font-card-name {
+        font-size: 10px;
+        color: var(--text-sub);
+        max-width: 52px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .font-card-delete {
+        position: absolute;
+        bottom: 2px;
+        right: 3px;
+        font-size: 10px;
+        color: var(--text-sub);
+        padding: 2px;
+      }
+      .font-card-delete:hover {
+        color: var(--text-main);
+      }
+
       /* Typing indicator animation */
+      /* ==================== “对方正在输入...”动画样式 ==================== */
       .typing-dots {
         display: flex;
         gap: 4px;
@@ -1009,6 +1090,7 @@
         }
       }
 
+      /* ==================== CSS全屏编辑器文本框样式 ==================== */
       .css-expand-textarea {
         flex: 1;
         width: 100%;
@@ -1025,8 +1107,10 @@
       }
     </style>
   </head>
+  <!-- ==================== 页面主体 ==================== -->
   <body>
     <div class="phone-container" id="phoneContainer">
+      <!-- 顶部导航栏：返回感/头像/昵称/主题切换按钮 -->
       <header class="chat-header">
         <div class="header-left">
           <div class="avatar" id="avatarBtn"></div>
@@ -1091,6 +1175,7 @@
         </div>
       </header>
 
+      <!-- 聊天消息滚动区域：所有消息气泡/时间戳/撤回提示都渲染在这里 -->
       <main class="chat-main" id="chatMain">
         <div class="timestamp">Today 09:41 AM</div>
         <div class="message received">
@@ -1115,6 +1200,7 @@
         </div>
       </main>
 
+      <!-- 底部输入栏：“+”号功能菜单入口、文本输入框、发送按钮 -->
       <footer class="chat-footer">
         <div class="icon-btn" id="plusBtn" onclick="togglePlusMenu(event)">
           +
@@ -1217,6 +1303,7 @@
       </footer>
 
       <!-- Modals -->
+      <!-- 弹窗：头像设置（本地上传 / 网络URL） -->
       <div class="modal-overlay" id="avatarModal">
         <div class="modal-content">
           <div class="modal-title">Change Avatar</div>
@@ -1257,6 +1344,7 @@
           </div>
         </div>
       </div>
+      <!-- 弹窗：用户昵称设置 -->
       <div class="modal-overlay" id="nameModal">
         <div class="modal-content">
           <div class="modal-title">Change Name</div>
@@ -1279,6 +1367,7 @@
           </div>
         </div>
       </div>
+      <!-- 弹窗：消息编辑 / 插入消息（复用同一弹窗，靠 state.modalMode 区分） -->
       <div class="modal-overlay" id="editModal">
         <div class="modal-content">
           <div class="modal-title" id="editModalTitle">Edit Message</div>
@@ -1303,6 +1392,7 @@
       </div>
 
       <!-- Data management modal -->
+      <!-- 弹窗：聊天存档管理（存档列表/加载/删除/导出/清空） -->
       <div class="modal-overlay" id="dataModal" style="z-index: 110">
         <div class="modal-content">
           <div class="modal-title">Data Management</div>
@@ -1360,6 +1450,7 @@
       </div>
 
       <!-- Save name modal -->
+      <!-- 弹窗：聊天存档命名 -->
       <div class="modal-overlay" id="saveNameModal" style="z-index: 120">
         <div class="modal-content">
           <div class="modal-title">Name Your Save</div>
@@ -1369,7 +1460,10 @@
             id="saveNameInput"
             placeholder="e.g. Draft 1"
             autocomplete="off"
-            onkeypress="if (event.key === 'Enter') saveCurrentChat();"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing)
+                saveCurrentChat();
+            "
           />
           <div class="modal-actions sleek-actions">
             <button
@@ -1386,6 +1480,7 @@
       </div>
 
       <!-- Confirm clear chat modal -->
+      <!-- 弹窗：清空当前聊天 二次确认 -->
       <div class="modal-overlay" id="confirmClearModal" style="z-index: 120">
         <div class="modal-content">
           <div class="modal-title">Clear Chat?</div>
@@ -1410,6 +1505,7 @@
       </div>
 
       <!-- Confirm reset modal -->
+      <!-- 弹窗：重置全部数据 二次确认 -->
       <div class="modal-overlay" id="confirmResetModal" style="z-index: 120">
         <div class="modal-content">
           <div class="modal-title">Reset All Data?</div>
@@ -1434,6 +1530,7 @@
       </div>
 
       <!-- Settings modal -->
+      <!-- 弹窗：设置（已读不回开关、自动回复速度、字卡数量统计入口） -->
       <div class="modal-overlay" id="settingsModal" style="z-index: 110">
         <div class="modal-content">
           <div class="modal-title">Chat Settings</div>
@@ -1510,6 +1607,7 @@
       </div>
 
       <!-- Word card library modal -->
+      <!-- 弹窗：字卡（自动回复语料）管理，含标签筛选栏与字卡列表 -->
       <div class="modal-overlay" id="wordCardModal" style="z-index: 120">
         <div
           class="modal-content"
@@ -1693,7 +1791,9 @@
               id="newCardInput"
               placeholder="Add new card..."
               style="flex: 1; padding: 6px"
-              onkeypress="if (event.key === 'Enter') addWordCard();"
+              onkeydown="
+                if (event.key === 'Enter' && !event.isComposing) addWordCard();
+              "
             />
             <button class="modal-btn btn-save" onclick="addWordCard()">
               Add
@@ -1703,6 +1803,7 @@
       </div>
 
       <!-- Batch tag modal -->
+      <!-- 弹窗：批量打标签（含已有标签快速选择列表） -->
       <div class="modal-overlay" id="tagPromptModal" style="z-index: 130">
         <div class="modal-content" style="width: 240px">
           <div class="modal-title">Set Tag</div>
@@ -1712,7 +1813,10 @@
             id="newTagInput"
             placeholder="e.g. daily, question..."
             autocomplete="off"
-            onkeypress="if (event.key === 'Enter') confirmBatchTag();"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing)
+                confirmBatchTag();
+            "
           />
           <div
             class="saves-list"
@@ -1734,6 +1838,7 @@
       </div>
 
       <!-- Add custom tag modal -->
+      <!-- 弹窗：新增标签 -->
       <div class="modal-overlay" id="addTagModal" style="z-index: 130">
         <div class="modal-content" style="width: 240px">
           <div class="modal-title">New Tag</div>
@@ -1742,7 +1847,9 @@
             class="modal-input"
             id="addTagInput"
             autocomplete="off"
-            onkeypress="if (event.key === 'Enter') confirmAddTag();"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing) confirmAddTag();
+            "
             aria-label="Tag"
           />
           <div class="modal-actions sleek-actions">
@@ -1760,6 +1867,7 @@
       </div>
 
       <!-- Manage single tag modal -->
+      <!-- 弹窗：标签管理（重命名 / 删除标签） -->
       <div class="modal-overlay" id="tagManageModal" style="z-index: 130">
         <div class="modal-content" style="width: 240px">
           <div class="modal-title">Manage Tag</div>
@@ -1768,7 +1876,9 @@
             class="modal-input"
             id="manageTagInput"
             autocomplete="off"
-            onkeypress="if (event.key === 'Enter') saveTagRename();"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing) saveTagRename();
+            "
             aria-label="manageTag"
           />
           <div
@@ -1797,6 +1907,7 @@
         </div>
       </div>
       <!-- Card Data & Tools Modal -->
+      <!-- 弹窗：字卡存档管理 -->
       <div class="modal-overlay" id="cardDataModal" style="z-index: 130">
         <div class="modal-content">
           <div class="modal-title">Card Presets & Tools</div>
@@ -1835,6 +1946,7 @@
       </div>
 
       <!-- Save Card Preset Name Modal -->
+      <!-- 弹窗：字卡存档命名 -->
       <div class="modal-overlay" id="saveCardNameModal" style="z-index: 140">
         <div class="modal-content">
           <div class="modal-title">Name Your Preset</div>
@@ -1844,7 +1956,10 @@
             id="saveCardNameInput"
             placeholder="e.g. English Vocab"
             autocomplete="off"
-            onkeypress="if (event.key === 'Enter') saveCurrentCards();"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing)
+                saveCurrentCards();
+            "
           />
           <div class="modal-actions sleek-actions">
             <button
@@ -1861,7 +1976,8 @@
       </div>
 
       <!-- Alert Modal -->
-      <div class="modal-overlay" id="alertModal" style="z-index: 150">
+      <!-- 弹窗：通用提示/警告信息弹窗 -->
+      <div class="modal-overlay" id="alertModal" style="z-index: 300">
         <div class="modal-content" style="width: 220px">
           <div class="modal-title" style="margin-bottom: 10px">Notice</div>
           <div
@@ -1886,6 +2002,7 @@
       </div>
 
       <!-- Theme Modal -->
+      <!-- 弹窗：主题设置（深色/浅色、自定义全局CSS、气泡CSS、字体管理入口） -->
       <div class="modal-overlay" id="themeModal" style="z-index: 160">
         <div
           class="modal-content"
@@ -2138,14 +2255,15 @@
                 >+ Add</span
               >
             </div>
+
             <div
               id="fontList"
               style="
                 display: flex;
-                flex-direction: column;
-                gap: 4px;
-                max-height: 100px;
-                overflow-y: auto;
+                flex-direction: row;
+                gap: 8px;
+                overflow-x: auto;
+                padding: 4px 2px 8px;
                 margin-bottom: 4px;
               "
             ></div>
@@ -2242,6 +2360,7 @@
       </div>
 
       <!-- Save Theme Name Modal -->
+      <!-- 弹窗：主题存档命名 -->
       <div class="modal-overlay" id="saveThemeModal" style="z-index: 170">
         <div class="modal-content" style="width: 240px">
           <div class="modal-title">Name This Theme</div>
@@ -2251,7 +2370,10 @@
             id="saveThemeNameInput"
             placeholder="e.g. Dark Purple"
             autocomplete="off"
-            onkeypress="if (event.key === 'Enter') saveCurrentTheme();"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing)
+                saveCurrentTheme();
+            "
           />
           <div class="modal-actions sleek-actions">
             <button
@@ -2268,6 +2390,7 @@
       </div>
 
       <!-- Add Font Modal -->
+      <!-- 弹窗：添加自定义字体（URL 或本地文件） -->
       <div class="modal-overlay" id="addFontModal" style="z-index: 170">
         <div class="modal-content" style="width: 270px">
           <div class="modal-title">Add Font</div>
@@ -2304,6 +2427,11 @@
               id="fontFileInput"
               accept=".ttf,.otf,.woff,.woff2"
               aria-label="fontFile"
+              onchange="
+                if (this.files[0]) {
+                  addFont();
+                }
+              "
             />
           </div>
           <div class="modal-actions sleek-actions" style="margin-top: 10px">
@@ -2317,9 +2445,67 @@
           </div>
         </div>
       </div>
+
+      <!-- Rename Font Modal -->
+      <!-- 弹窗：重命名字体 -->
+      <div class="modal-overlay" id="renameFontModal" style="z-index: 180">
+        <div class="modal-content">
+          <div class="modal-title">Rename Font</div>
+          <input
+            type="text"
+            class="modal-input"
+            id="renameFontInput"
+            placeholder="Font name"
+            autocomplete="off"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing) saveFontRename();
+            "
+          />
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('renameFontModal')"
+            >
+              Cancel
+            </button>
+            <button class="modal-btn btn-save" onclick="saveFontRename()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirm Delete Font Modal -->
+      <!-- 弹窗：确认删除字体 -->
+      <div
+        class="modal-overlay"
+        id="confirmDeleteFontModal"
+        style="z-index: 180"
+      >
+        <div class="modal-content">
+          <div class="modal-title">Delete Font?</div>
+          <div
+            style="font-size: 12px; text-align: center; color: var(--text-sub)"
+          >
+            This font will be permanently removed.
+          </div>
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('confirmDeleteFontModal')"
+            >
+              Cancel
+            </button>
+            <button
+              class="modal-btn btn-danger"
+              onclick="confirmDeleteFontYes()"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- ↑ phone-container 闭合标签（已修复：原先在 settingsModal 之前提前闭合，
-         导致 12 个弹窗跑到 .phone-container 外面，桌面端会相对 viewport 定位错乱） -->
 
     <script>
       /* ============================================================
@@ -2384,9 +2570,9 @@
        * ============================================================ */
 
       // ==================== [TOC-1] DOM Cache ====================
+      // 功能：统一缓存整页会被频繁访问的 DOM 元素引用，避免到处重复 getElementById
       const DOM = {
         html: document.documentElement,
-        phoneContainer: document.getElementById("phoneContainer"),
         themeBtn: document.getElementById("themeBtn"),
         chatInput: document.getElementById("chatInput"),
         sendBtn: document.getElementById("sendBtn"),
@@ -2449,16 +2635,21 @@
         themeCustomCSS: document.getElementById("themeCustomCSS"),
         themeBubbleCSS: document.getElementById("themeBubbleCSS"),
         fontList: document.getElementById("fontList"),
+        renameFontModal: document.getElementById("renameFontModal"),
+        renameFontInput: document.getElementById("renameFontInput"),
+        confirmDeleteFontModal: document.getElementById(
+          "confirmDeleteFontModal",
+        ),
         saveThemeModal: document.getElementById("saveThemeModal"),
         saveThemeNameInput: document.getElementById("saveThemeNameInput"),
         addFontModal: document.getElementById("addFontModal"),
         fontNameInput: document.getElementById("fontNameInput"),
         fontUrlInput: document.getElementById("fontUrlInput"),
         fontFileInput: document.getElementById("fontFileInput"),
-        themeImportFile: document.getElementById("themeImportFile"),
       };
 
       // ==================== [TOC-2] Storage Helper ====================
+      // 功能：封装 localStorage 的读/写/删/清空，统一做 try/catch 异常兜底
       const Storage = {
         get: (key, defaultValue = null) => {
           try {
@@ -2495,6 +2686,7 @@
       };
 
       // ==================== [TOC-3] State Management ====================
+      // 功能：全局运行时状态（当前视角、正在编辑/引用的消息、自动回复相关标记等）
       let state = {
         lastTimestamp: "",
         activeMessage: null,
@@ -2518,9 +2710,12 @@
         customTags: Storage.get("customTags", []),
         expandedFolders: new Set(),
         managingTag: null,
+        renamingTag: null, // 正在改名的字体id
+        pendingTagRename: null, // 等待确认删除的字体id
       };
 
       // ==================== [TOC-4] Initialization ====================
+      // 功能：与初始化相关的小工具函数（如设置回复频率）
       if (state.chatSettings.readNoReply)
         DOM.readNoReplyToggle.classList.add("active");
       updateActiveCardCount();
@@ -2535,6 +2730,7 @@
         });
       })();
 
+      // 设置自动回复速度档位并持久化
       function setReplyFreq(val) {
         state.chatSettings.replyFrequency = val;
         Storage.set("chatSettings", state.chatSettings);
@@ -2544,16 +2740,19 @@
       }
 
       // ==================== [TOC-5] Utility Functions ====================
+      // 功能：消息 DOM 生成、时间戳处理、滚动到底部、存档等通用工具函数
       function generateId() {
         return "msg-" + Math.random().toString(36).substring(2, 9);
       }
 
+      // 转义HTML特殊字符，防止卡片文本/存档名等用户输入拼接进innerHTML时破坏结构或引发XSS
       function escapeHtml(text) {
         const div = document.createElement("div");
         div.textContent = text;
         return div.innerHTML;
       }
 
+      // 创建一条消息的完整DOM结构（气泡、引用块、已读勾选标记等）
       function createMessageElement(
         text,
         className,
@@ -2598,51 +2797,66 @@
         return messageDiv;
       }
 
-      function getTimeString() {
+      // 时间戳显示规则：
+      // 根据"消息真实发送时间"和"现在的真实时间"，计算应该显示的文字
+      function getTimeString(date = new Date()) {
         const now = new Date();
-        const timeStr = now.toLocaleTimeString("en-US", {
+        const timeStr = date.toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
           hour12: true,
         });
-        // BUG FIX: 原代码将 today 和 msgDate 都设为今天凌晨再相减，diffDays 永远为 0。
-        // 正确做法是用真实的 now 与今天凌晨相减。
-        const todayMidnight = new Date();
-        todayMidnight.setHours(0, 0, 0, 0);
-        const diffDays = Math.floor(
-          (todayMidnight -
-            new Date(now.getFullYear(), now.getMonth(), now.getDate())) /
-            86400000,
-        );
-        const dateLabel =
-          diffDays === 0
-            ? "Today"
-            : diffDays === 1
-              ? "Yesterday"
-              : now.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
+
+        // 只比较"日期"（几号），不比较具体几点几分
+        const dayOnly = (d) =>
+          new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        const diffDays = Math.round((dayOnly(now) - dayOnly(date)) / 86400000);
+
+        if (diffDays === 0) return timeStr; // 今天：只显示时间
+        if (diffDays === 1) return `Yesterday ${timeStr}`; // 昨天
+        if (diffDays >= 2 && diffDays <= 6) {
+          // 本周内：周几 + 时间
+          const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+          return `${weekday} ${timeStr}`;
+        }
+        // 更早：日期 + 时间
+        const dateLabel = date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
         return `${dateLabel} ${timeStr}`;
       }
 
+      // 若当前时间戳文案与上一条不同，则在聊天区插入新的时间戳分隔条
       function addTimestampIfNeeded() {
-        const timeString = getTimeString();
+        const now = new Date();
+        const timeString = getTimeString(now);
         if (timeString !== state.lastTimestamp) {
           const timeDiv = document.createElement("div");
           timeDiv.classList.add("timestamp");
           timeDiv.textContent = timeString;
+          timeDiv.dataset.ts = now.getTime(); // 记下真实发送时间，方便以后重算文字
           DOM.chatMain.appendChild(timeDiv);
           state.lastTimestamp = timeString;
         }
       }
 
+      // 每次打开网页时用，把每条时间戳按"真实现在时间"重新算一遍该显示什么文字
+      function refreshAllTimestamps() {
+        DOM.chatMain.querySelectorAll(".timestamp").forEach((el) => {
+          const ts = Number(el.dataset.ts);
+          if (ts) el.textContent = getTimeString(new Date(ts));
+        });
+      }
+
+      // 兼容旧存档：给历史消息补上缺失的id，避免引用/撤回/删除功能失效
       function ensureMessageIds() {
         DOM.chatMain.querySelectorAll(".message").forEach((msg) => {
           if (!msg.id) msg.id = generateId();
         });
       }
 
+      // 读取聊天区最后一个时间戳文本，同步进state.lastTimestamp
       function updateLastTimestamp() {
         const timestamps = DOM.chatMain.querySelectorAll(".timestamp");
         state.lastTimestamp =
@@ -2651,21 +2865,26 @@
             : "";
       }
 
+      // 将聊天区域滚动到最底部
       function scrollToBottom() {
         DOM.chatMain.scrollTop = DOM.chatMain.scrollHeight;
       }
 
+      // 关闭消息工具栏，并将当前聊天区完整HTML写入localStorage
       function saveChatHistory() {
         closeToolbar();
         Storage.set("chatHistory", DOM.chatMain.innerHTML);
       }
 
+      // 通用弹窗关闭方法，按id移除active类
       function closeModal(modalId) {
         document.getElementById(modalId).classList.remove("active");
       }
 
       const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+      // ==================== [TOC-6] window.onload ====================
+      // 功能：页面加载时恢复本地存储的主题/头像/昵称/聊天记录等数据
       window.onload = () => {
         const chatTheme = Storage.get("chatTheme", "light");
         if (chatTheme === "dark") {
@@ -2685,21 +2904,25 @@
         if (chatHistory) DOM.chatMain.innerHTML = chatHistory;
 
         ensureMessageIds();
+        refreshAllTimestamps();
         updateLastTimestamp();
         scrollToBottom();
       };
 
       /* [TOC-7] Menu & Perspective */
+      /* 功能：顶部 "+" 号菜单的开关，以及"我方 / 角色方"发言视角切换 */
       function togglePlusMenu(e) {
         e.stopPropagation();
         DOM.plusMenu.classList.toggle("active");
         closeToolbar();
       }
 
+      // 关闭底部“+”号功能菜单
       function closePlusMenu() {
         DOM.plusMenu.classList.remove("active");
       }
 
+      // 切换“我方/角色方”发言视角，并同步输入框占位符文案
       function togglePerspective() {
         state.isCharPerspective = !state.isCharPerspective;
         document.getElementById("perspectiveText").textContent =
@@ -2711,6 +2934,7 @@
       }
 
       // ==================== [TOC-8] Event Delegation ====================
+      // 功能：全局点击事件委托，用于点击空白处时关闭工具栏 / 菜单 / 下拉框等浮层
       document.addEventListener("click", (e) => {
         if (!e.target.closest(".message") && !e.target.closest(".msg-toolbar"))
           closeToolbar();
@@ -2725,10 +2949,12 @@
       });
 
       /* [TOC-9] Message Interaction */
+      /* 功能：点击消息弹出操作工具栏；点击引用块跳转并高亮定位到原消息 */
       DOM.chatMain.addEventListener("click", (e) => {
         const quoteBox = e.target.closest(".quote-box");
         if (quoteBox) {
           e.stopPropagation();
+          if (quoteBox.classList.contains("quote-unavailable")) return;
           const targetMsg = document.getElementById(
             quoteBox.getAttribute("data-target-id"),
           );
@@ -2743,6 +2969,7 @@
         if (msg && !msg.classList.contains("recalled-msg")) showToolbar(msg);
       });
 
+      // 根据消息类型（是否己方发送、是否含文字）动态生成消息操作工具栏（编辑/引用/插入/撤回/删除）
       function showToolbar(msgElement) {
         closeToolbar();
         state.activeMessage = msgElement;
@@ -2760,6 +2987,7 @@
         msgElement.appendChild(toolbar);
       }
 
+      // 关闭当前显示的消息操作工具栏
       function closeToolbar() {
         const tb = document.querySelector(".msg-toolbar");
         if (tb) tb.remove();
@@ -2767,6 +2995,7 @@
       }
 
       /* [TOC-10] Edit/Insert */
+      /* 功能：编辑已发送的消息内容 / 在指定消息之后插入一条新消息 */
       function openEditModal(e) {
         e.stopPropagation();
         state.modalMode = "edit";
@@ -2779,6 +3008,7 @@
         closeToolbar();
       }
 
+      // 打开“插入消息”弹窗，在当前消息之后插入一条新消息
       function openInsertModal(e) {
         e.stopPropagation();
         state.modalMode = "insert";
@@ -2790,6 +3020,7 @@
         closeToolbar();
       }
 
+      // 根据modalMode保存编辑结果或插入新消息，并写入存档
       function saveEdit() {
         const text = DOM.editInput.value.trim();
         if (!text || !state.editingMessage) return closeModal("editModal");
@@ -2808,11 +3039,14 @@
         closeModal("editModal");
       }
 
-      DOM.editInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") saveEdit();
+      // BUG FIX: 同上，避免输入法选字回车被误判为保存
+      DOM.editInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.isComposing) saveEdit();
       });
 
       /* [TOC-11] Quote/Recall/Delete */
+      /* 功能：引用消息（写入输入框上方提示）、撤回消息、删除消息 */
+      // 引用消息：记录被引用消息的 id/文本，并在输入框上方给出"正在回复：xxx"提示
       function actionQuote(e) {
         e.stopPropagation();
         state.quotingMsgId = state.activeMessage.id;
@@ -2826,6 +3060,7 @@
         closeToolbar();
       }
 
+      // 取消当前引用状态，恢复输入框默认占位符
       function cancelQuote() {
         state.quotingText = null;
         state.quotingMsgId = null;
@@ -2835,22 +3070,41 @@
         DOM.cancelQuoteBtn.style.display = "none";
       }
 
+      // 撤回消息：把消息内容替换成"该消息已撤回"提示，原文不再保留
       function actionRecall(e) {
         e.stopPropagation();
+        const recalledId = state.activeMessage.id;
         state.activeMessage.className = "message recalled-msg";
         state.activeMessage.innerHTML = `<div class="recalled-text">You recalled a message</div>`;
+        updateQuoteReferences(recalledId, "This message has been recalled");
         saveChatHistory();
         closeToolbar();
       }
 
+      // 删除消息，并同步更新所有引用了它的引用框文案
       function actionDelete(e) {
         e.stopPropagation();
+        const deletedId = state.activeMessage.id;
         state.activeMessage.remove();
+        updateQuoteReferences(deletedId, "This message has been deleted");
         cleanupTimestamps();
         saveChatHistory();
         closeToolbar();
       }
 
+      // 找到所有引用了 targetId 这条消息的 quote-box，把预览文案替换成占位提示，
+      // 并加上 quote-unavailable 标记（禁止再点击跳转、样式变为斜体弱化），
+      // 避免消息被撤回/删除后，别的消息里的引用框还残留着旧的原文内容。
+      function updateQuoteReferences(targetId, placeholderText) {
+        document
+          .querySelectorAll(`.quote-box[data-target-id="${targetId}"]`)
+          .forEach((qb) => {
+            qb.textContent = placeholderText;
+            qb.classList.add("quote-unavailable");
+          });
+      }
+
+      // 删除消息后清理“孤立”的时间戳分隔条（前后都没有真实消息内容时）
       function cleanupTimestamps() {
         const children = Array.from(DOM.chatMain.children);
         for (let i = 0; i < children.length; i++) {
@@ -2866,7 +3120,10 @@
       }
 
       /* ================= [TOC-12] Auto Reply & Typing ================= */
+      /* 功能：自动回复引擎 —— 模拟阅读延迟、已读不回判定、连发概率衰减、
+         抽字卡组句、打字延迟、被用户新消息打断后重新思考 */
 
+      // 显示"对方正在输入..."气泡（若已存在则不重复添加）
       function showTypingIndicator() {
         if (document.getElementById("typingIndicator")) return;
         const msgDiv = document.createElement("div");
@@ -2877,12 +3134,14 @@
         scrollToBottom();
       }
 
+      // 移除"对方正在输入..."气泡
       function hideTypingIndicator() {
         const indicator = document.getElementById("typingIndicator");
         if (indicator) indicator.remove();
       }
 
       /* ================= Human-like Auto Reply Engine ================= */
+      // 把一条自动回复内容真正渲染成消息并追加到聊天区、滚动、存档
       function receiveAutoMessage(text, quoteId = null, quoteText = null) {
         addTimestampIfNeeded();
         const messageDiv = createMessageElement(
@@ -2897,6 +3156,7 @@
         saveChatHistory();
       }
 
+      // 从历史消息里随机挑一条作为"引用"目标；forceUser=true 时只从用户发的消息里挑
       function findOlderMessageTarget(forceUser = false) {
         const messages = Array.from(
           DOM.chatMain.querySelectorAll(
@@ -2915,6 +3175,8 @@
         return validMessages[Math.floor(Math.random() * validMessages.length)];
       }
 
+      // 用户在角色"思考/打字"过程中又发了新消息时的打断处理：
+      // 已经抽好的草稿有 70% 概率仍然发出去，然后针对用户最新消息重新开始思考
       async function processInterrupt(draftText) {
         state.interruptFlag = false;
         hideTypingIndicator();
@@ -2931,6 +3193,8 @@
         return true;
       }
 
+      // "大脑抽卡"逻辑：从已启用字卡里随机抽取内容拼成一句回复，
+      // 模拟真人打字时的犹豫（抽到不满意的卡会重新想）和偶尔追加组合句
       async function generateCharContent(enabledCards) {
         let finalContent = "";
         let isCombining = true;
@@ -2966,6 +3230,8 @@
         return { interrupted: false, text: finalContent };
       }
 
+      // 自动回复主流程：阅读延迟 -> 已读不回判定 -> 连发概率衰减循环
+      // （每条消息内部走一次抽卡 -> 打字延迟 -> 发送），支持被新消息随时打断
       async function triggerAutoReply(userMessageText) {
         if (state.charReplying) return;
         state.charReplying = true;
@@ -3072,6 +3338,8 @@
       }
 
       /* [TOC-13] Send Message */
+      /* 功能：发送消息主流程；发送后决定触发/打断自动回复；回车发送已做输入法安全处理 */
+      // 发送一条消息：生成消息DOM、处理引用状态、存档，并根据当前视角决定是否触发/打断自动回复
       function sendMessage() {
         const text = DOM.chatInput.value.trim();
         if (!text) return;
@@ -3108,9 +3376,11 @@
         }
       }
 
+      // BUG FIX: keypress 已废弃，且不区分输入法候选词确认与真正的回车键；
+      // 改用 keydown + isComposing 判断，避免中文/日文等输入法选字时误触发发送。
       DOM.sendBtn.addEventListener("click", sendMessage);
-      DOM.chatInput.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") sendMessage();
+      DOM.chatInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.isComposing) sendMessage();
       });
 
       // iOS keyboard: scroll chat to bottom when virtual keyboard opens
@@ -3128,10 +3398,17 @@
       }
 
       /* ================= [TOC-14] Avatar & Name Management ================= */
-      DOM.avatarBtn.addEventListener("click", () =>
-        DOM.avatarModal.classList.add("active"),
-      );
+      /* 功能：头像（本地文件 / URL 两种方式）与用户昵称的修改与保存 */
+      DOM.avatarBtn.addEventListener("click", () => {
+        const savedAvatar = Storage.get("chatAvatarImg");
+        // URL 长期储存
+        if (savedAvatar && !savedAvatar.startsWith("data:")) {
+          DOM.avatarUrl.value = savedAvatar;
+        }
+        DOM.avatarModal.classList.add("active");
+      });
 
+      // 从本地文件读取头像图片，转base64后应用并持久化
       function saveAvatar() {
         if (DOM.avatarFile.files && DOM.avatarFile.files[0]) {
           const reader = new FileReader();
@@ -3150,6 +3427,7 @@
         // BUG FIX: 原代码无论是否有内容都会立即关闭，现在仅在有内容时关闭
       }
 
+      // 把头像图片应用到按钮背景，并存入localStorage
       function applyAndSaveAvatar(imgSrc) {
         DOM.avatarBtn.style.backgroundImage = `url(${imgSrc})`;
         Storage.set("chatAvatarImg", imgSrc);
@@ -3161,6 +3439,7 @@
         DOM.nameInput.focus();
       });
 
+      // 保存用户昵称到界面与localStorage
       function saveName() {
         const newName = DOM.nameInput.value.trim();
         if (newName) {
@@ -3170,24 +3449,29 @@
         closeModal("nameModal");
       }
 
-      DOM.nameInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") saveName();
+      // BUG FIX: 同上，避免输入法选字回车被误判为保存
+      DOM.nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.isComposing) saveName();
       });
 
       /* ================= [TOC-15] Data Management ================= */
+      /* 功能：聊天记录存档列表的增删改查、导出(txt/json)、清空当前聊天、重置全部数据 */
       function getSaves() {
         return Storage.get("chatSaves", []);
       }
 
+      // 将聊天存档列表整体写回localStorage
       function setSaves(saves) {
         Storage.set("chatSaves", saves);
       }
 
+      // 打开“聊天存档管理”弹窗并渲染存档列表
       function openDataModal() {
         renderSavesList();
         DOM.dataModal.classList.add("active");
       }
 
+      // 渲染当前所有聊天存档条目
       function renderSavesList() {
         const saves = getSaves();
         if (saves.length === 0) {
@@ -3216,12 +3500,14 @@
           .join("");
       }
 
+      // 打开“存档命名”弹窗
       function openSaveNameModal() {
         DOM.saveNameInput.value = "";
         DOM.saveNameModal.classList.add("active");
         DOM.saveNameInput.focus();
       }
 
+      // 将当前聊天记录另存为一份新存档
       function saveCurrentChat() {
         let name = DOM.saveNameInput.value.trim() || "Unnamed Save";
         closeToolbar();
@@ -3237,6 +3523,7 @@
         renderSavesList();
       }
 
+      // 按id加载指定聊天存档，覆盖当前聊天区域
       function loadSave(id) {
         const save = getSaves().find((s) => s.id === id);
         if (save) {
@@ -3249,12 +3536,14 @@
         }
       }
 
+      // 删除指定的聊天存档
       function deleteSave(id) {
         const saves = getSaves().filter((s) => s.id !== id);
         setSaves(saves);
         renderSavesList();
       }
 
+      // 整理导出所需的聊天数据结构
       function getChatDataForExport() {
         const data = [];
         for (let node of DOM.chatMain.children) {
@@ -3275,6 +3564,7 @@
         return data;
       }
 
+      // 按指定格式（txt/json）导出当前聊天记录为文件
       function exportData(format) {
         const data = getChatDataForExport();
         let content = "";
@@ -3302,10 +3592,12 @@
         URL.revokeObjectURL(url);
       }
 
+      // 打开“清空当前聊天”二次确认弹窗
       function openConfirmClear() {
         DOM.confirmClearModal.classList.add("active");
       }
 
+      // 清空当前聊天区域内容并保存
       function clearCurrentChat() {
         DOM.chatMain.innerHTML = "";
         state.lastTimestamp = "";
@@ -3314,10 +3606,12 @@
         closeModal("dataModal");
       }
 
+      // 打开“重置全部数据”二次确认弹窗
       function openConfirmReset() {
         DOM.confirmResetModal.classList.add("active");
       }
 
+      // 清空所有本地存储数据（聊天/字卡/主题/字体等），恢复到初始状态
       function resetAllData() {
         if (Storage.clear()) {
           location.reload();
@@ -3325,6 +3619,7 @@
       }
 
       /* ================= [TOC-16] Settings & Word Cards ================= */
+      /* 功能：设置弹窗 —— 已读不回开关、回复频率滑块、已启用字卡数量统计 */
       function openSettingsModal() {
         closeModal("wordCardModal");
         DOM.settingsModal.classList.add("active");
@@ -3332,6 +3627,7 @@
 
       const backToSettings = openSettingsModal;
 
+      // 切换“已读不回”开关并持久化
       function toggleReadNoReply() {
         state.chatSettings.readNoReply = !state.chatSettings.readNoReply;
         DOM.readNoReplyToggle.classList.toggle(
@@ -3341,14 +3637,17 @@
         Storage.set("chatSettings", state.chatSettings);
       }
 
+      // 统计并显示当前启用状态的字卡数量
       function updateActiveCardCount() {
         const activeCount = state.wordCards.filter((c) => c.enabled).length;
         DOM.activeCardCount.innerHTML = `${activeCount} Active ⟩`;
       }
 
       /* ================= [TOC-17] Word Card Management ================= */
+      /* 功能：字卡（自动回复语料库）的增删改查、标签筛选、文件夹分组、批量操作、导入导出、去重 */
       let cardObserver = null;
 
+      // 打开字卡管理弹窗并渲染卡片列表
       function openWordCardModal() {
         closeModal("settingsModal");
         state.currentFilterTag = "All";
@@ -3361,6 +3660,7 @@
         DOM.wordCardModal.classList.add("active");
       }
 
+      // 根据当前状态刷新顶部图标（全选、主题等）的显示
       function updateTopIcons() {
         if (state.isSelectMode) {
           DOM.iconTag.style.display = "block";
@@ -3381,6 +3681,7 @@
         }
       }
 
+      // 全选/取消全选当前可见的字卡
       function selectAllCards() {
         const visibleCards = document.querySelectorAll(".card-item");
         const visibleHeaders = document.querySelectorAll(".folder-header");
@@ -3399,21 +3700,25 @@
         });
       }
 
+      // 标签筛选栏滚动回起始位置
       function scrollToTagStart() {
         DOM.tagFilterBar.scrollTo({ left: 0, behavior: "smooth" });
       }
 
+      // 将字卡数组整体写回localStorage
       function saveCards() {
         Storage.set("wordCards", state.wordCards);
         Storage.set("customTags", state.customTags);
         updateActiveCardCount();
       }
 
+      // 汇总所有字卡中出现过的标签（去重）
       function getAllUniqueTags() {
         const cardTags = state.wordCards.map((c) => c.tag.toLowerCase());
         return [...new Set([...cardTags, ...state.customTags])];
       }
 
+      // 渲染顶部标签筛选栏
       function renderTagFilterBar() {
         const uniqueTags = getAllUniqueTags();
         const displayTags = [
@@ -3449,6 +3754,7 @@
         }
       }
 
+      // 点击标签时切换筛选条件，或长按/再次点击进入标签管理
       function handleTagClick(tag, event) {
         if (event.target.closest(".add-tag-icon")) return;
 
@@ -3464,6 +3770,7 @@
         }
       }
 
+      // 展开/收起“全部标签”下拉菜单
       function toggleAllDropdown() {
         const isActive = DOM.allTagDropdown.classList.contains("active");
         if (isActive) {
@@ -3486,6 +3793,7 @@
         }
       }
 
+      // 设置当前筛选的标签，并重新渲染字卡列表
       function setFilterTag(tag) {
         state.currentFilterTag = tag;
         DOM.allTagDropdown.classList.remove("active");
@@ -3493,6 +3801,7 @@
         renderCardList();
       }
 
+      // 打开“新增标签”弹窗
       function openAddTagModal(e) {
         e.stopPropagation();
         DOM.addTagInput.value = "";
@@ -3500,6 +3809,7 @@
         DOM.addTagInput.focus();
       }
 
+      // 确认新增标签，并应用到选中的字卡
       function confirmAddTag() {
         const newTag = DOM.addTagInput.value.trim().toLowerCase();
         if (newTag && newTag !== "all") {
@@ -3512,12 +3822,14 @@
         closeModal("addTagModal");
       }
 
+      // 打开标签管理弹窗（重命名/删除该标签）
       function openTagManageModal(tag) {
         state.managingTag = tag;
         DOM.manageTagInput.value = tag.charAt(0).toUpperCase() + tag.slice(1);
         DOM.tagManageModal.classList.add("active");
       }
 
+      // 保存标签重命名结果
       function saveTagRename() {
         const newTag = DOM.manageTagInput.value.trim().toLowerCase();
         if (!newTag || newTag === "all" || newTag === state.managingTag) {
@@ -3543,6 +3855,7 @@
         closeModal("tagManageModal");
       }
 
+      // 删除当前标签（从所有字卡中移除该标签）
       function deleteCurrentTag() {
         state.wordCards.forEach((c) => {
           if (c.tag.toLowerCase() === state.managingTag.toLowerCase()) {
@@ -3558,6 +3871,7 @@
         closeModal("tagManageModal");
       }
 
+      // 进入/退出字卡批量选择模式
       function toggleSelectMode() {
         state.isSelectMode = !state.isSelectMode;
         if (!state.isSelectMode) {
@@ -3571,6 +3885,7 @@
         updateTopIcons();
       }
 
+      // 处理字卡点击：选择模式下勾选/取消勾选，否则打开编辑
       function handleCardClick(realIndex, event) {
         if (event.target.closest(".toggle-switch")) return;
         if (state.isSelectMode) {
@@ -3597,6 +3912,7 @@
         }
       }
 
+      // 处理标签文件夹的点击（展开或进入选择）
       function handleFolderClick(tag, folderId, event) {
         if (state.isSelectMode) {
           event.stopPropagation();
@@ -3621,6 +3937,7 @@
         }
       }
 
+      // 展开/折叠某个标签文件夹
       function toggleFolder(folderId, event) {
         event.stopPropagation();
         const content = document.getElementById(`folder-content-${folderId}`);
@@ -3639,6 +3956,7 @@
         }
       }
 
+      // 展开/折叠某标签下的字卡列表
       function toggleFolderCards(tag, event) {
         event.stopPropagation();
         const cardsInTag = state.wordCards.filter(
@@ -3656,6 +3974,7 @@
         renderCardList();
       }
 
+      // 生成单张字卡的HTML片段
       function createCardHTML(card) {
         return `
           <div class="card-item" data-index="${card.realIndex}" onclick="handleCardClick(${card.realIndex}, event)">
@@ -3668,6 +3987,7 @@
         `;
       }
 
+      // 分批（chunk）渲染字卡列表，避免大量卡片一次性渲染导致卡顿
       function renderCardsChunked(container, cardsArray, startIndex = 0) {
         const chunkSize = 50;
         const chunk = cardsArray.slice(startIndex, startIndex + chunkSize);
@@ -3716,6 +4036,7 @@
         }
       }
 
+      // 渲染当前筛选条件下的完整字卡列表
       function renderCardList() {
         if (cardObserver) {
           cardObserver.disconnect();
@@ -3786,6 +4107,7 @@
         }
       }
 
+      // 切换某张字卡的启用/禁用状态
       function toggleCardEnable(realIndex) {
         state.wordCards[realIndex].enabled =
           !state.wordCards[realIndex].enabled;
@@ -3793,6 +4115,7 @@
         renderCardList();
       }
 
+      // 新增一张字卡
       function addWordCard(
         text = null,
         tag = state.currentFilterTag === "All"
@@ -3815,12 +4138,14 @@
         renderCardList();
       }
 
+      // 获取批量选择模式下被勾选字卡的真实索引
       function getSelectedRealIndices() {
         return Array.from(document.querySelectorAll(".card-item.selected")).map(
           (el) => parseInt(el.dataset.index),
         );
       }
 
+      // 批量删除选中的字卡
       function batchDeleteCards() {
         const indices = getSelectedRealIndices();
         if (indices.length === 0) return;
@@ -3840,6 +4165,7 @@
         if (state.isSelectMode) toggleSelectMode();
       }
 
+      // 打开批量打标签弹窗
       function batchTagCards() {
         if (getSelectedRealIndices().length === 0) return;
         DOM.newTagInput.value = "";
@@ -3859,6 +4185,7 @@
         DOM.newTagInput.focus();
       }
 
+      // 确认给批量选中的字卡打上标签
       function confirmBatchTag() {
         const newTag = DOM.newTagInput.value.trim() || "default";
         const indices = getSelectedRealIndices();
@@ -3881,6 +4208,7 @@
         if (state.isSelectMode) toggleSelectMode();
       }
 
+      // 导出所有字卡为txt文件
       function exportCardsTxt() {
         if (state.wordCards.length === 0) return;
         const tags = getAllUniqueTags();
@@ -3904,10 +4232,12 @@
         URL.revokeObjectURL(url);
       }
 
+      // 触发选择txt文件以导入字卡
       function importCardsTxt() {
         document.getElementById("importCardFile").click();
       }
 
+      // 解析导入的txt文件内容并合并进字卡列表
       function handleImportCards(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -3945,19 +4275,23 @@
       }
 
       /* ================= [TOC-18] Card Presets & Tools ================= */
+      /* 功能：字卡相关的预设方案与辅助工具 */
       function getCardSaves() {
         return Storage.get("cardSaves", []);
       }
 
+      // 写回字卡存档列表到localStorage
       function setCardSaves(saves) {
         Storage.set("cardSaves", saves);
       }
 
+      // 打开字卡存档管理弹窗
       function openCardDataModal() {
         renderCardSavesList();
         DOM.cardDataModal.classList.add("active");
       }
 
+      // 渲染字卡存档列表
       function renderCardSavesList() {
         const saves = getCardSaves();
         if (saves.length === 0) {
@@ -3986,12 +4320,14 @@
           .join("");
       }
 
+      // 打开“字卡存档命名”弹窗
       function openSaveCardNameModal() {
         DOM.saveCardNameInput.value = "";
         DOM.saveCardNameModal.classList.add("active");
         DOM.saveCardNameInput.focus();
       }
 
+      // 将当前字卡配置另存为一份新存档
       function saveCurrentCards() {
         let name = DOM.saveCardNameInput.value.trim() || "Unnamed Preset";
         const saves = getCardSaves();
@@ -4007,6 +4343,7 @@
         renderCardSavesList();
       }
 
+      // 加载指定字卡存档，覆盖当前字卡列表
       function loadCardSave(id) {
         const save = getCardSaves().find((s) => s.id === id);
         if (save) {
@@ -4018,12 +4355,14 @@
         }
       }
 
+      // 删除指定的字卡存档
       function deleteCardSave(id) {
         const saves = getCardSaves().filter((s) => s.id !== id);
         setCardSaves(saves);
         renderCardSavesList();
       }
 
+      // 按文本内容去除重复的字卡
       function deduplicateCards() {
         const uniqueTexts = new Set();
         const newCards = [];
@@ -4053,12 +4392,14 @@
       }
 
       /* ================= [TOC-19] Theme Modal ================= */
+      /* 功能：深色/浅色主题切换、自定义全局CSS与气泡CSS、主题方案存档、主题导入导出 */
 
       // IDs for the injected style tags
       const CUSTOM_CSS_ID = "user-custom-css";
       const BUBBLE_CSS_ID = "user-bubble-css";
       const FONT_STYLE_ID = "user-font-css";
 
+      // 打开主题设置弹窗
       function openThemeModal() {
         // Sync dark toggle state
         const isDark = DOM.html.getAttribute("data-theme") === "dark";
@@ -4082,6 +4423,7 @@
         if (meta) meta.setAttribute("content", isDark ? "#000000" : "#ffffff");
       }
 
+      // 切换深色/浅色主题，并同步theme-color meta标签
       function toggleTheme() {
         const isDark = DOM.html.getAttribute("data-theme") === "dark";
         if (isDark) {
@@ -4111,6 +4453,7 @@
         tag.textContent = css;
       }
 
+      // 重置全局自定义CSS为默认值
       function resetCustomCSS() {
         Storage.remove("themeCustomCSS");
         DOM.themeCustomCSS.value = "";
@@ -4131,6 +4474,7 @@
         tag.textContent = css;
       }
 
+      // 重置气泡自定义CSS为默认值
       function resetBubbleCSS() {
         Storage.remove("themeBubbleCSS");
         DOM.themeBubbleCSS.value = "";
@@ -4149,19 +4493,23 @@
         };
       }
 
+      // 读取主题存档列表
       function getThemeSaves() {
         return Storage.get("themeSaves", []);
       }
+      // 写回主题存档列表到localStorage
       function setThemeSaves(s) {
         Storage.set("themeSaves", s);
       }
 
+      // 打开“主题存档命名”弹窗
       function openSaveThemeModal() {
         DOM.saveThemeNameInput.value = "";
         DOM.saveThemeModal.classList.add("active");
         DOM.saveThemeNameInput.focus();
       }
 
+      // 将当前主题配置另存为一份新存档
       function saveCurrentTheme() {
         const name = DOM.saveThemeNameInput.value.trim() || "Unnamed Theme";
         const saves = getThemeSaves();
@@ -4176,6 +4524,7 @@
         renderThemeSavesList();
       }
 
+      // 渲染主题存档列表
       function renderThemeSavesList() {
         const saves = getThemeSaves();
         if (saves.length === 0) {
@@ -4206,6 +4555,7 @@
           .join("");
       }
 
+      // 加载指定主题存档并应用
       function loadThemeSave(id) {
         const save = getThemeSaves().find((s) => s.id === id);
         if (!save) return;
@@ -4258,11 +4608,13 @@
         renderFontList();
       }
 
+      // 删除指定的主题存档
       function deleteThemeSave(id) {
         setThemeSaves(getThemeSaves().filter((s) => s.id !== id));
         renderThemeSavesList();
       }
 
+      // 导出当前主题配置为json文件
       function exportTheme() {
         const data = getThemeCapture();
         const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -4276,6 +4628,7 @@
         URL.revokeObjectURL(url);
       }
 
+      // 导入json主题配置文件并应用
       function importTheme(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -4307,13 +4660,16 @@
       }
 
       /* [TOC-20] Font Management */
+      /* 功能：自定义字体的添加（URL 或本地文件）、删除、应用、列表渲染 */
       function getFonts() {
         return Storage.get("chatFonts", []);
       }
+      // 写回自定义字体列表到localStorage
       function setFonts(f) {
-        Storage.set("chatFonts", f);
+        return Storage.set("chatFonts", f);
       }
 
+      // 打开“添加字体”弹窗
       function openAddFontModal() {
         DOM.fontNameInput.value = "";
         DOM.fontUrlInput.value = "";
@@ -4322,13 +4678,11 @@
         DOM.fontNameInput.focus();
       }
 
+      // 添加一个自定义字体（URL或本地文件）
       function addFont() {
-        const name = DOM.fontNameInput.value.trim();
-        if (!name) return;
         const file = DOM.fontFileInput.files && DOM.fontFileInput.files[0];
         const url = DOM.fontUrlInput.value.trim();
 
-        // BUG FIX: 原代码在 name 有值但 url/file 均为空时静默退出，用户无任何反馈
         if (!file && !url) {
           DOM.alertMessage.textContent =
             "Please provide a font URL or upload a font file.";
@@ -4336,34 +4690,45 @@
           return;
         }
 
-        const doAdd = (src) => {
+        const doAdd = (name, src) => {
           const fonts = getFonts();
           const id = generateId();
           fonts.push({ id, name, src });
-          setFonts(fonts);
+          const saved = setFonts(fonts);
+          if (!saved) {
+            DOM.alertMessage.textContent =
+              "This font file is too large to save. Please try a smaller file or use a URL link instead.";
+            DOM.alertModal.classList.add("active");
+            return;
+          }
           closeModal("addFontModal");
           renderFontList();
           applyFontById(id, fonts);
         };
 
         if (file) {
+          // 文件导入：字体名字直接用文件名（去掉后缀），不用手动填
+          const fileName = file.name.replace(/\.[^./\\]+$/, "");
           const reader = new FileReader();
-          reader.onload = (e) => doAdd(e.target.result);
+          reader.onload = (e) => doAdd(fileName, e.target.result);
           reader.readAsDataURL(file);
         } else if (url) {
-          doAdd(url);
+          // URL导入：没有文件名可以用，还是需要用户填一个名字
+          const typedName = DOM.fontNameInput.value.trim() || "Custom Font";
+          doAdd(typedName, url);
         }
       }
 
+      // 应用指定id的字体到全局
       function applyFontById(id, fontsArr) {
         const fonts = fontsArr || getFonts();
         const font = id ? fonts.find((f) => f.id === id) : null;
         let tag = document.getElementById(FONT_STYLE_ID);
         if (!font) {
-          // Remove custom font, revert to system font
           if (tag) tag.remove();
           Storage.set("chatActiveFont", null);
           document.body.style.fontFamily = "";
+          renderFontList();
           return;
         }
         if (!tag) {
@@ -4371,10 +4736,12 @@
           tag.id = FONT_STYLE_ID;
           document.head.appendChild(tag);
         }
-        tag.textContent = `@font-face { font-family: '${font.name}'; src: url('${font.src}'); } * { font-family: '${font.name}', -apple-system, sans-serif !important; }`;
+        tag.textContent = `@font-face { font-family: 'preview-${font.id}'; src: url('${font.src}'); } *{ font-family: 'preview-${font.id}', -apple-system, sans-serif !important; }`;
         Storage.set("chatActiveFont", id);
+        renderFontList();
       }
 
+      // 删除指定的自定义字体
       function deleteFont(id) {
         const fonts = getFonts().filter((f) => f.id !== id);
         setFonts(fonts);
@@ -4383,35 +4750,115 @@
         renderFontList();
       }
 
-      function renderFontList() {
-        const fonts = getFonts();
-        const activeId = Storage.get("chatActiveFont");
-        if (fonts.length === 0) {
-          DOM.fontList.innerHTML =
-            '<div style="font-size:11px; color:var(--text-sub); text-align:center; padding:6px 0;">No custom fonts added.</div>';
-          return;
+      // 给每个字体注册一个"专属"的预览用 @font-face（跟真正应用的字体分开），
+      // 这样列表里每张卡片的 "Aa" 才能各自显示成对应字体的样子，
+      // 而不用等它变成"当前使用中"才看得出效果
+      function ensureFontPreviewStyles(fonts) {
+        let tag = document.getElementById("font-preview-css");
+        if (!tag) {
+          tag = document.createElement("style");
+          tag.id = "font-preview-css";
+          document.head.appendChild(tag);
         }
-        DOM.fontList.innerHTML = fonts
-          .map((f) => {
-            const isActive = f.id === activeId;
-            return `<div class="save-item" style="cursor:default;">
-            <div class="save-info">
-              <span class="save-name" style="${isActive ? "color:var(--text-main);" : ""}">${escapeHtml(f.name)}${isActive ? " ✓" : ""}</span>
-            </div>
-            <div class="save-actions">
-              <button class="save-btn-small" title="${isActive ? "Deactivate" : "Use"}" onclick="${isActive ? "applyFontById(null)" : "applyFontById('" + f.id + "')"}; renderFontList()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="${isActive ? "20 6 9 17 4 12" : "9 11 12 14 20 6"}"/>${isActive ? "" : '<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>'}</svg>
-              </button>
-              <button class="save-btn-small" title="Delete" onclick="deleteFont('${f.id}')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
-            </div>
-          </div>`;
-          })
-          .join("");
+        tag.textContent = fonts
+          .map(
+            (f) =>
+              `@font-face { font-family: 'preview-${f.id}'; src: url('${f.src}'); }`,
+          )
+          .join("\n");
       }
 
+      // 渲染已添加的自定义字体列表（横向卡片：默认字体 + 每个自定义字体）
+      function renderFontList() {
+        const fonts = getFonts();
+        ensureFontPreviewStyles(fonts);
+        const activeId = Storage.get("chatActiveFont");
+
+        // 第一张卡片永远是"默认字体"（不用自定义字体时长这样）
+        let html = `<div class="font-card${!activeId ? " active" : ""}" data-id="">
+          <div class="font-card-check">✓</div>
+          <div class="font-card-preview" style="font-family: -apple-system, sans-serif !important;">Aa</div>
+          <div class="font-card-name">Default</div>
+        </div>`;
+
+        html += fonts
+          .map((f) => {
+            const isActive = f.id === activeId;
+            return `<div class="font-card${isActive ? " active" : ""}" data-id="${f.id}">
+              <div class="font-card-check">✓</div>
+              <div class="font-card-preview" style="font-family:'preview-${f.id}'  !important">Aa</div>
+              <div class="font-card-name" data-role="name">${escapeHtml(f.name)}</div>
+              <div class="font-card-delete" data-role="delete">✕</div>
+            </div>`;
+          })
+          .join("");
+
+        DOM.fontList.innerHTML = html;
+      }
+
+      // 打开"改名"弹窗，把当前名字填进去
+      function openRenameFontModal(id) {
+        const fonts = getFonts();
+        const font = fonts.find((f) => f.id === id);
+        if (!font) return;
+        state.renamingFontId = id;
+        DOM.renameFontInput.value = font.name;
+        DOM.renameFontModal.classList.add("active");
+        DOM.renameFontInput.focus();
+      }
+
+      // 保存改名结果
+      function saveFontRename() {
+        const newName = DOM.renameFontInput.value.trim();
+        if (!newName) return;
+        const fonts = getFonts();
+        const font = fonts.find((f) => f.id === state.renamingFontId);
+        if (font) {
+          font.name = newName;
+          setFonts(fonts);
+          renderFontList();
+        }
+        closeModal("renameFontModal");
+      }
+
+      // 打开"确认删除"弹窗
+      function openConfirmDeleteFont(id) {
+        state.pendingDeleteFontId = id;
+        DOM.confirmDeleteFontModal.classList.add("active");
+      }
+
+      // 用户点了"Delete"确认按钮之后，真正执行删除
+      function confirmDeleteFontYes() {
+        if (state.pendingDeleteFontId) {
+          deleteFont(state.pendingDeleteFontId);
+          state.pendingDeleteFontId = null;
+        }
+        closeModal("confirmDeleteFontModal");
+      }
+
+      // 点击卡片本体 = 应用这个字体；点名字 = 改名；点右下角✕ = 询问是否删除
+      DOM.fontList.addEventListener("click", (e) => {
+        const nameEl = e.target.closest('[data-role="name"]');
+        const deleteEl = e.target.closest('[data-role="delete"]');
+        const card = e.target.closest(".font-card");
+        if (!card) return;
+        const id = card.getAttribute("data-id");
+
+        if (nameEl) {
+          e.stopPropagation();
+          openRenameFontModal(id);
+          return;
+        }
+        if (deleteEl) {
+          e.stopPropagation();
+          openConfirmDeleteFont(id);
+          return;
+        }
+        applyFontById(id || null);
+      });
+
       /* [TOC-21] Init: restore saved CSS / fonts on load */
+      /* 功能：页面加载时恢复用户此前保存的自定义 CSS 与字体设置 */
       (function initTheme() {
         const customCSS = Storage.get("themeCustomCSS", "");
         if (customCSS) {
@@ -4432,9 +4879,11 @@
       })();
 
       /* [TOC-22] CSS Fullscreen Expand */
+      /* 功能：CSS 输入框的全屏编辑弹窗（方便在小输入框里写长段 CSS） */
       let _cssExpandSourceId = null;
       let _cssExpandApplyFn = null;
 
+      // 打开CSS全屏编辑弹窗
       function openCSSExpand(sourceId, title, applyFn) {
         _cssExpandSourceId = sourceId;
         _cssExpandApplyFn = applyFn;
@@ -4445,6 +4894,7 @@
         DOM.cssExpandTextarea.focus();
       }
 
+      // 保存全屏编辑器中的CSS内容回原输入框并应用
       function saveCSSExpand() {
         const source = document.getElementById(_cssExpandSourceId);
         if (source) source.value = DOM.cssExpandTextarea.value;
