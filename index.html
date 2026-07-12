@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#050505" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <link
       rel="apple-touch-icon"
@@ -18,7 +18,7 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <title>CardChat</title>
     <style>
-      /* ==================== 全局CSS变量：浅色/暗色主题配色 ==================== */
+      /* ====== 全局CSS变量：浅色/暗色主题配色 ====== */
       :root {
         --bg-color: #ffffff;
         --text-main: #000000;
@@ -90,7 +90,7 @@
       }
 
       html,
-      /* ==================== 页面与手机外框布局（含桌面端居中卡片、iOS安全区适配） ==================== */
+      /* ====== 页面与手机外框布局（含桌面端居中卡片、iOS安全区适配） ====== */
       body {
         height: 100%;
       }
@@ -150,7 +150,7 @@
         }
       }
 
-      /* ==================== 顶部导航栏（头像/昵称/主题切换按钮） ==================== */
+      /* ====== 顶部导航栏（头像/昵称/主题切换按钮） ====== */
       .chat-header {
         display: flex;
         align-items: center;
@@ -214,7 +214,7 @@
         justify-content: center;
       }
 
-      /* ==================== 聊天消息滚动区域 & 时间戳分隔条 ==================== */
+      /* ====== 聊天消息滚动区域 & 时间戳分隔条 ====== */
       .chat-main {
         flex: 1;
         padding: 15px;
@@ -259,7 +259,7 @@
         }
       }
 
-      /* ==================== 消息气泡与状态（发送/接收样式、已读勾选、撤回态） ==================== */
+      /* ====== 消息气泡与状态 ====== */
       .message {
         display: flex;
         flex-direction: column;
@@ -320,7 +320,7 @@
         border-bottom-right-radius: 4px;
       }
 
-      /* ==================== 消息引用框样式 ==================== */
+      /* ====== 消息引用框样式 ====== */
       .quote-box {
         font-size: 11px;
         color: var(--text-sub);
@@ -362,7 +362,7 @@
         border-radius: 12px;
       }
 
-      /* ==================== 消息操作工具栏（编辑/引用/插入/撤回/删除按钮） ==================== */
+      /* ====== 消息操作工具栏（编辑/引用/插入/撤回/删除按钮） ====== */
       .msg-toolbar {
         position: absolute;
         bottom: 100%;
@@ -413,7 +413,7 @@
         height: 14px;
       }
 
-      /* ==================== 底部输入栏（输入框、发送按钮、“+”菜单入口） ==================== */
+      /* ====== 底部输入栏（输入框、发送按钮、“+”菜单入口） ====== */
       .chat-footer {
         padding: 12px 15px;
         padding-bottom: max(12px, env(safe-area-inset-bottom));
@@ -475,7 +475,7 @@
         opacity: 0.5;
       }
 
-      /* ==================== “+”号功能菜单（图片/位置/文件等功能入口） ==================== */
+      /* ====== “+”号功能菜单（图片/位置/文件等功能入口） ====== */
       .plus-menu {
         position: absolute;
         bottom: 65px;
@@ -517,7 +517,7 @@
         background-color: var(--input-bg);
       }
 
-      /* ==================== 通用弹窗基础样式（遮罩层/内容容器/标题/按钮） ==================== */
+      /* ====== 通用弹窗基础样式（遮罩层/内容容器/标题/按钮） ====== */
       .modal-overlay {
         position: absolute;
         top: 0;
@@ -656,7 +656,7 @@
         font-size: 11px;
       }
 
-      /* ==================== 存档列表通用样式（聊天/字卡/主题存档共用） ==================== */
+      /* ====== 存档列表通用样式（聊天/字卡/主题存档共用） ====== */
       .saves-list {
         display: flex;
         flex-direction: column;
@@ -701,12 +701,18 @@
       }
 
       /* Settings & Word Card styles */
-      /* ==================== 设置页列表项与开关控件样式 ==================== */
+      /* ====== 设置页列表项与开关控件样式 ====== */
       .setting-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 12px 0;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .setting-item-divider {
+        padding-top: 4px;
+        padding-bottom: 12px;
+        margin-bottom: 2px;
         border-bottom: 1px solid var(--border-color);
       }
       .setting-label {
@@ -748,7 +754,7 @@
       }
 
       /* Word Card filter bar */
-      /* ==================== 字卡标签筛选栏样式 ==================== */
+      /* ====== 字卡标签筛选栏样式 ====== */
       .card-filter-bar {
         display: flex;
         overflow-x: auto;
@@ -818,7 +824,7 @@
       }
 
       /* Word Card Right Top Toolbar */
-      /* ==================== 字卡管理顶部工具图标 ==================== */
+      /* ====== 字卡管理顶部工具图标 ====== */
       .card-top-icons {
         display: flex;
         gap: 10px;
@@ -836,7 +842,7 @@
       }
 
       /* Word Card List & Folders */
-      /* ==================== 字卡列表/文件夹/单张卡片样式 ==================== */
+      /* ====== 字卡列表/文件夹/单张卡片样式 ====== */
       .card-list {
         flex: 1;
         overflow-y: auto;
@@ -949,7 +955,7 @@
       }
 
       /* Reply Frequency segmented control */
-      /* ==================== 自动回复速度分段选择器样式 ==================== */
+      /* ====== 自动回复速度分段选择器样式 ====== */
       .freq-segmented {
         display: flex;
         width: 100%;
@@ -1021,29 +1027,524 @@
         background: var(--border-color);
       }
 
-      /* Message read ticks */
-      /* ==================== 消息已读状态勾选图标样式 ==================== */
+      /* ====== Message read ticks ====== */
+      /* 消息已读状态勾选图标样式（2026-07-07 改动） */
       .msg-status {
         display: flex;
         justify-content: flex-end;
-        padding: 1px 3px 0;
+        padding: 2px 3px 0;
         height: 10px;
       }
       .msg-ticks {
         color: var(--text-sub);
-        opacity: 0.55;
+        opacity: 0.5;
         line-height: 1;
         display: flex;
         align-items: center;
-        transition: opacity 0.3s;
+        transition: all 0.3s;
+      }
+      .msg-ticks svg {
+        stroke-width: 1.3px;
       }
       .msg-ticks.read {
-        opacity: 1;
+        opacity: 0.6;
         color: var(--text-main);
       }
 
+      /* ====== Playlist card ====== */
+      /* 2026-07-07 歌单卡片列表 */
+      .playlist-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        max-height: 320px;
+        overflow-y: auto;
+        padding: 4px 0;
+        margin: 12px 0;
+      }
+      .playlist-card {
+        position: relative;
+        aspect-ratio: 1; /* 正方形 */
+        border-radius: 8px;
+        background: var(--border-color); /* 底色 */
+        overflow: hidden;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      .playlist-sleeve {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+        /* filter: grayscale(100%) contrast(1.1); */ /* 黑白效果，可选 */
+      }
+      .playlist-label {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 24px 10px 10px;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.85) 0%,
+          transparent 100%
+        );
+        color: #eeeeee;
+        font-size: 11px;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        z-index: 3;
+      }
+      .playlist-label svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        overflow: visible;
+        opacity: 0.6;
+      }
+      .playlist-label-text {
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* ====== Song rows (playlist detail) ====== */
+      /* 2026-07-12 重做：改为与 .card-item 一致的"圆角色块行"风格，
+         而不是原来带分隔线的列表，与字卡/文件夹列表统一视觉语言 */
+      .song-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--input-bg);
+        padding: 6px 10px;
+        border-radius: 8px;
+        min-height: 40px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .song-row.playing {
+        background: var(--highlight-bg);
+      }
+      .song-row.playing .song-row-title {
+        font-weight: 600;
+      }
+      /* 多选模式：不用勾选框，用深浅背景表示选中（与字卡 .card-item.selected 一致） */
+      .song-row.selected {
+        background-color: var(--text-sub);
+      }
+      .song-row.selected .song-row-title,
+      .song-row.selected .song-row-artist,
+      .song-row.selected .song-row-index {
+        color: var(--bg-color);
+      }
+      .song-row.selected .song-row-eq span {
+        background: var(--bg-color);
+      }
+      /* 序号 / 正在播放的迷你均衡器动画（呼应 .typing-dots 的拟真动效风格） */
+      .song-row-index {
+        flex-shrink: 0;
+        width: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: var(--text-sub);
+        font-variant-numeric: tabular-nums;
+      }
+      .song-row.playing .song-row-index {
+        color: var(--text-main);
+      }
+
+      .song-row-eq {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        width: 10px;
+        height: 12px;
+      }
+
+      /* 2026-07-12 FIX */
+      .song-row-eq span {
+        width: 2px;
+        height: 10px;
+
+        background: currentColor;
+        border-radius: 999px;
+
+        transform-origin: bottom center;
+
+        animation: eqBounce 1.6s infinite ease-in-out;
+      }
+      .song-row-eq span:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .song-row-eq span:nth-child(2) {
+        animation-delay: -0.15s;
+      }
+      .song-row-eq span:nth-child(3) {
+        animation-delay: -0.7s;
+      }
+
+      @keyframes eqBounce {
+        0% {
+          transform: scaleY(0.25);
+        }
+        15% {
+          transform: scaleY(0.85);
+        }
+        35% {
+          transform: scaleY(0.45);
+        }
+        55% {
+          transform: scaleY(1);
+        }
+        75% {
+          transform: scaleY(0.35);
+        }
+        100% {
+          transform: scaleY(0.25);
+        }
+      }
+
+      .song-row-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .song-row-title {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-main);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .song-row-artist {
+        font-size: 10px;
+        color: var(--text-sub);
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .song-row-menu-btn {
+        background: none;
+        border: none;
+        color: var(--text-sub);
+        padding: 4px;
+        border-radius: 6px;
+        cursor: pointer;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+      }
+      .song-row-menu-btn:hover {
+        color: var(--text-main);
+        background: var(--border-color);
+      }
+
+      /* ====== Playlist detail modal ====== */
+      .playlist-detail-content {
+        position: relative;
+        width: 280px !important; /* 统一宽度 */
+        max-width: 100%;
+        padding: 0 !important;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        max-height: 85vh;
+        border-radius: 16px; /* 统一圆角 */
+        background-color: var(--bg-color);
+      }
+
+      .playlist-detail-header {
+        position: relative;
+        min-height: 180px;
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+
+      .playlist-detail-header-bg {
+        /* old version, 2026-07-12
+        position: absolute;
+        inset: 0;
+        background: var(--input-bg);
+        background-size: cover;
+        background-position: center;
+        */
+        /* 2026-07-12 */
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        width: 100%;
+        height: 290px;
+
+        background-size: cover;
+        background-position: center;
+        filter: saturate(1.2) brightness(0.95) contrast(0.9) opacity(0.7);
+
+        z-index: 0;
+      }
+
+      .playlist-detail-header-gradient {
+        /* old version, 2026-07-12
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.8) 0%,
+          transparent 100%
+        );
+        pointer-events: none;
+        */
+        /* 2026-07-12 */
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        width: 100%;
+        height: 290px;
+
+        background: linear-gradient(
+          to bottom,
+          transparent 38%,
+          color-mix(in srgb, var(--bg-color) 45%, transparent) 54%,
+          color-mix(in srgb, var(--bg-color) 85%, transparent) 78%,
+          var(--bg-color) 100%
+        );
+
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .playlist-detail-header-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 2;
+        padding: 0px 16px;
+        color: #fff;
+      }
+
+      .playlist-detail-header-info h2 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      }
+      /* 歌曲数量副标题 */
+      .playlist-detail-header-count {
+        display: block;
+        font-size: 11px;
+        font-weight: 400;
+        opacity: 0.8;
+        margin-top: 2px;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+      }
+
+      .playlist-detail-songs {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 150px;
+        max-height: 340px;
+        padding: 6px 12px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        /* 2026-07-12 new */
+        background: transparent;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* 沉底的主按钮行：Back + Play All + More，同一行 */
+      .playlist-detail-bottom-bar {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        margin: 0px 15px 15px;
+        flex-shrink: 0;
+      }
+      .playlist-detail-play-all {
+        flex: 1;
+        min-width: 0;
+        height: 25px;
+        padding: 0 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        background: transparent;
+        color: var(--text-sub);
+        font-size: 12px;
+        font-weight: 400;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+      .playlist-detail-play-all:hover {
+        background: var(--input-bg);
+        border-color: var(--text-sub);
+      }
+      /* Back 和 More 共用同一套圆形图标按钮样式，分别放在这一行的左右两端 */
+      .playlist-detail-back-btn,
+      .playlist-detail-cover-btn,
+      .playlist-detail-more-btn {
+        flex-shrink: 0;
+        width: 25px;
+        height: 25px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        background: transparent;
+        color: var(--text-sub);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+      .playlist-detail-back-btn:hover,
+      .playlist-detail-cover-btn:hover,
+      .playlist-detail-more-btn:hover {
+        background: var(--input-bg);
+        border-color: var(--text-sub);
+      }
+
+      /* 多选栏：顶部显示已选数量，底部一行操作按钮 */
+      .playlist-detail-select-bar {
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        padding: 3px 15px 0px;
+        border-top: 1px solid var(--border-color);
+        background: var(--bg-color);
+      }
+
+      .playlist-detail-select-bar.active {
+        display: flex;
+      }
+
+      .playlist-select-bar-count {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-sub);
+        text-align: center;
+      }
+
+      .playlist-select-bar-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .playlist-select-bar-actions button {
+        flex: 1;
+        padding: 3px 6px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--input-bg);
+        color: var(--text-main);
+        height: 32px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .playlist-select-bar-actions button:active {
+        background: var(--border-color);
+      }
+      .playlist-select-bar-actions button.danger {
+        color: #e53935;
+        border-color: rgba(229, 57, 53, 0.35);
+      }
+
+      /* Dropdown menus (playlist / song) */
+      /* 2026-07-12 重做：统一改为普通竖排（列）菜单，不再用横向图标胶囊；
+         用 .expand-up 区分"从下往上展开"还是默认的"从上往下展开" */
+      .music-dropdown {
+        position: fixed;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        display: none;
+        flex-direction: column;
+        z-index: 200;
+        min-width: 150px;
+        overflow: hidden;
+        transform-origin: top right;
+      }
+      .music-dropdown.active {
+        display: flex;
+        animation: dropdownPop 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .music-dropdown.expand-up {
+        transform-origin: bottom right;
+      }
+      .music-dropdown.expand-up.active {
+        animation-name: dropdownPopUp;
+      }
+      @keyframes dropdownPop {
+        from {
+          opacity: 0;
+          transform: scale(0.94) translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      @keyframes dropdownPopUp {
+        from {
+          opacity: 0;
+          transform: scale(0.94) translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      .music-dropdown-item {
+        padding: 10px 14px;
+        font-size: 12px;
+        color: var(--text-main);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .music-dropdown-item:hover {
+        background: var(--input-bg);
+      }
+      .music-dropdown-item.danger {
+        color: #e53935;
+      }
+      .play-mode-btn {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+      .play-mode-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
       /* Font card */
-      /* ==================== 字体卡片样式（横向滑动列表用） ==================== */
+      /* ====== 字体卡片样式（横向滑动列表用） ====== */
       .font-card {
         position: relative;
         flex-shrink: 0;
@@ -1104,51 +1605,84 @@
         color: var(--text-main);
       }
 
-      /* Music Island */
-      /* ==================== 音乐灵动岛样式 ==================== */
+      /* ====== Music dynamic island ====== */
       .music-island {
         position: absolute;
-        top: 8px;
+        top: 10px;
         left: 50%;
         transform: translateX(-50%) scale(0.4);
         opacity: 0;
         pointer-events: none;
         display: flex;
         align-items: center;
-        gap: 8px;
-        background: #000;
-        color: #fff;
-        padding: 6px 14px;
-        border-radius: 20px;
-        max-width: 60%;
+        gap: 10px; /* 稍微拉开一点点元素间距 */
+
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        color: #eeeeee;
+        padding: 8px 14px;
+        border-radius: 30px;
+        width: 150px;
         z-index: 90;
-        transition:
-          transform 0.3s ease,
-          opacity 0.3s ease;
         cursor: pointer;
+
+        transition:
+          transform 0.5s cubic-bezier(0.32, 0.72, 0, 1),
+          opacity 0.4s ease;
       }
+
+      /* 激活状态 */
       .music-island.active {
         transform: translateX(-50%) scale(1);
         opacity: 1;
         pointer-events: auto;
       }
+
+      /* 点击时的微缩放反馈 */
+      .music-island:active {
+        transform: translateX(-50%) scale(0.96);
+        transition: transform 0.1s;
+      }
+
       .music-island-icon svg {
         width: 13px;
         height: 13px;
         flex-shrink: 0;
+        opacity: 0.8;
       }
+
       .music-island-title-wrap {
         flex: 1;
         overflow: hidden;
         white-space: nowrap;
+        min-width: 0;
+
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          black 10%,
+          black 90%,
+          transparent 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          black 10%,
+          black 90%,
+          transparent 100%
+        );
       }
+
       .music-island-title-track {
         display: inline-flex;
-        gap: 24px;
       }
+
       .music-island-title-track.marquee {
-        animation: music-marquee 8s linear infinite;
+        animation: music-marquee 10s linear infinite;
       }
+
       @keyframes music-marquee {
         from {
           transform: translateX(0);
@@ -1157,36 +1691,30 @@
           transform: translateX(-50%);
         }
       }
+
       .music-title-copy {
-        font-size: 12px;
+        font-size: 11px;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        margin-left: 24px;
       }
+
+      .music-island-status {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+      }
+
       .music-island-status svg {
         width: 13px;
         height: 13px;
         flex-shrink: 0;
       }
-      .music-wave-bar {
-        animation: music-wave 0.8s ease-in-out infinite;
-        transform-origin: center;
-      }
-      .music-wave-bar:nth-child(2) {
-        animation-delay: 0.15s;
-      }
-      .music-wave-bar:nth-child(3) {
-        animation-delay: 0.3s;
-      }
-      @keyframes music-wave {
-        0%,
-        100% {
-          transform: scaleY(0.4);
-        }
-        50% {
-          transform: scaleY(1);
-        }
-      }
 
       /* Typing indicator animation */
-      /* ==================== “对方正在输入...”动画样式 ==================== */
+      /* ====== “对方正在输入...”动画样式 ====== */
       .typing-dots {
         display: flex;
         gap: 4px;
@@ -1221,7 +1749,7 @@
         }
       }
 
-      /* ==================== CSS全屏编辑器文本框样式 ==================== */
+      /* ====== CSS全屏编辑器文本框样式 ====== */
       .css-expand-textarea {
         flex: 1;
         width: 100%;
@@ -1238,7 +1766,7 @@
       }
     </style>
   </head>
-  <!-- ==================== 页面主体 ==================== -->
+  <!-- ====== 页面主体 ====== -->
   <body>
     <div class="phone-container" id="phoneContainer">
       <!-- 顶部导航栏：返回感/头像/昵称/主题切换按钮 -->
@@ -1306,16 +1834,20 @@
         </div>
       </header>
 
-      <!-- 音乐灵动岛：点击展开歌曲列表弹窗 -->
+      <!-- Music dynamic island -->
       <div class="music-island" id="musicIsland" onclick="openMusicListModal()">
         <div class="music-island-icon">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M9 18V5l12-2v13"
-              stroke="currentColor"
-              stroke-width="2"
-              fill="none"
-            />
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 18V5l12-2v13" />
             <circle cx="6" cy="18" r="3" />
             <circle cx="18" cy="16" r="3" />
           </svg>
@@ -1335,7 +1867,7 @@
         </div>
         <div class="music-island-status" id="musicIslandStatus"></div>
       </div>
-      <audio id="bgAudio" loop style="display: none"></audio>
+      <audio id="bgAudio" style="display: none"></audio>
 
       <!-- 聊天消息滚动区域：所有消息气泡/时间戳/撤回提示都渲染在这里 -->
       <main class="chat-main" id="chatMain">
@@ -1884,7 +2416,7 @@
       <div class="modal-overlay" id="wordCardModal" style="z-index: 120">
         <div
           class="modal-content"
-          style="width: 320px; height: 85%; padding: 15px"
+          style="width: 320px; height: 80%; padding: 15px"
         >
           <!-- Header: Back Btn, Title, Top Icons -->
           <div
@@ -2280,8 +2812,8 @@
         <div
           class="modal-content"
           style="
-            width: 300px;
-            max-height: 88%;
+            width: 320px;
+            max-height: 80%;
             padding: 0;
             display: flex;
             flex-direction: column;
@@ -2291,20 +2823,22 @@
           <!-- Scrollable body -->
           <div style="flex: 1; overflow-y: auto; padding: 16px 16px 0">
             <!-- 1. Dark / Light toggle -->
-            <div
-              class="setting-item"
-              style="
-                padding-top: 4px;
-                border-bottom: 1px solid var(--border-color);
-                padding-bottom: 12px;
-                margin-bottom: 2px;
-              "
-            >
+            <div class="setting-item setting-item-divider">
               <span class="setting-label">Dark Mode</span>
               <div
                 class="toggle-switch"
                 id="themeDarkToggle"
                 onclick="toggleTheme()"
+              ></div>
+            </div>
+
+            <!-- ADD: Lock Zoom -2026-07-12 -->
+            <div class="setting-item setting-item-divider">
+              <span class="setting-label">Lock Zoom</span>
+              <div
+                class="toggle-switch"
+                id="lockZoomToggle"
+                onclick="toggleLockZoom()"
               ></div>
             </div>
 
@@ -2540,11 +3074,20 @@
                 margin-bottom: 4px;
               "
             ></div>
-            <div style="display: flex; gap: 10px; margin-top: 4px">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                margin-top: 4px;
+                padding-top: 5px;
+              "
+            >
               <div
                 style="flex: 1; display: flex; flex-direction: column; gap: 4px"
               >
-                <span class="setting-label" style="font-size: 11px"
+                <span
+                  class="setting-label"
+                  style="font-size: 11px; color: var(--text-sub)"
                   >Font Size</span
                 >
                 <div style="display: flex; align-items: center; gap: 4px">
@@ -2556,6 +3099,7 @@
                       class="stepper-input"
                       value="14"
                       onchange="applyFontSize()"
+                      aria-label="Font Size"
                     />
                     <div class="stepper-arrows">
                       <button
@@ -2569,6 +3113,8 @@
                             applyFontSize,
                           )
                         "
+                        aria-label="Increase Font Size"
+                        title="Increase Font Size"
                       >
                         <svg viewBox="0 0 24 24">
                           <path d="M6 15l6-6 6 6" />
@@ -2585,6 +3131,8 @@
                             applyFontSize,
                           )
                         "
+                        aria-label="Decrease Font Size"
+                        title="Decrease Font Size"
                       >
                         <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" /></svg>
                       </button>
@@ -2595,11 +3143,12 @@
                   </div>
                 </div>
               </div>
-              <div style="width: 1px; background: var(--border-color)"></div>
               <div
                 style="flex: 1; display: flex; flex-direction: column; gap: 4px"
               >
-                <span class="setting-label" style="font-size: 11px"
+                <span
+                  class="setting-label"
+                  style="font-size: 11px; color: var(--text-sub)"
                   >Line Height</span
                 >
                 <div class="freq-segmented" id="lineHeightSegmented">
@@ -2814,7 +3363,6 @@
       </div>
 
       <!-- Music List Modal -->
-      <!-- 弹窗：音乐列表 -->
       <div class="modal-overlay" id="musicListModal" style="z-index: 120">
         <div class="modal-content">
           <div
@@ -2825,28 +3373,579 @@
               align-items: center;
             "
           >
-            <span>Music</span>
-            <span style="font-size: 11px; color: var(--text-sub)"
-              >Import: TBD</span
+            <div
+              class="play-mode-btn"
+              id="playModeToggle"
+              onclick="cyclePlayMode()"
+              title="Play mode"
             >
+              <span id="playModeIcon"></span>
+              <span id="playModeLabel">Sequential</span>
+            </div>
+            <div style="display: flex; gap: 14px">
+              <span
+                onclick="openMusicLinkModal()"
+                title="Add by link"
+                style="cursor: pointer"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M9 18V5l12-2v13" />
+                  <circle cx="6" cy="18" r="3" />
+                  <circle cx="18" cy="16" r="3" />
+                </svg>
+              </span>
+              <span
+                onclick="openMusicSearchPlaceholder()"
+                title="Search online"
+                style="cursor: pointer"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </span>
+              <span
+                onclick="openCreatePlaylistModal()"
+                title="New playlist"
+                style="cursor: pointer"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="2.5"
+                    fill="currentColor"
+                    stroke="none"
+                  />
+                  <line x1="19" y1="5" x2="19" y2="11" />
+                  <line x1="16" y1="8" x2="22" y2="8" />
+                </svg>
+              </span>
+            </div>
           </div>
-          <div
-            id="musicListContainer"
-            style="
-              display: flex;
-              flex-direction: column;
-              gap: 6px;
-              max-height: 260px;
-              overflow-y: auto;
-              margin: 8px 0;
-            "
-          ></div>
+          <div class="playlist-grid" id="musicListContainer"></div>
           <div class="modal-actions sleek-actions">
             <button
               class="modal-btn btn-cancel"
               onclick="closeModal('musicListModal')"
             >
               Close
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Song by Link Modal -->
+      <div class="modal-overlay" id="musicLinkModal" style="z-index: 130">
+        <div class="modal-content">
+          <div class="modal-title">Add Song by Link</div>
+          <input
+            type="text"
+            class="modal-input"
+            id="musicLinkTitle"
+            placeholder="Song title"
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            class="modal-input"
+            id="musicLinkArtist"
+            placeholder="Artist (optional)"
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            class="modal-input"
+            id="musicLinkUrl"
+            placeholder="Direct audio link (https://...)"
+            autocomplete="off"
+          />
+          <div class="modal-subtitle" style="margin-top: 8px">
+            Add to playlist (optional)
+          </div>
+          <div
+            id="musicLinkPlaylistCheckboxes"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+              max-height: 100px;
+              overflow-y: auto;
+            "
+          ></div>
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('musicLinkModal')"
+            >
+              Cancel
+            </button>
+            <button class="modal-btn btn-save" onclick="saveMusicLink()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Playlist Modal -->
+      <div class="modal-overlay" id="createPlaylistModal" style="z-index: 130">
+        <div class="modal-content">
+          <div class="modal-title">New Playlist</div>
+          <input
+            type="text"
+            class="modal-input"
+            id="newPlaylistNameInput"
+            placeholder="Playlist name"
+            autocomplete="off"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing)
+                saveNewPlaylist();
+            "
+          />
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('createPlaylistModal')"
+            >
+              Cancel
+            </button>
+            <button class="modal-btn btn-save" onclick="saveNewPlaylist()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playlist Detail Modal -->
+      <div class="modal-overlay" id="playlistDetailModal" style="z-index: 130">
+        <div class="modal-content playlist-detail-content">
+          <!-- 头部区域 -->
+          <div class="playlist-detail-header" id="playlistDetailHeader">
+            <div
+              class="playlist-detail-header-bg"
+              id="playlistDetailHeaderBg"
+            ></div>
+            <div class="playlist-detail-header-gradient"></div>
+            <div class="playlist-detail-header-info">
+              <h2 id="playlistDetailName">Playlist</h2>
+              <span
+                class="playlist-detail-header-count"
+                id="playlistDetailCount"
+              ></span>
+            </div>
+          </div>
+
+          <!-- 歌曲列表区域 -->
+          <div class="playlist-detail-songs" id="playlistDetailSongs"></div>
+
+          <!-- 多选操作栏 -->
+          <div class="playlist-detail-select-bar" id="playlistSelectBar">
+            <div class="playlist-select-bar-count" id="playlistSelectCount">
+              0 selected
+            </div>
+            <div class="playlist-select-bar-actions">
+              <button type="button" onclick="addSelectedSongsToPlaylist()">
+                Add to Playlist
+              </button>
+              <button
+                type="button"
+                class="danger"
+                onclick="deleteSelectedSongs()"
+              >
+                Delete
+              </button>
+              <button type="button" onclick="exitPlaylistSelectMode()">
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <!-- Back + Play All + Change Cover + More，同一行 -->
+          <div class="playlist-detail-bottom-bar">
+            <button
+              type="button"
+              class="playlist-detail-back-btn"
+              onclick="
+                event.stopPropagation();
+                closeModal('playlistDetailModal');
+              "
+              title="Back"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="playlist-detail-play-all"
+              onclick="
+                event.stopPropagation();
+                playAllInPlaylist(state.viewingPlaylistId);
+              "
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                style="vertical-align: -2px; margin-right: 6px"
+              >
+                <polygon points="5,3 19,12 5,21" />
+              </svg>
+              Play All
+            </button>
+            <!-- 2026-07-12: cover button  -->
+            <button
+              type="button"
+              class="playlist-detail-cover-btn"
+              id="playlistCoverBtn"
+              onclick="
+                event.stopPropagation();
+                triggerPlaylistCoverUpload(event);
+              "
+              title="Change Cover"
+            >
+              <!-- 2026-07-12: svg重画  -->
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <!-- 相册/图片的外框 (右上角留出缺口给画笔) -->
+                <path
+                  d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"
+                />
+
+                <!-- 图片里的山峰/风景折线 -->
+                <path d="m21 15-5-5L5 21" />
+
+                <!-- 图片里的太阳/月亮 -->
+                <circle cx="8.5" cy="8.5" r="1.5" />
+
+                <!-- 右上角的编辑画笔 (Pencil) -->
+                <path
+                  d="M17.5 2.5a2.121 2.121 0 0 1 3 3L13 13l-4 1 1-4 7.5-7.5z"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="playlist-detail-more-btn"
+              id="playlistDetailMenuBtn"
+              onclick="
+                event.stopPropagation();
+                togglePlaylistDetailMenu(event);
+              "
+              title="More"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <circle cx="5" cy="12" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="19" cy="12" r="2" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 竖排菜单，从按钮位置向上展开 -->
+        <div class="music-dropdown expand-up" id="playlistDetailMenu">
+          <div
+            class="music-dropdown-item"
+            id="renamePlaylistMenuItem"
+            onclick="openRenamePlaylistModal()"
+            title="Rename"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+              />
+              <path
+                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+              />
+            </svg>
+            <span>Rename</span>
+          </div>
+          <div
+            class="music-dropdown-item"
+            onclick="cyclePlaylistSort()"
+            title="Sort"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="4" y1="12" x2="14" y2="12" />
+              <line x1="4" y1="18" x2="8" y2="18" />
+            </svg>
+            <span id="playlistSortLabel">Sort</span>
+          </div>
+          <div
+            class="music-dropdown-item"
+            onclick="enterPlaylistSelectMode()"
+            title="Multi-select"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="9 11 12 14 22 4" />
+              <path
+                d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+              />
+            </svg>
+            <span>Multi-select</span>
+          </div>
+          <div
+            class="music-dropdown-item danger"
+            id="deletePlaylistMenuItem"
+            onclick="confirmDeletePlaylist()"
+            title="Delete Playlist"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="3 6 5 6 21 6" />
+              <path
+                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+              />
+            </svg>
+            <span>Delete</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playlist Cover Modal（与头像弹窗一致：URL 或 相册/图库） -->
+      <div class="modal-overlay" id="playlistCoverModal" style="z-index: 140">
+        <div class="modal-content">
+          <div class="modal-title">Change Playlist Cover</div>
+          <input
+            type="text"
+            class="modal-input"
+            id="playlistCoverUrl"
+            placeholder="Paste image URL here..."
+            autocomplete="off"
+          />
+          <div
+            style="text-align: center; font-size: 10px; color: var(--text-sub)"
+          >
+            OR
+          </div>
+          <div class="file-upload-wrapper">
+            <div class="file-upload-btn">Upload from device</div>
+            <input
+              type="file"
+              id="playlistCoverFile"
+              accept="image/*"
+              title="Upload Image"
+              onchange="
+                if (this.files[0]) {
+                  savePlaylistCoverFromFile();
+                }
+              "
+            />
+          </div>
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('playlistCoverModal')"
+            >
+              Cancel
+            </button>
+            <button
+              class="modal-btn btn-save"
+              onclick="savePlaylistCoverFromUrl()"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Song Modal -->
+      <div class="modal-overlay" id="editSongModal" style="z-index: 140">
+        <div class="modal-content">
+          <div class="modal-title">Edit Song</div>
+          <input
+            type="text"
+            class="modal-input"
+            id="editSongTitle"
+            placeholder="Song title"
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            class="modal-input"
+            id="editSongArtist"
+            placeholder="Artist (optional)"
+            autocomplete="off"
+          />
+          <input
+            type="text"
+            class="modal-input"
+            id="editSongUrl"
+            placeholder="Direct audio link (https://...)"
+            autocomplete="off"
+          />
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('editSongModal')"
+            >
+              Cancel
+            </button>
+            <button class="modal-btn btn-save" onclick="saveEditSong()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Song to Playlist Modal -->
+      <div class="modal-overlay" id="addToPlaylistModal" style="z-index: 140">
+        <div class="modal-content">
+          <div class="modal-title">Add to Playlist</div>
+          <div
+            id="addToPlaylistList"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+              max-height: 180px;
+              overflow-y: auto;
+            "
+          ></div>
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('addToPlaylistModal')"
+            >
+              Cancel
+            </button>
+            <button class="modal-btn btn-save" onclick="confirmAddToPlaylist()">
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rename Playlist Modal -->
+      <div class="modal-overlay" id="renamePlaylistModal" style="z-index: 140">
+        <div class="modal-content">
+          <div class="modal-title">Rename Playlist</div>
+          <input
+            type="text"
+            class="modal-input"
+            id="renamePlaylistInput"
+            placeholder="Playlist name"
+            autocomplete="off"
+            onkeydown="
+              if (event.key === 'Enter' && !event.isComposing)
+                saveRenamePlaylist();
+            "
+          />
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('renamePlaylistModal')"
+            >
+              Cancel
+            </button>
+            <button class="modal-btn btn-save" onclick="saveRenamePlaylist()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Song action dropdown (shared) -->
+      <div class="music-dropdown" id="songActionMenu"></div>
+
+      <!-- Confirm Delete Song Modal -->
+      <div
+        class="modal-overlay"
+        id="confirmDeleteSongModal"
+        style="z-index: 140"
+      >
+        <div class="modal-content">
+          <div class="modal-title">Delete Song?</div>
+          <div
+            style="font-size: 12px; text-align: center; color: var(--text-sub)"
+          >
+            This will remove the song from your entire library and all
+            playlists.
+          </div>
+          <div class="modal-actions sleek-actions">
+            <button
+              class="modal-btn btn-cancel"
+              onclick="closeModal('confirmDeleteSongModal')"
+            >
+              Cancel
+            </button>
+            <button
+              class="modal-btn btn-danger"
+              onclick="confirmDeleteSongYes()"
+            >
+              Delete
             </button>
           </div>
         </div>
@@ -2914,9 +4013,9 @@
     </div>
 
     <script>
-      /* ============================================================
+      /* ====
        *  TABLE OF CONTENTS  (Ctrl+F 搜索注释标题快速跳转)
-       * ============================================================
+       * ====
        *
        *  [TOC-1]  DOM Cache
        *  [TOC-2]  Storage Helper
@@ -2965,6 +4064,7 @@
        *           - exportCardsTxt / importCardsTxt
        *  [TOC-18] Card Presets & Tools
        *  [TOC-19] Theme Modal
+       *           - Lock Zoom(2026-7-12): toggleLockZoom
        *           - toggleTheme
        *           - applyCustomCSS / resetCustomCSS
        *           - applyBubbleCSS / resetBubbleCSS
@@ -2973,9 +4073,9 @@
        *  [TOC-21] initTheme (CSS/字体启动恢复)
        *  [TOC-22] CSS Fullscreen Expand
        *
-       * ============================================================ */
+       * ==== */
 
-      // ==================== [TOC-1] DOM Cache ====================
+      // ====== [TOC-1] DOM Cache ======
       // 功能：统一缓存整页会被频繁访问的 DOM 元素引用，避免到处重复 getElementById
       const DOM = {
         html: document.documentElement,
@@ -3050,6 +4150,10 @@
         cssExpandModal: document.getElementById("cssExpandModal"),
         cssExpandTitle: document.getElementById("cssExpandTitle"),
         cssExpandTextarea: document.getElementById("cssExpandTextarea"),
+
+        viewportMeta: document.querySelector('meta[name="viewport"]'),
+        lockZoomToggle: document.getElementById("lockZoomToggle"),
+
         themeDarkToggle: document.getElementById("themeDarkToggle"),
         themeSavesList: document.getElementById("themeSavesList"),
         themeCustomCSS: document.getElementById("themeCustomCSS"),
@@ -3061,6 +4165,45 @@
         confirmDeleteFontModal: document.getElementById(
           "confirmDeleteFontModal",
         ),
+
+        musicListContainer: document.getElementById("musicListContainer"),
+        musicLinkModal: document.getElementById("musicLinkModal"),
+        musicLinkTitle: document.getElementById("musicLinkTitle"),
+        musicLinkArtist: document.getElementById("musicLinkArtist"),
+        musicLinkUrl: document.getElementById("musicLinkUrl"),
+        musicLinkPlaylistCheckboxes: document.getElementById(
+          "musicLinkPlaylistCheckboxes",
+        ),
+        createPlaylistModal: document.getElementById("createPlaylistModal"),
+        newPlaylistNameInput: document.getElementById("newPlaylistNameInput"),
+        playlistDetailModal: document.getElementById("playlistDetailModal"),
+        playlistDetailHeaderBg: document.getElementById(
+          "playlistDetailHeaderBg",
+        ),
+        playlistDetailName: document.getElementById("playlistDetailName"),
+        playlistDetailCount: document.getElementById("playlistDetailCount"),
+        playlistDetailSongs: document.getElementById("playlistDetailSongs"),
+        playlistDetailMenu: document.getElementById("playlistDetailMenu"),
+        playlistSelectBar: document.getElementById("playlistSelectBar"),
+        playlistSelectCount: document.getElementById("playlistSelectCount"),
+        playlistCoverFile: document.getElementById("playlistCoverFile"),
+        playlistCoverModal: document.getElementById("playlistCoverModal"),
+        playlistCoverUrl: document.getElementById("playlistCoverUrl"),
+        songActionMenu: document.getElementById("songActionMenu"),
+        editSongModal: document.getElementById("editSongModal"),
+        editSongTitle: document.getElementById("editSongTitle"),
+        editSongArtist: document.getElementById("editSongArtist"),
+        editSongUrl: document.getElementById("editSongUrl"),
+        addToPlaylistModal: document.getElementById("addToPlaylistModal"),
+        addToPlaylistList: document.getElementById("addToPlaylistList"),
+        renamePlaylistModal: document.getElementById("renamePlaylistModal"),
+        renamePlaylistInput: document.getElementById("renamePlaylistInput"),
+        playModeIcon: document.getElementById("playModeIcon"),
+        playModeLabel: document.getElementById("playModeLabel"),
+        confirmDeleteSongModal: document.getElementById(
+          "confirmDeleteSongModal",
+        ),
+
         saveThemeModal: document.getElementById("saveThemeModal"),
         saveThemeNameInput: document.getElementById("saveThemeNameInput"),
         addFontModal: document.getElementById("addFontModal"),
@@ -3069,7 +4212,7 @@
         fontFileInput: document.getElementById("fontFileInput"),
       };
 
-      // ==================== [TOC-2] Storage Helper ====================
+      // ====== [TOC-2] Storage Helper ======
       // 功能：封装 localStorage 的读/写/删/清空，统一做 try/catch 异常兜底
       const Storage = {
         get: (key, defaultValue = null) => {
@@ -3106,7 +4249,7 @@
         },
       };
 
-      // ==================== [TOC-3] State Management ====================
+      // ====== [TOC-3] State Management ======
       // 功能：全局运行时状态（当前视角、正在编辑/引用的消息、自动回复相关标记等）
       let state = {
         lastTimestamp: "",
@@ -3136,11 +4279,22 @@
         expandedFolders: new Set(),
         managingTag: null,
         musicPlaying: false,
+        currentQueue: [],
+        currentQueueIndex: 0,
+        currentPlaylistId: null,
+        viewingPlaylistId: null,
+        playlistSelectMode: false,
+        playlistSelectedSongs: new Set(),
+        actionSongId: null,
+        pendingDeleteSongId: null,
+        addToPlaylistSongIds: [],
         renamingTag: null, // 正在改名的字体id
         pendingTagRename: null, // 等待确认删除的字体id
+        addToPlaylistSelectedPlaylists: [], // 选中的 playlist ID 列表
+        musicLinkSelectedPlaylists: [], // 用于 Add Song by Link 中选中的歌单 ID
       };
 
-      // ==================== [TOC-4] Initialization ====================
+      // ====== [TOC-4] Initialization ======
       // 功能：与初始化相关的小工具函数（如设置回复频率）
       if (state.chatSettings.readNoReply)
         DOM.readNoReplyToggle.classList.add("active");
@@ -3173,7 +4327,16 @@
         });
       }
 
-      // ==================== [TOC-5] Utility Functions ====================
+      // ====== [TOC-5] Utility Functions ======
+      // 拿到某个歌单里的所有歌曲；playlistId传null，代表默认歌单"My Favorites"（=整个曲库）
+      function getSongsForPlaylist(playlistId) {
+        const songs = Storage.get("musicSongs", []);
+        if (!playlistId) return songs;
+        const map = Storage.get("musicPlaylistSongIds", {});
+        const ids = map[playlistId] || [];
+        return ids.map((id) => songs.find((s) => s.id === id)).filter(Boolean);
+      }
+
       // 功能：消息 DOM 生成、时间戳处理、滚动到底部、存档等通用工具函数
       function generateId() {
         return "msg-" + Math.random().toString(36).substring(2, 9);
@@ -3317,7 +4480,7 @@
 
       const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-      // ==================== [TOC-6] window.onload ====================
+      // ====== [TOC-6] window.onload ======
       // 功能：页面加载时恢复本地存储的主题/头像/昵称/聊天记录等数据
       window.onload = () => {
         const chatTheme = Storage.get("chatTheme", "light");
@@ -3326,6 +4489,19 @@
           DOM.themeBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>`;
         }
         syncThemeColorMeta();
+
+        const lockZoom = Storage.get("lockZoom", false);
+
+        if (lockZoom) {
+          DOM.lockZoomToggle.classList.add("active");
+
+          document
+            .querySelector('meta[name="viewport"]')
+            .setAttribute(
+              "content",
+              "width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no",
+            );
+        }
 
         const avatarImg = Storage.get("chatAvatarImg");
         if (avatarImg)
@@ -3342,38 +4518,194 @@
         updateLastTimestamp();
         scrollToBottom();
         if (state.chatSettings.proactiveEnabled) startProactiveTimer();
+        restoreMusicPlaybackState();
       };
 
       /* [TOC-7] Menu & Perspective */
-      /* 功能：顶部 "+" 号菜单的开关，发言视角切换|音乐灵动岛 */
+      /* Music module: dynamic island, playlists, playback engine */
 
-      // 打开/收起音乐灵动岛
+      const PLAY_MODES = ["sequential", "shuffle", "single", "list"];
+      const PLAY_MODE_LABELS = {
+        sequential: "Sequential",
+        shuffle: "Shuffle",
+        single: "Single Loop",
+        list: "List Loop",
+      };
+      const PLAY_MODE_SVGS = {
+        // 顺序播放 (图标：标准音乐列表 + 播放小三角)
+        sequential: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"/>
+          <line x1="4" y1="12" x2="20" y2="12"/>
+          <line x1="4" y1="18" x2="12" y2="18"/>
+          <path d="M15 15l6 3-6 3v-6z" fill="currentColor" stroke="none"/>
+        </svg>`,
+
+        // 随机播放 (图标：平滑过渡的交叉箭头)
+        shuffle: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
+          <path d="m18 2 4 4-4 4"/>
+          <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/>
+          <path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/>
+          <path d="m18 14 4 4-4 4"/>
+        </svg>`,
+
+        // 单曲循环 (图标：首尾相连的环形箭头 + 中间的数字 "1")
+        single: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m17 2 4 4-4 4"/>
+          <path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
+          <path d="m7 22-4-4 4-4"/>
+          <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+          <polyline points="10 11 12 10 12 14"/>
+        </svg>`,
+
+        // 列表循环 (图标：首尾相连的环形箭头，无数字)
+        list: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m17 2 4 4-4 4"/>
+          <path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
+          <path d="m7 22-4-4 4-4"/>
+          <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+        </svg>`,
+      };
+
+      const PLAYLIST_SORT_LABELS = {
+        default: "Sort: Default",
+        title: "Sort: Title A-Z",
+        artist: "Sort: Artist A-Z",
+      };
+
+      function getPlayMode() {
+        return Storage.get("musicPlayMode", "sequential");
+      }
+
+      function syncAudioLoop() {
+        DOM.bgAudio.loop = getPlayMode() === "single";
+      }
+
+      function renderPlayModeUI() {
+        const mode = getPlayMode();
+        if (DOM.playModeIcon)
+          DOM.playModeIcon.innerHTML =
+            PLAY_MODE_SVGS[mode] || PLAY_MODE_SVGS.sequential;
+        if (DOM.playModeLabel)
+          DOM.playModeLabel.textContent =
+            PLAY_MODE_LABELS[mode] || "Sequential";
+        syncAudioLoop();
+      }
+
+      function cyclePlayMode() {
+        const next =
+          PLAY_MODES[
+            (PLAY_MODES.indexOf(getPlayMode()) + 1) % PLAY_MODES.length
+          ];
+        Storage.set("musicPlayMode", next);
+        renderPlayModeUI();
+      }
+
+      function formatSongDisplay(song) {
+        const title = song?.title || "Unknown";
+        const artist = song?.artist || "";
+        return artist ? `${title} · ${artist}` : title;
+      }
+
+      function getPlaylistCover(playlistId) {
+        if (!playlistId) return Storage.get("musicFavoritesCover", "");
+        const playlist = Storage.get("musicPlaylists", []).find(
+          (p) => p.id === playlistId,
+        );
+        return playlist?.cover || "";
+      }
+
+      function setPlaylistCover(playlistId, dataUrl) {
+        if (!playlistId) {
+          Storage.set("musicFavoritesCover", dataUrl);
+          return;
+        }
+        const playlists = Storage.get("musicPlaylists", []);
+        const playlist = playlists.find((p) => p.id === playlistId);
+        if (playlist) {
+          playlist.cover = dataUrl;
+          Storage.set("musicPlaylists", playlists);
+        }
+      }
+
+      function getPlaylistSortKey(playlistId) {
+        const sorts = Storage.get("musicPlaylistSorts", {});
+        return sorts[playlistId || "__favorites__"] || "default";
+      }
+
+      function setPlaylistSortKey(playlistId, sort) {
+        const sorts = Storage.get("musicPlaylistSorts", {});
+        sorts[playlistId || "__favorites__"] = sort;
+        Storage.set("musicPlaylistSorts", sorts);
+      }
+
+      function sortSongsList(songs, sortKey) {
+        const copy = [...songs];
+        if (sortKey === "title")
+          copy.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+        else if (sortKey === "artist")
+          copy.sort((a, b) => (a.artist || "").localeCompare(b.artist || ""));
+        return copy;
+      }
+
+      function getSongsForPlaylistDisplay(playlistId) {
+        return sortSongsList(
+          getSongsForPlaylist(playlistId),
+          getPlaylistSortKey(playlistId),
+        );
+      }
+
+      function saveMusicPlaybackState() {
+        if (!state.currentQueue?.length) return;
+        Storage.set("musicPlaybackState", {
+          playlistId: state.currentPlaylistId,
+          queue: state.currentQueue,
+          queueIndex: state.currentQueueIndex,
+          islandActive: DOM.musicIsland.classList.contains("active"),
+        });
+      }
+
+      function restoreMusicPlaybackState() {
+        renderPlayModeUI();
+        renderMusicStatusIcon();
+        const saved = Storage.get("musicPlaybackState");
+        if (!saved?.queue?.length) return;
+        state.currentPlaylistId = saved.playlistId ?? null;
+        state.currentQueue = saved.queue;
+        state.currentQueueIndex = saved.queueIndex ?? 0;
+        const songId = state.currentQueue[state.currentQueueIndex];
+        const song = Storage.get("musicSongs", []).find((s) => s.id === songId);
+        if (!song) return;
+        DOM.bgAudio.src = song.url;
+        updateMusicIslandTitle(formatSongDisplay(song));
+        if (saved.islandActive) DOM.musicIsland.classList.add("active");
+      }
+
+      function closeMusicDropdowns() {
+        DOM.playlistDetailMenu?.classList.remove("active");
+        DOM.songActionMenu?.classList.remove("active");
+      }
+
       function toggleMusicIsland() {
         closePlusMenu();
+        const wasActive = DOM.musicIsland.classList.contains("active");
         DOM.musicIsland.classList.toggle("active");
-        if (DOM.musicIsland.classList.contains("active")) {
-          renderMusicStatusIcon();
+        if (wasActive) {
+          DOM.bgAudio.pause();
+          state.musicPlaying = false;
         }
+        renderMusicStatusIcon();
+        saveMusicPlaybackState();
       }
 
-      // 根据当前播放/暂停状态，切换灵动岛右侧的图标（静音图标 / 音波动效）
       function renderMusicStatusIcon() {
         if (state.musicPlaying) {
-          DOM.musicIslandStatus.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-      <rect class="music-wave-bar" x="4" y="9" width="3" height="6" rx="1"/>
-      <rect class="music-wave-bar" x="10.5" y="6" width="3" height="12" rx="1"/>
-      <rect class="music-wave-bar" x="17" y="9" width="3" height="6" rx="1"/>
-    </svg>`;
+          DOM.musicIslandStatus.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>`;
         } else {
-          DOM.musicIslandStatus.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M5 9v6h4l5 5V4L9 9H5z"/>
-      <line x1="16" y1="9" x2="22" y2="15"/>
-      <line x1="22" y1="9" x2="16" y2="15"/>
-    </svg>`;
+          DOM.musicIslandStatus.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`;
         }
       }
 
-      // 更新灵动岛中间显示的歌名；如果文字太长显示不下，自动加上滚动效果
       function updateMusicIslandTitle(text) {
         DOM.musicTitleCopy1.textContent = text;
         DOM.musicTitleCopy2.textContent = text;
@@ -3388,30 +4720,744 @@
         });
       }
 
-      // 打开歌曲列表弹窗（歌曲导入方式还没定，暂时先放个空列表占位）
       function openMusicListModal() {
-        const songs = []; // 以后有了导入功能，这里改成读取存起来的歌曲数组
-        if (songs.length === 0) {
-          DOM.musicListContainer.innerHTML = `<div style="text-align:center;color:var(--text-sub);font-size:12px;padding:20px 0;">No songs yet</div>`;
-        }
+        renderMusicPlaylists();
+        renderPlayModeUI();
         DOM.musicListModal.classList.add("active");
       }
 
-      // bgAudio 播放/暂停时，自动联动更新灵动岛的图标和歌名
+      function renderMusicPlaylists() {
+        const playlists = Storage.get("musicPlaylists", []);
+        let html = createPlaylistCardHTML(null, "My Favorites", true);
+        html += playlists
+          .map((p) => createPlaylistCardHTML(p.id, p.name, false))
+          .join("");
+        DOM.musicListContainer.innerHTML = html;
+      }
+
+      function createPlaylistCardHTML(id, name, isDefault) {
+        const playingNow = state.musicPlaying && state.currentPlaylistId === id;
+        const cover = getPlaylistCover(id);
+        const sleeveStyle = cover
+          ? `background-image:url('${cover.replace(/'/g, "%27")}')`
+          : "";
+        return `<div class="playlist-card" data-id="${id === null ? "" : id}">
+    <div class="playlist-sleeve" style="${sleeveStyle}"></div>
+    <div class="playlist-disc-wrap">
+      <div class="playlist-disc${playingNow ? " spinning" : ""}"></div>
+      ${playingNow ? '<div class="playlist-tonearm"></div>' : ""}
+    </div>
+    <div class="playlist-label">
+      ${
+        isDefault
+          ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span class="playlist-label-text">My Favorites</span>'
+          : `<span class="playlist-label-text">${escapeHtml(name)}</span>`
+      }
+    </div>
+  </div>`;
+      }
+
+      DOM.musicListContainer.addEventListener("click", (e) => {
+        const card = e.target.closest(".playlist-card");
+        if (!card) return;
+        const id = card.getAttribute("data-id");
+        openPlaylistDetail(id === "" ? null : id);
+      });
+
+      function openPlaylistDetail(playlistId) {
+        state.viewingPlaylistId = playlistId;
+        closeMusicDropdowns();
+        exitPlaylistSelectMode();
+        const playlists = Storage.get("musicPlaylists", []);
+        const playlist = playlistId
+          ? playlists.find((p) => p.id === playlistId)
+          : null;
+        DOM.playlistDetailName.textContent = playlist
+          ? playlist.name
+          : "My Favorites";
+        const cover = getPlaylistCover(playlistId);
+        DOM.playlistDetailHeaderBg.style.backgroundImage = cover
+          ? `url(${cover})`
+          : "";
+        const deleteItem = document.getElementById("deletePlaylistMenuItem");
+        const renameItem = document.getElementById("renamePlaylistMenuItem");
+        if (deleteItem) deleteItem.style.display = playlistId ? "flex" : "none";
+        if (renameItem) renameItem.style.display = playlistId ? "flex" : "none";
+        updatePlaylistSortLabel();
+        renderPlaylistSongs(playlistId);
+        DOM.playlistDetailModal.classList.add("active");
+      }
+
+      function updatePlaylistSortLabel() {
+        const label = document.getElementById("playlistSortLabel");
+        if (label) {
+          const key = getPlaylistSortKey(state.viewingPlaylistId);
+          label.textContent =
+            PLAYLIST_SORT_LABELS[key] || PLAYLIST_SORT_LABELS.default;
+        }
+      }
+
+      function renderPlaylistSongs(playlistId) {
+        const songs = getSongsForPlaylistDisplay(playlistId);
+
+        // 更新头部的歌曲数量副标题
+        if (DOM.playlistDetailCount) {
+          DOM.playlistDetailCount.textContent =
+            songs.length === 0
+              ? "No songs"
+              : `${songs.length} song${songs.length > 1 ? "s" : ""}`;
+        }
+
+        if (songs.length === 0) {
+          DOM.playlistDetailSongs.innerHTML = `<div style="text-align:center;color:var(--text-sub);font-size:12px;padding:24px 0;">No songs yet</div>`;
+          return;
+        }
+        DOM.playlistDetailSongs.innerHTML = songs
+          .map((s, i) => {
+            const isPlaying =
+              state.musicPlaying &&
+              state.currentQueue[state.currentQueueIndex] === s.id;
+            const isSelected = state.playlistSelectedSongs.has(s.id);
+            const menuBtn = state.playlistSelectMode
+              ? ""
+              : `<button type="button" class="song-row-menu-btn" data-role="menu" title="More"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>`;
+            const rowClasses = [
+              "song-row",
+              isPlaying ? "playing" : "",
+              state.playlistSelectMode && isSelected ? "selected" : "",
+            ]
+              .filter(Boolean)
+              .join(" ");
+            // 正在播放的这首歌用迷你均衡器动画代替序号，其余显示两位数序号
+            const indexHTML = isPlaying
+              ? `<div class="song-row-eq"><span></span><span></span><span></span></div>`
+              : String(i + 1).padStart(2, "0");
+            return `<div class="${rowClasses}" data-id="${s.id}">
+        <div class="song-row-index">${indexHTML}</div>
+        <div class="song-row-info">
+          <div class="song-row-title">${escapeHtml(s.title)}</div>
+          <div class="song-row-artist">${escapeHtml(s.artist || "")}</div>
+        </div>
+        ${menuBtn}
+      </div>`;
+          })
+          .join("");
+      }
+
+      // 更新多选栏顶部"已选 N 首"的文字
+      function updateSelectCountLabel() {
+        if (DOM.playlistSelectCount)
+          DOM.playlistSelectCount.textContent = `${state.playlistSelectedSongs.size} selected`;
+      }
+
+      DOM.playlistDetailSongs.addEventListener("click", (e) => {
+        const row = e.target.closest(".song-row");
+        if (!row) return;
+        const songId = row.getAttribute("data-id");
+        if (e.target.closest('[data-role="menu"]')) {
+          e.stopPropagation();
+          openSongActionMenu(songId, e.target.closest('[data-role="menu"]'));
+          return;
+        }
+        if (state.playlistSelectMode) {
+          if (state.playlistSelectedSongs.has(songId))
+            state.playlistSelectedSongs.delete(songId);
+          else state.playlistSelectedSongs.add(songId);
+          updateSelectCountLabel();
+          renderPlaylistSongs(state.viewingPlaylistId);
+          return;
+        }
+        playSong(songId, state.viewingPlaylistId);
+      });
+
+      function openSongActionMenu(songId, anchorEl) {
+        state.actionSongId = songId;
+        closeMusicDropdowns();
+
+        const menu = DOM.songActionMenu;
+        menu.innerHTML = `
+    <div class="music-dropdown-item" onclick="openEditSongModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <span>Edit</span>
+    </div>
+    <div class="music-dropdown-item" onclick="openAddSongToOtherPlaylist()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Add to Playlist</span>
+    </div>
+    <div class="music-dropdown-item danger" onclick="deleteSongFromActionMenu()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <span>Delete</span>
+    </div>
+  `;
+
+        // 定位：贴着被点击的"…"按钮，右边缘对齐按钮右边缘，向左侧展开，
+        // 避免菜单超出手机框右边（这里不再是圆形图标胶囊，而是普通竖排文字菜单）
+        const rect = anchorEl.getBoundingClientRect();
+        menu.style.position = "fixed";
+        menu.style.left = "auto";
+        menu.style.right = `${Math.max(8, window.innerWidth - rect.right)}px`;
+
+        // 根据按钮下方剩余空间，自动决定菜单向下展开还是向上展开
+        const spaceBelow = window.innerHeight - rect.bottom;
+        if (spaceBelow < 150) {
+          menu.style.top = "auto";
+          menu.style.bottom = `${window.innerHeight - rect.top + 4}px`;
+          menu.classList.add("expand-up");
+        } else {
+          menu.style.bottom = "auto";
+          menu.style.top = `${rect.bottom + 4}px`;
+          menu.classList.remove("expand-up");
+        }
+
+        menu.classList.add("active");
+      }
+
+      function openEditSongModal() {
+        closeMusicDropdowns();
+        const song = Storage.get("musicSongs", []).find(
+          (s) => s.id === state.actionSongId,
+        );
+        if (!song) return;
+        DOM.editSongTitle.value = song.title || "";
+        DOM.editSongArtist.value = song.artist || "";
+        DOM.editSongUrl.value = song.url || "";
+        DOM.editSongModal.classList.add("active");
+      }
+
+      function saveEditSong() {
+        const title = DOM.editSongTitle.value.trim();
+        const url = DOM.editSongUrl.value.trim();
+        const artist = DOM.editSongArtist.value.trim();
+        if (!title || !url) {
+          DOM.alertMessage.textContent =
+            "Please enter a song title and a link.";
+          DOM.alertModal.classList.add("active");
+          return;
+        }
+        const songs = Storage.get("musicSongs", []);
+        const song = songs.find((s) => s.id === state.actionSongId);
+        if (!song) return closeModal("editSongModal");
+        song.title = title;
+        song.artist = artist;
+        song.url = url;
+        Storage.set("musicSongs", songs);
+        if (state.currentQueue[state.currentQueueIndex] === song.id) {
+          DOM.bgAudio.src = url;
+          updateMusicIslandTitle(formatSongDisplay(song));
+        }
+        closeModal("editSongModal");
+        renderPlaylistSongs(state.viewingPlaylistId);
+        renderMusicPlaylists();
+      }
+
+      function openAddSongToOtherPlaylist() {
+        closeMusicDropdowns();
+        state.addToPlaylistSongIds = [state.actionSongId];
+        renderAddToPlaylistCheckboxes();
+        DOM.addToPlaylistModal.classList.add("active");
+      }
+
+      function renderAddToPlaylistCheckboxes() {
+        const playlists = Storage.get("musicPlaylists", []);
+        if (!state.addToPlaylistSelectedPlaylists) {
+          state.addToPlaylistSelectedPlaylists = [];
+        }
+        const container = DOM.addToPlaylistList;
+        container.innerHTML = "";
+
+        // 横向滚动容器
+        const scrollWrapper = document.createElement("div");
+        scrollWrapper.style.cssText = `
+          display: flex;
+          overflow-x: auto;
+          gap: 8px;
+          padding: 4px 2px 8px;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+        `;
+        scrollWrapper.addEventListener("wheel", (e) => {
+          if (e.deltaY !== 0) {
+            e.preventDefault();
+            scrollWrapper.scrollLeft += e.deltaY;
+          }
+        });
+
+        playlists.forEach((p) => {
+          const isSelected = state.addToPlaylistSelectedPlaylists.includes(
+            p.id,
+          );
+          const chip = document.createElement("div");
+          chip.dataset.id = p.id;
+          chip.style.cssText = `
+            flex-shrink: 0;
+            padding: 6px 14px;
+            border-radius: 16px;
+            background: ${isSelected ? "var(--text-main)" : "var(--input-bg)"};
+            color: ${isSelected ? "var(--bg-color)" : "var(--text-sub)"};
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid ${isSelected ? "var(--text-main)" : "var(--border-color)"};
+            user-select: none;
+            white-space: nowrap;
+          `;
+          chip.textContent = p.name;
+          chip.addEventListener("click", () => {
+            const idx = state.addToPlaylistSelectedPlaylists.indexOf(p.id);
+            if (idx > -1) state.addToPlaylistSelectedPlaylists.splice(idx, 1);
+            else state.addToPlaylistSelectedPlaylists.push(p.id);
+            renderAddToPlaylistCheckboxes();
+          });
+          scrollWrapper.appendChild(chip);
+        });
+
+        if (playlists.length === 0) {
+          const empty = document.createElement("div");
+          empty.style.cssText =
+            "font-size:11px; color:var(--text-sub); text-align:center; padding:10px;";
+          empty.textContent = "No playlists yet. Create one first.";
+          scrollWrapper.appendChild(empty);
+        }
+
+        container.appendChild(scrollWrapper);
+      }
+
+      function confirmAddToPlaylist() {
+        const ids = state.addToPlaylistSongIds;
+        if (!ids.length) return closeModal("addToPlaylistModal");
+        const selected = state.addToPlaylistSelectedPlaylists || [];
+        if (selected.length === 0) {
+          DOM.alertMessage.textContent = "Please select at least one playlist.";
+          DOM.alertModal.classList.add("active");
+          return;
+        }
+        const map = Storage.get("musicPlaylistSongIds", {});
+        selected.forEach((pid) => {
+          map[pid] = map[pid] || [];
+          ids.forEach((sid) => {
+            if (!map[pid].includes(sid)) map[pid].push(sid);
+          });
+        });
+        Storage.set("musicPlaylistSongIds", map);
+        state.addToPlaylistSelectedPlaylists = [];
+        closeModal("addToPlaylistModal");
+        renderPlaylistSongs(state.viewingPlaylistId);
+        renderMusicPlaylists();
+      }
+
+      function deleteSongFromActionMenu() {
+        closeMusicDropdowns();
+        removeSongFromPlaylist(state.actionSongId, state.viewingPlaylistId);
+      }
+
+      function togglePlaylistDetailMenu(e) {
+        e.stopPropagation();
+        const menu = DOM.playlistDetailMenu;
+        const isOpen = menu.classList.contains("active");
+        closeMusicDropdowns();
+        if (!isOpen) {
+          const rect = e.currentTarget.getBoundingClientRect();
+          menu.style.position = "fixed";
+          menu.style.top = "auto";
+          // 按钮在底部一行，从下往上展开，避免超出弹窗/屏幕（.expand-up 负责动画方向）
+          menu.style.bottom = `${window.innerHeight - rect.top + 8}px`;
+          menu.style.left = "auto";
+          // 用 right 锚定按钮右边缘，不依赖对菜单宽度的猜测（之前硬编码 160px 导致对不齐/错位）
+          menu.style.right = `${Math.max(8, window.innerWidth - rect.right)}px`;
+          menu.classList.add("active");
+        }
+      }
+      function openRenamePlaylistModal() {
+        closeMusicDropdowns();
+        if (!state.viewingPlaylistId) return;
+        const playlist = Storage.get("musicPlaylists", []).find(
+          (p) => p.id === state.viewingPlaylistId,
+        );
+        DOM.renamePlaylistInput.value = playlist?.name || "";
+        DOM.renamePlaylistModal.classList.add("active");
+      }
+
+      function saveRenamePlaylist() {
+        const name = DOM.renamePlaylistInput.value.trim();
+        if (!name || !state.viewingPlaylistId) return;
+        const playlists = Storage.get("musicPlaylists", []);
+        const playlist = playlists.find(
+          (p) => p.id === state.viewingPlaylistId,
+        );
+        if (playlist) {
+          playlist.name = name;
+          Storage.set("musicPlaylists", playlists);
+          DOM.playlistDetailName.textContent = name;
+        }
+        closeModal("renamePlaylistModal");
+        renderMusicPlaylists();
+      }
+
+      function cyclePlaylistSort() {
+        closeMusicDropdowns();
+        const order = ["default", "title", "artist"];
+        const cur = getPlaylistSortKey(state.viewingPlaylistId);
+        const next = order[(order.indexOf(cur) + 1) % order.length];
+        setPlaylistSortKey(state.viewingPlaylistId, next);
+        updatePlaylistSortLabel();
+        renderPlaylistSongs(state.viewingPlaylistId);
+      }
+
+      function enterPlaylistSelectMode() {
+        closeMusicDropdowns();
+        state.playlistSelectMode = true;
+        state.playlistSelectedSongs = new Set();
+        DOM.playlistSelectBar.classList.add("active");
+        updateSelectCountLabel();
+        renderPlaylistSongs(state.viewingPlaylistId);
+      }
+
+      function exitPlaylistSelectMode() {
+        state.playlistSelectMode = false;
+        state.playlistSelectedSongs = new Set();
+        DOM.playlistSelectBar?.classList.remove("active");
+        renderPlaylistSongs(state.viewingPlaylistId);
+      }
+
+      function addSelectedSongsToPlaylist() {
+        const ids = Array.from(state.playlistSelectedSongs);
+        if (!ids.length) return;
+        state.addToPlaylistSongIds = ids;
+        renderAddToPlaylistCheckboxes();
+        DOM.addToPlaylistModal.classList.add("active");
+      }
+
+      function deleteSelectedSongs() {
+        const ids = Array.from(state.playlistSelectedSongs);
+        if (!ids.length) return;
+        ids.forEach((id) =>
+          removeSongFromPlaylist(id, state.viewingPlaylistId),
+        );
+        exitPlaylistSelectMode();
+      }
+
+      function confirmDeletePlaylist() {
+        closeMusicDropdowns();
+        if (!state.viewingPlaylistId) return;
+        const playlists = Storage.get("musicPlaylists", []).filter(
+          (p) => p.id !== state.viewingPlaylistId,
+        );
+        const map = Storage.get("musicPlaylistSongIds", {});
+        delete map[state.viewingPlaylistId];
+        Storage.set("musicPlaylists", playlists);
+        Storage.set("musicPlaylistSongIds", map);
+        if (state.currentPlaylistId === state.viewingPlaylistId) {
+          DOM.bgAudio.pause();
+          state.currentQueue = [];
+          state.currentQueueIndex = 0;
+          state.currentPlaylistId = null;
+          updateMusicIslandTitle("No music added yet");
+        }
+        closeModal("playlistDetailModal");
+        renderMusicPlaylists();
+      }
+
+      function triggerPlaylistCoverUpload(e) {
+        DOM.playlistCoverUrl.value = "";
+        DOM.playlistCoverModal.classList.add("active");
+      }
+
+      function savePlaylistCoverFromUrl() {
+        const url = DOM.playlistCoverUrl.value.trim();
+        if (!url) {
+          DOM.alertMessage.textContent = "Please paste an image URL first.";
+          DOM.alertModal.classList.add("active");
+          return;
+        }
+        setPlaylistCover(state.viewingPlaylistId, url);
+        DOM.playlistDetailHeaderBg.style.backgroundImage = `url(${url})`;
+        renderMusicPlaylists();
+        closeModal("playlistCoverModal");
+      }
+
+      function savePlaylistCoverFromFile() {
+        const file = DOM.playlistCoverFile.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          setPlaylistCover(state.viewingPlaylistId, reader.result);
+          DOM.playlistDetailHeaderBg.style.backgroundImage = `url(${reader.result})`;
+          renderMusicPlaylists();
+          closeModal("playlistCoverModal");
+        };
+        reader.readAsDataURL(file);
+        DOM.playlistCoverFile.value = "";
+      }
+
+      function removeSongFromPlaylist(songId, playlistId) {
+        if (!playlistId) {
+          state.pendingDeleteSongId = songId;
+          DOM.confirmDeleteSongModal.classList.add("active");
+          return;
+        }
+        const map = Storage.get("musicPlaylistSongIds", {});
+        map[playlistId] = (map[playlistId] || []).filter((id) => id !== songId);
+        Storage.set("musicPlaylistSongIds", map);
+        renderPlaylistSongs(playlistId);
+      }
+
+      function confirmDeleteSongYes() {
+        const id = state.pendingDeleteSongId;
+        if (id) {
+          Storage.set(
+            "musicSongs",
+            Storage.get("musicSongs", []).filter((s) => s.id !== id),
+          );
+          const map = Storage.get("musicPlaylistSongIds", {});
+          Object.keys(map).forEach((pid) => {
+            map[pid] = map[pid].filter((sid) => sid !== id);
+          });
+          Storage.set("musicPlaylistSongIds", map);
+          if (state.currentQueue[state.currentQueueIndex] === id) {
+            DOM.bgAudio.pause();
+          }
+          state.pendingDeleteSongId = null;
+          renderPlaylistSongs(state.viewingPlaylistId);
+          renderMusicPlaylists();
+        }
+        closeModal("confirmDeleteSongModal");
+      }
+
+      function playSong(songId, playlistId) {
+        const ids = getSongsForPlaylist(playlistId).map((s) => s.id);
+        state.currentQueue = ids;
+        state.currentQueueIndex = ids.indexOf(songId);
+        state.currentPlaylistId = playlistId;
+        loadAndPlayCurrentQueueIndex();
+      }
+
+      function playAllInPlaylist(playlistId) {
+        const songs = getSongsForPlaylist(playlistId);
+        if (songs.length === 0) return;
+        state.currentQueue = songs.map((s) => s.id);
+        state.currentQueueIndex = 0;
+        state.currentPlaylistId = playlistId;
+        loadAndPlayCurrentQueueIndex();
+      }
+
+      function loadAndPlayCurrentQueueIndex() {
+        const songId = state.currentQueue[state.currentQueueIndex];
+        const song = Storage.get("musicSongs", []).find((s) => s.id === songId);
+        if (!song) return;
+        syncAudioLoop();
+        DOM.bgAudio.src = song.url;
+        DOM.bgAudio.play().catch(() => {});
+        updateMusicIslandTitle(formatSongDisplay(song));
+        DOM.musicIsland.classList.add("active");
+        saveMusicPlaybackState();
+        if (DOM.playlistDetailModal.classList.contains("active")) {
+          renderPlaylistSongs(state.viewingPlaylistId);
+        }
+        renderMusicPlaylists();
+      }
+
+      function playNextInQueue() {
+        const mode = getPlayMode();
+        if (mode === "single") {
+          loadAndPlayCurrentQueueIndex();
+          return;
+        }
+        if (mode === "shuffle") {
+          if (state.currentQueue.length <= 1) {
+            loadAndPlayCurrentQueueIndex();
+            return;
+          }
+          // 如果播到了最后一首，重新洗牌整个队列
+          if (state.currentQueueIndex >= state.currentQueue.length - 1) {
+            const currentSongId = state.currentQueue[state.currentQueueIndex];
+            const rest = state.currentQueue.filter(
+              (id) => id !== currentSongId,
+            );
+            // Fisher–Yates 洗牌
+            for (let i = rest.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [rest[i], rest[j]] = [rest[j], rest[i]];
+            }
+            state.currentQueue = [currentSongId, ...rest];
+            state.currentQueueIndex = 0;
+            loadAndPlayCurrentQueueIndex();
+            return;
+          }
+          let next;
+          do {
+            next = Math.floor(Math.random() * state.currentQueue.length);
+          } while (
+            next === state.currentQueueIndex &&
+            state.currentQueue.length > 1
+          );
+          state.currentQueueIndex = next;
+          loadAndPlayCurrentQueueIndex();
+          return;
+        }
+        // sequential 和 list 模式
+        if (state.currentQueueIndex < state.currentQueue.length - 1) {
+          state.currentQueueIndex++;
+          loadAndPlayCurrentQueueIndex();
+        } else if (mode === "list") {
+          // 列表循环：从头开始
+          state.currentQueueIndex = 0;
+          loadAndPlayCurrentQueueIndex();
+        }
+        // sequential 模式播完就停止（无操作）
+      }
+      DOM.bgAudio.addEventListener("ended", playNextInQueue);
+
+      function openMusicSearchPlaceholder() {
+        DOM.alertMessage.textContent = "Online search is coming soon.";
+        DOM.alertModal.classList.add("active");
+      }
+
+      function openMusicLinkModal() {
+        DOM.musicLinkTitle.value = "";
+        DOM.musicLinkArtist.value = "";
+        DOM.musicLinkUrl.value = "";
+        state.musicLinkSelectedPlaylists = []; // 重置选中状态
+
+        const container = DOM.musicLinkPlaylistCheckboxes;
+        container.innerHTML = "";
+        const playlists = Storage.get("musicPlaylists", []);
+
+        // 横向滚动容器
+        const scrollWrapper = document.createElement("div");
+        scrollWrapper.style.cssText = `
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 4px 2px 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  `;
+        // 支持鼠标滚轮横向滚动
+        scrollWrapper.addEventListener("wheel", (e) => {
+          if (e.deltaY !== 0) {
+            e.preventDefault();
+            scrollWrapper.scrollLeft += e.deltaY;
+          }
+        });
+
+        playlists.forEach((p) => {
+          const chip = document.createElement("div");
+          chip.dataset.id = p.id;
+          chip.style.cssText = `
+      flex-shrink: 0;
+      padding: 6px 14px;
+      border-radius: 16px;
+      background: var(--input-bg);
+      color: var(--text-sub);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid var(--border-color);
+      user-select: none;
+      white-space: nowrap;
+    `;
+          chip.textContent = p.name;
+          chip.addEventListener("click", () => {
+            const idx = state.musicLinkSelectedPlaylists.indexOf(p.id);
+            if (idx > -1) {
+              state.musicLinkSelectedPlaylists.splice(idx, 1);
+              chip.style.background = "var(--input-bg)";
+              chip.style.color = "var(--text-sub)";
+              chip.style.borderColor = "var(--border-color)";
+            } else {
+              state.musicLinkSelectedPlaylists.push(p.id);
+              chip.style.background = "var(--text-main)";
+              chip.style.color = "var(--bg-color)";
+              chip.style.borderColor = "var(--text-main)";
+            }
+          });
+          scrollWrapper.appendChild(chip);
+        });
+
+        if (playlists.length === 0) {
+          const empty = document.createElement("div");
+          empty.style.cssText =
+            "font-size:11px; color:var(--text-sub); text-align:center; padding:10px;";
+          empty.textContent = "No playlists yet. Create one first.";
+          scrollWrapper.appendChild(empty);
+        }
+
+        container.appendChild(scrollWrapper);
+        DOM.musicLinkModal.classList.add("active");
+      }
+
+      function saveMusicLink() {
+        const title = DOM.musicLinkTitle.value.trim();
+        const url = DOM.musicLinkUrl.value.trim();
+        const artist = DOM.musicLinkArtist.value.trim();
+        if (!title || !url) {
+          DOM.alertMessage.textContent =
+            "Please enter a song title and a link.";
+          DOM.alertModal.classList.add("active");
+          return;
+        }
+        const songs = Storage.get("musicSongs", []);
+        const id = generateId();
+        songs.push({ id, title, artist, url });
+        Storage.set("musicSongs", songs);
+
+        // 从 state 中读取选中的歌单
+        const selected = state.musicLinkSelectedPlaylists || [];
+        if (selected.length > 0) {
+          const map = Storage.get("musicPlaylistSongIds", {});
+          selected.forEach((pid) => {
+            map[pid] = map[pid] || [];
+            map[pid].push(id);
+          });
+          Storage.set("musicPlaylistSongIds", map);
+        }
+        closeModal("musicLinkModal");
+        renderMusicPlaylists();
+      }
+      function openCreatePlaylistModal() {
+        DOM.newPlaylistNameInput.value = "";
+        DOM.createPlaylistModal.classList.add("active");
+      }
+
+      function saveNewPlaylist() {
+        const name = DOM.newPlaylistNameInput.value.trim();
+        if (!name) return;
+        const playlists = Storage.get("musicPlaylists", []);
+        playlists.push({ id: generateId(), name, cover: "" });
+        Storage.set("musicPlaylists", playlists);
+        closeModal("createPlaylistModal");
+        renderMusicPlaylists();
+      }
+
       DOM.bgAudio.addEventListener("play", () => {
         state.musicPlaying = true;
         renderMusicStatusIcon();
+        saveMusicPlaybackState();
       });
       DOM.bgAudio.addEventListener("pause", () => {
         state.musicPlaying = false;
         renderMusicStatusIcon();
+        saveMusicPlaybackState();
       });
+
+      renderPlayModeUI();
 
       function togglePlusMenu(e) {
         e.stopPropagation();
         DOM.plusMenu.classList.toggle("active");
         closeToolbar();
       }
+
+      DOM.musicIslandStatus.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (!DOM.bgAudio.src && state.currentQueue?.length) {
+          loadAndPlayCurrentQueueIndex();
+          return;
+        }
+        if (DOM.bgAudio.src) {
+          state.musicPlaying ? DOM.bgAudio.pause() : DOM.bgAudio.play();
+        }
+      });
 
       // 关闭底部“+”号功能菜单
       function closePlusMenu() {
@@ -3429,7 +5475,7 @@
         closePlusMenu();
       }
 
-      // ==================== [TOC-8] Event Delegation ====================
+      // ====== [TOC-8] Event Delegation ======
       // 功能：全局点击事件委托，用于点击空白处时关闭工具栏 / 菜单 / 下拉框等浮层
       document.addEventListener("click", (e) => {
         if (!e.target.closest(".message") && !e.target.closest(".msg-toolbar"))
@@ -3441,6 +5487,13 @@
           !e.target.closest("#allTagDropdown")
         ) {
           DOM.allTagDropdown.classList.remove("active");
+        }
+        if (
+          !e.target.closest(".music-dropdown") &&
+          !e.target.closest("#playlistDetailMenuBtn") &&
+          !e.target.closest('[data-role="menu"]')
+        ) {
+          closeMusicDropdowns();
         }
       });
 
@@ -3615,7 +5668,7 @@
         updateLastTimestamp();
       }
 
-      /* ================= [TOC-12] Auto Reply & Typing ================= */
+      /* === [TOC-12] Auto Reply & Typing === */
       /* 功能：自动回复引擎 —— 模拟阅读延迟、已读不回判定、连发概率衰减、
          抽字卡组句、打字延迟、被用户新消息打断后重新思考 */
 
@@ -3636,7 +5689,7 @@
         if (indicator) indicator.remove();
       }
 
-      /* ================= Human-like Auto Reply Engine ================= */
+      /* === Human-like Auto Reply Engine === */
       // 把一条自动回复内容真正渲染成消息并追加到聊天区、滚动、存档
       function receiveAutoMessage(
         text,
@@ -3769,6 +5822,7 @@
         }
 
         // Mark all unread sent messages as read (double tick)
+        // 将所有未读已发送消息标记为已读（双勾）
         DOM.chatMain
           .querySelectorAll(".message.sent .msg-ticks:not(.read)")
           .forEach((el) => {
@@ -3873,6 +5927,16 @@
           cancelQuote();
         }
 
+        // 2026-07-07 BUG FIX:
+        // 发送新消息时，先把旧的已读图标删掉，避免残留在历史消息上
+        const oldStatuses = DOM.chatMain.querySelectorAll(
+          ".message.sent .msg-status",
+        );
+        oldStatuses.forEach((status) => {
+          status.remove(); // 删掉旧图标
+          // 隐藏，可以改用： status.style.display = 'none';
+        });
+
         DOM.chatMain.appendChild(messageDiv);
         DOM.chatInput.value = "";
         scrollToBottom();
@@ -3891,8 +5955,6 @@
         }
       }
 
-      // BUG FIX: keypress 已废弃，且不区分输入法候选词确认与真正的回车键；
-      // 改用 keydown + isComposing 判断，避免中文/日文等输入法选字时误触发发送。
       DOM.sendBtn.addEventListener("click", sendMessage);
       DOM.chatInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter" && !e.isComposing) sendMessage();
@@ -3912,7 +5974,7 @@
         });
       }
 
-      /* ================= [TOC-14] Avatar & Name Management ================= */
+      /* === [TOC-14] Avatar & Name Management === */
       /* 功能：头像（本地文件 / URL 两种方式）与用户昵称的修改与保存 */
       DOM.avatarBtn.addEventListener("click", () => {
         const savedAvatar = Storage.get("chatAvatarImg");
@@ -3969,7 +6031,7 @@
         if (e.key === "Enter" && !e.isComposing) saveName();
       });
 
-      /* ================= [TOC-15] Data Management ================= */
+      /* === [TOC-15] Data Management === */
       /* 功能：聊天记录存档列表的增删改查、导出(txt/json)、清空当前聊天、重置全部数据 */
       function getSaves() {
         return Storage.get("chatSaves", []);
@@ -4133,7 +6195,7 @@
         }
       }
 
-      /* ================= [TOC-16] Settings & Word Cards ================= */
+      /* === [TOC-16] Settings & Word Cards === */
       /* 功能：设置弹窗 —— 已读不回开关、回复频率滑块、已启用字卡数量统计 */
       function openSettingsModal() {
         closeModal("wordCardModal");
@@ -4276,7 +6338,7 @@
         DOM.activeCardCount.innerHTML = `${activeCount} Active ⟩`;
       }
 
-      /* ================= [TOC-17] Word Card Management ================= */
+      /* === [TOC-17] Word Card Management === */
       /* 功能：字卡（自动回复语料库）的增删改查、标签筛选、文件夹分组、批量操作、导入导出、去重 */
       let cardObserver = null;
 
@@ -4907,7 +6969,7 @@
         reader.readAsText(file);
       }
 
-      /* ================= [TOC-18] Card Presets & Tools ================= */
+      /* === [TOC-18] Card Presets & Tools === */
       /* 功能：字卡相关的预设方案与辅助工具 */
       function getCardSaves() {
         return Storage.get("cardSaves", []);
@@ -5024,7 +7086,7 @@
         DOM.alertModal.classList.add("active");
       }
 
-      /* ================= [TOC-19] Theme Modal ================= */
+      /* === [TOC-19] Theme Modal === */
       /* 功能：深色/浅色主题切换、自定义全局CSS与气泡CSS、主题方案存档、主题导入导出 */
 
       // IDs for the injected style tags
@@ -5105,6 +7167,34 @@
         DOM.themeModal.classList.add("active");
       }
 
+      /* --- Lock Zoom --- */
+      // 2026-07-12
+      function toggleLockZoom() {
+        const locked = DOM.lockZoomToggle.classList.contains("active");
+
+        if (locked) {
+          DOM.lockZoomToggle.classList.remove("active");
+          Storage.set("lockZoom", false);
+
+          document
+            .querySelector('meta[name="viewport"]')
+            .setAttribute(
+              "content",
+              "width=device-width, initial-scale=1.0, viewport-fit=cover",
+            );
+        } else {
+          DOM.lockZoomToggle.classList.add("active");
+          Storage.set("lockZoom", true);
+
+          document
+            .querySelector('meta[name="viewport"]')
+            .setAttribute(
+              "content",
+              "width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no",
+            );
+        }
+      }
+
       /* --- Dark / Light --- */
       // 同步 theme-color meta（决定PWA全屏模式下刘海/灵动岛区域及浏览器地址栏的颜色），
       // 让状态栏颜色跟随深浅色主题走，而不是停留在写死的深色
@@ -5174,6 +7264,7 @@
       }
 
       /* --- Theme Presets --- */
+      // 主题预设
       function getThemeCapture() {
         return {
           darkMode: DOM.html.getAttribute("data-theme") === "dark",
