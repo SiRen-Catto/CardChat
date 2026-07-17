@@ -30,7 +30,7 @@
         --msg-sent-text: #ffffff;
         --input-bg: #f4f4f4;
         --icon-color: #000000;
-        --modal-overlay: rgba(0, 0, 0, 0.4);
+        --modal-overlay: rgba(188, 188, 188, 0.4);
         --highlight-bg: rgba(0, 0, 0, 0.08);
         --desktop-backdrop: #e0e0e0;
       }
@@ -46,7 +46,7 @@
         --msg-sent-text: #000000;
         --input-bg: #1a1a1a;
         --icon-color: #ffffff;
-        --modal-overlay: rgba(255, 255, 255, 0.1);
+        --modal-overlay: rgba(0, 0, 0, 0.8);
         --highlight-bg: rgba(255, 255, 255, 0.15);
         --desktop-backdrop: #050505;
       }
@@ -518,13 +518,36 @@
       }
 
       /* ====== 通用弹窗基础样式（遮罩层/内容容器/标题/按钮） ====== */
-      .modal-overlay {
+      /* ====== 共享磨砂遮罩层 ======
+         2026-07-17 ADD：原来每个 .modal-overlay 各自带一份 background + 磨砂，
+         子弹窗叠在父弹窗上面时，两层磨砂会叠加，透明度越叠越深，视觉上很脏。
+         现在把"磨砂背景"单独拆成一个页面级共享元素，所有弹窗共用同一份磨砂，
+         不管叠多少层弹窗，视觉上磨砂只会出现一次。 */
+      .shared-modal-backdrop {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background: var(--modal-overlay);
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 95;
+      }
+      .shared-modal-backdrop.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -536,6 +559,20 @@
       .modal-overlay.active {
         opacity: 1;
         pointer-events: auto;
+      }
+      /* 子弹窗打开时，底层弹窗（modal-stack-hidden）整体淡出、禁止点击，
+         但不清除它的 active 状态，所以关闭子弹窗后能原样恢复显示 */
+      .modal-overlay > * {
+        transition:
+          opacity 0.25s ease,
+          transform 0.3s ease;
+      }
+      .modal-overlay.modal-stack-hidden {
+        pointer-events: none;
+      }
+      .modal-overlay.modal-stack-hidden > * {
+        opacity: 0;
+        pointer-events: none;
       }
       .modal-content {
         background-color: var(--bg-color);
@@ -575,7 +612,6 @@
         border-bottom: 1px solid var(--border-color);
         padding-bottom: 4px;
       }
-
       .modal-input {
         width: 100%;
         background-color: var(--input-bg);
@@ -586,6 +622,7 @@
         color: var(--text-main);
         outline: none;
       }
+
       .file-upload-wrapper {
         position: relative;
         overflow: hidden;
@@ -1056,6 +1093,10 @@
       .playlist-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        grid-auto-rows: minmax(
+          120px,
+          auto
+        ); /* 2026-07-16 ADD: ios端 歌单重叠修复*/
         gap: 12px;
         max-height: 320px;
         overflow-y: auto;
@@ -1769,6 +1810,8 @@
   <!-- ====== 页面主体 ====== -->
   <body>
     <div class="phone-container" id="phoneContainer">
+      <!-- 所有弹窗共用的磨砂遮罩层，见 CSS .shared-modal-backdrop 注释 -->
+      <div class="shared-modal-backdrop" id="sharedModalBackdrop"></div>
       <!-- 顶部导航栏：返回感/头像/昵称/主题切换按钮 -->
       <header class="chat-header">
         <div class="header-left">
@@ -4033,6 +4076,7 @@
        *           - saveChatHistory
        *           - closeModal
        *           - sleep
+       *           - Modal Stack Manager (2026-07-17：子弹窗自动隐藏/恢复底层弹窗, 并把磨砂遮罩拆成全局共用一份，配合 CSS 中的 .shared-modal-backdrop)
        *  [TOC-6]  window.onload  (主题/头像/历史恢复)
        *  [TOC-7]  Menu & Perspective Toggle
        *  [TOC-8]  Event Delegation (全局点击关闭)
@@ -4079,6 +4123,7 @@
       // 功能：统一缓存整页会被频繁访问的 DOM 元素引用，避免到处重复 getElementById
       const DOM = {
         html: document.documentElement,
+        sharedModalBackdrop: document.getElementById("sharedModalBackdrop"),
         themeBtn: document.getElementById("themeBtn"),
         musicIsland: document.getElementById("musicIsland"),
         musicTitleTrack: document.getElementById("musicTitleTrack"),
@@ -4480,6 +4525,65 @@
 
       const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+      // ====== Modal Stack Manager ======
+      // 功能：打开子弹窗时，自动隐藏（不是关闭）底层已打开的弹窗；
+      //       关闭子弹窗时，自动把底层那个弹窗重新显示出来。
+      // 原理：不需要改动现有任何 openXxxModal() / closeModal() 的调用方式，
+      //       只是"监听"所有 .modal-overlay 的 class 是否加上/去掉了 "active"，
+      //       谁最后变成 active 谁就是当前最上层，此前处于 active 的那个会被
+      //       打上 modal-stack-hidden（只是视觉隐藏 + 禁止点击，不清掉它的 active，
+      //       所以里面已经填好的内容、滚动位置等状态都还在，退回时原样恢复）。
+      // 隐藏这一步刻意用内联样式（而不是加 class）来做，避免被自己触发的
+      // MutationObserver 重新回调、造成死循环。
+      const modalStack = [];
+
+      function setModalStackHidden(overlay, hidden) {
+        const child = overlay.firstElementChild;
+        if (hidden) {
+          overlay.style.pointerEvents = "none";
+          if (child) {
+            child.style.opacity = "0";
+            child.style.pointerEvents = "none";
+          }
+        } else {
+          overlay.style.pointerEvents = "";
+          if (child) {
+            child.style.opacity = "";
+            child.style.pointerEvents = "";
+          }
+        }
+      }
+
+      function handleModalOverlayChange(overlay) {
+        const isActive = overlay.classList.contains("active");
+        const idx = modalStack.indexOf(overlay);
+
+        if (isActive) {
+          if (idx !== -1) return; // 已经在栈里了（重复触发），不用处理
+          const prevTop = modalStack[modalStack.length - 1];
+          if (prevTop) setModalStackHidden(prevTop, true);
+          modalStack.push(overlay);
+          setModalStackHidden(overlay, false);
+          DOM.sharedModalBackdrop.classList.add("active");
+        } else if (idx !== -1) {
+          modalStack.splice(idx, 1);
+          setModalStackHidden(overlay, false);
+          const newTop = modalStack[modalStack.length - 1];
+          if (newTop) {
+            setModalStackHidden(newTop, false);
+          } else {
+            DOM.sharedModalBackdrop.classList.remove("active");
+          }
+        }
+      }
+
+      document.querySelectorAll(".modal-overlay").forEach((overlay) => {
+        new MutationObserver(() => handleModalOverlayChange(overlay)).observe(
+          overlay,
+          { attributes: true, attributeFilter: ["class"] },
+        );
+      });
+
       // ====== [TOC-6] window.onload ======
       // 功能：页面加载时恢复本地存储的主题/头像/昵称/聊天记录等数据
       window.onload = () => {
@@ -4736,17 +4840,12 @@
       }
 
       function createPlaylistCardHTML(id, name, isDefault) {
-        const playingNow = state.musicPlaying && state.currentPlaylistId === id;
         const cover = getPlaylistCover(id);
         const sleeveStyle = cover
           ? `background-image:url('${cover.replace(/'/g, "%27")}')`
           : "";
         return `<div class="playlist-card" data-id="${id === null ? "" : id}">
     <div class="playlist-sleeve" style="${sleeveStyle}"></div>
-    <div class="playlist-disc-wrap">
-      <div class="playlist-disc${playingNow ? " spinning" : ""}"></div>
-      ${playingNow ? '<div class="playlist-tonearm"></div>' : ""}
-    </div>
     <div class="playlist-label">
       ${
         isDefault
