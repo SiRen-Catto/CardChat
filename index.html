@@ -52,6 +52,7 @@
        *  [CSS-TOC-30] HTML 内联样式抽离：弹窗尺寸与层级
        *  [CSS-TOC-31] Char Setting：角色信息表与头像设置
        *  [CSS-TOC-32] Char Setting：长文本展开编辑器|复用[CSS-TOC-25] CSS 全屏编辑器
+       *  [CSS-TOC-33] Char Setting / User Setting：3D卡片翻转、统一图标与用户设定
        *
        * ==== */
 
@@ -612,6 +613,7 @@
       /* --- 弹窗外层与显示状态 --- */
       .modal-overlay {
         position: absolute;
+        overflow: visible;
         top: 0;
         left: 0;
         width: 100%;
@@ -3043,6 +3045,140 @@
 
       /* ====== [CSS-TOC-32] Char Setting：长文本展开编辑器 ====== */
       /* 功能：Description 复用 Theme Modal 的 Custom CSS / Bubble CSS 全屏展开编辑器 */
+      /* ====== [CSS-TOC-33] Char Setting / User Setting：3D卡片翻转、统一图标与用户设定 ====== */
+      /*
+       * 2026-08-28 微调：
+       * 1. User Setting 底部不显示 Prompt namespace 文案；data-prompt-key 仍保留，供后续调用。
+       * 2. Char / User 两面共用同一枚线性 SVG 翻转图标，保持尺寸、描边和视觉语言一致。
+       * 3. 使用独立 3D stage 承载翻转卡片；弹窗外层允许 3D 透视溢出，避免 rotateY 中途被 overflow 裁掉。
+       * 4. 动画采用更柔和的 cubic-bezier，并在 90°附近稍微放慢，使“卡片翻面”更自然。
+       */
+      .char-setting-modal-content {
+        width: 320px;
+        max-height: none;
+        padding: 0;
+        overflow: visible;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+
+      .char-setting-flip-stage {
+        position: relative;
+        width: 100%;
+        height: min(540px, 80vh);
+        perspective: 1400px;
+        transform: translateZ(0);
+      }
+
+      .char-setting-flip-card {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        will-change: transform;
+        transition: transform 680ms cubic-bezier(0.2, 0.72, 0.2, 1);
+      }
+
+      .char-setting-flip-card.is-flipped {
+        transform: rotateY(-180deg);
+      }
+
+      .char-setting-face {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 16px;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        overflow: hidden;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        transform-style: preserve-3d;
+      }
+
+      .char-setting-face.user-setting-face {
+        transform: rotateY(180deg);
+      }
+
+      .char-setting-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        min-height: 26px;
+      }
+
+      .char-setting-header .modal-title {
+        flex: 1;
+        text-align: center;
+        margin: 0;
+      }
+
+      /* 翻转按钮：左右两面共用，图标本身保持完全一致。 */
+      .char-setting-flip-btn {
+        width: 26px;
+        height: 26px;
+        flex: 0 0 26px;
+        margin-left: 0;
+        padding: 4px;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: var(--icon-color);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition:
+          background-color 180ms ease,
+          opacity 180ms ease,
+          transform 180ms ease;
+      }
+
+      .char-setting-flip-btn:hover {
+        background: var(--input-bg);
+        opacity: 0.72;
+      }
+
+      .char-setting-flip-btn:active {
+        transform: scale(0.9);
+      }
+
+      .char-setting-flip-icon {
+        display: block;
+        width: 18px;
+        height: 18px;
+        overflow: visible;
+      }
+
+      .char-setting-scroll-body {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-right: 2px;
+      }
+
+      .user-setting-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .char-setting-flip-card {
+          transition-duration: 1ms;
+        }
+      }
     </style>
   </head>
 
@@ -3468,134 +3604,336 @@
       <!-- Modals -->
 
       <!-- ====== [HTML-TOC-31] Char Setting Modal ====== -->
-      <!-- 功能：统一管理 Char 的头像与长期角色资料 -->
+      <!-- 功能：统一管理 Char / User 的头像与长期资料；右上角 SVG 按钮切换两面。 -->
       <div class="modal-overlay" id="charSettingModal">
         <div class="modal-content char-setting-modal-content">
-          <div class="modal-title">Char Setting</div>
-
-          <!-- 第一行：头像预览、图片 URL、本地图片与 Reset -->
-          <div class="char-setting-avatar-row">
-            <div
-              class="char-setting-avatar-preview"
-              id="charAvatarPreview"></div>
-            <div class="char-setting-avatar-tools">
-              <input
-                type="text"
-                class="modal-input"
-                id="charAvatarUrl"
-                placeholder="Image URL..."
-                autocomplete="off" />
-              <div class="char-setting-avatar-file-row">
-                <label class="char-setting-upload-btn">
-                  Upload from device
-                  <input
-                    type="file"
-                    id="charAvatarFile"
-                    accept="image/*"
-                    title="Upload Image" />
-                </label>
-                <button
-                  type="button"
-                  class="char-setting-reset-btn"
-                  id="charAvatarResetBtn">
-                  Reset
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- 第二行：固定角色资料字段；后续功能直接调用 state.charProfile -->
-          <div class="char-setting-form">
-            <div class="char-setting-section-label">Character Information</div>
-            <div class="char-setting-grid">
-              <div class="char-setting-field">
-                <label for="charNameInput">Name</label>
-                <input
-                  type="text"
-                  id="charNameInput"
-                  placeholder="Character name"
-                  autocomplete="off" />
-              </div>
-              <div class="char-setting-field">
-                <label for="charAgeInput">Age</label>
-                <input
-                  type="text"
-                  id="charAgeInput"
-                  placeholder="Age"
-                  autocomplete="off" />
-              </div>
-              <div class="char-setting-field">
-                <label for="charGenderInput">Gender</label>
-                <input
-                  type="text"
-                  id="charGenderInput"
-                  placeholder="Gender"
-                  autocomplete="off" />
-              </div>
-              <div class="char-setting-field">
-                <label for="charHeightInput">Height</label>
-                <input
-                  type="text"
-                  id="charHeightInput"
-                  placeholder="Height"
-                  autocomplete="off" />
-              </div>
-              <div class="char-setting-field">
-                <label for="charBirthInput">Birth</label>
-                <input
-                  type="text"
-                  id="charBirthInput"
-                  placeholder="Birthday / birth date"
-                  autocomplete="off" />
-              </div>
-              <div class="char-setting-field">
-                <label for="charIdentityInput">Identity</label>
-                <input
-                  type="text"
-                  id="charIdentityInput"
-                  placeholder="Occupation / identity"
-                  autocomplete="off" />
-              </div>
-              <div class="char-setting-field full">
-                <label for="charDescriptionInput">Description</label>
-                <div class="char-setting-description-wrap">
-                  <textarea
-                    id="charDescriptionInput"
-                    placeholder="Basic character description..."></textarea>
+          <div class="char-setting-flip-stage">
+            <div class="char-setting-flip-card" id="charSettingFlipCard">
+              <!-- ====== [HTML-TOC-31A] Char Setting 正面 ====== -->
+              <section
+                class="char-setting-face char-setting-front"
+                aria-label="Char Setting">
+                <div class="char-setting-header">
+                  <div class="modal-title">Char Setting</div>
+                  <!-- 2026-08-28 ADD: 翻转到 User Setting；只负责视图切换，不修改资料。 -->
                   <button
                     type="button"
-                    class="char-setting-expand-btn"
-                    onclick="
-                      openCSSExpand('charDescriptionInput', 'Description', null)
-                    "
-                    title="Expand">
+                    class="char-setting-flip-btn"
+                    onclick="toggleCharUserSetting()"
+                    title="User Setting"
+                    aria-label="Switch to User Setting">
                     <svg
-                      width="13"
-                      height="13"
+                      class="char-setting-flip-icon"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2">
-                      <polyline points="15 3 21 3 21 9" />
-                      <polyline points="9 21 3 21 3 15" />
-                      <line x1="21" y1="3" x2="14" y2="10" />
-                      <line x1="3" y1="21" x2="10" y2="14" />
+                      stroke-width="1.65"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true">
+                      <rect x="5" y="5" width="14" height="14" rx="2.5"></rect>
+                      <path d="M8.5 9.5h7"></path>
+                      <path d="m13 7 2.5 2.5L13 12"></path>
+                      <path d="M15.5 14.5h-7"></path>
+                      <path d="m11 12-2.5 2.5L11 17"></path>
                     </svg>
                   </button>
                 </div>
-              </div>
-            </div>
-          </div>
+                <div class="char-setting-scroll-body">
+                  <div class="char-setting-avatar-row">
+                    <div
+                      class="char-setting-avatar-preview"
+                      id="charAvatarPreview"></div>
+                    <div class="char-setting-avatar-tools">
+                      <input
+                        type="text"
+                        class="modal-input"
+                        id="charAvatarUrl"
+                        placeholder="Image URL..."
+                        autocomplete="off" />
+                      <div class="char-setting-avatar-file-row">
+                        <label class="char-setting-upload-btn"
+                          >Upload from device<input
+                            type="file"
+                            id="charAvatarFile"
+                            accept="image/*"
+                            title="Upload Image" /></label
+                        ><button
+                          type="button"
+                          class="char-setting-reset-btn"
+                          id="charAvatarResetBtn">
+                          Reset
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="char-setting-form">
+                    <div class="char-setting-section-label">
+                      Character Information
+                    </div>
+                    <div class="char-setting-grid">
+                      <div class="char-setting-field">
+                        <label for="charNameInput">Name</label
+                        ><input
+                          type="text"
+                          id="charNameInput"
+                          placeholder="Character name"
+                          autocomplete="off" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="charAgeInput">Age</label
+                        ><input
+                          type="text"
+                          id="charAgeInput"
+                          placeholder="Age"
+                          autocomplete="off" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="charGenderInput">Gender</label
+                        ><input
+                          type="text"
+                          id="charGenderInput"
+                          placeholder="Gender"
+                          autocomplete="off" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="charHeightInput">Height</label
+                        ><input
+                          type="text"
+                          id="charHeightInput"
+                          placeholder="Height"
+                          autocomplete="off" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="charBirthInput">Birth</label
+                        ><input
+                          type="text"
+                          id="charBirthInput"
+                          placeholder="Birthday / birth date"
+                          autocomplete="off" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="charIdentityInput">Identity</label
+                        ><input
+                          type="text"
+                          id="charIdentityInput"
+                          placeholder="Occupation / identity"
+                          autocomplete="off" />
+                      </div>
+                      <div class="char-setting-field full">
+                        <label for="charDescriptionInput">Description</label>
+                        <div class="char-setting-description-wrap">
+                          <textarea
+                            id="charDescriptionInput"
+                            placeholder="Basic character description..."></textarea
+                          ><button
+                            type="button"
+                            class="char-setting-expand-btn"
+                            onclick="
+                              openCSSExpand(
+                                'charDescriptionInput',
+                                'Description',
+                                null,
+                              )
+                            "
+                            title="Expand">
+                            <svg
+                              width="13"
+                              height="13"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2">
+                              <polyline points="15 3 21 3 21 9"></polyline>
+                              <polyline points="9 21 3 21 3 15"></polyline>
+                              <line x1="21" y1="3" x2="14" y2="10"></line>
+                              <line x1="3" y1="21" x2="10" y2="14"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-actions">
+                  <button
+                    class="modal-btn btn-cancel"
+                    onclick="closeModal('charSettingModal')">
+                    Cancel</button
+                  ><button
+                    class="modal-btn btn-save"
+                    onclick="saveCharSettings()">
+                    Save
+                  </button>
+                </div>
+              </section>
 
-          <div class="modal-actions">
-            <button
-              class="modal-btn btn-cancel"
-              onclick="closeModal('charSettingModal')">
-              Cancel
-            </button>
-            <button class="modal-btn btn-save" onclick="saveCharSettings()">
-              Save
-            </button>
+              <!-- ====== [HTML-TOC-31B] User Setting 背面 ====== -->
+              <!-- 数据边界：仅保存 userProfile；字段与 Char Setting 一一对应；data-prompt-key 保留为内部调用标识，不在界面显示。 -->
+              <section
+                class="char-setting-face user-setting-face"
+                aria-label="User Setting">
+                <div class="char-setting-header">
+                  <div class="modal-title">User Setting</div>
+                  <button
+                    type="button"
+                    class="char-setting-flip-btn"
+                    onclick="toggleCharUserSetting()"
+                    title="Char Setting"
+                    aria-label="Switch to Char Setting">
+                    <svg
+                      class="char-setting-flip-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.65"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true">
+                      <rect x="5" y="5" width="14" height="14" rx="2.5"></rect>
+                      <path d="M8.5 9.5h7"></path>
+                      <path d="m13 7 2.5 2.5L13 12"></path>
+                      <path d="M15.5 14.5h-7"></path>
+                      <path d="m11 12-2.5 2.5L11 17"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="char-setting-scroll-body">
+                  <div class="char-setting-avatar-row">
+                    <div
+                      class="char-setting-avatar-preview"
+                      id="userAvatarPreview"></div>
+                    <div class="char-setting-avatar-tools">
+                      <input
+                        type="text"
+                        class="modal-input"
+                        id="userAvatarUrl"
+                        placeholder="Image URL..."
+                        autocomplete="off" />
+                      <div class="char-setting-avatar-file-row">
+                        <label class="char-setting-upload-btn"
+                          >Upload from device<input
+                            type="file"
+                            id="userAvatarFile"
+                            accept="image/*"
+                            title="Upload Image" /></label
+                        ><button
+                          type="button"
+                          class="char-setting-reset-btn"
+                          id="userAvatarResetBtn">
+                          Reset
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="user-setting-form">
+                    <div class="char-setting-section-label">
+                      User Information
+                    </div>
+                    <div class="char-setting-grid">
+                      <div class="char-setting-field">
+                        <label for="userNameInput">Name</label
+                        ><input
+                          type="text"
+                          id="userNameInput"
+                          placeholder="User name"
+                          autocomplete="off"
+                          data-prompt-key="user.name" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="userAgeInput">Age</label
+                        ><input
+                          type="text"
+                          id="userAgeInput"
+                          placeholder="Age"
+                          autocomplete="off"
+                          data-prompt-key="user.age" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="userGenderInput">Gender</label
+                        ><input
+                          type="text"
+                          id="userGenderInput"
+                          placeholder="Gender"
+                          autocomplete="off"
+                          data-prompt-key="user.gender" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="userHeightInput">Height</label
+                        ><input
+                          type="text"
+                          id="userHeightInput"
+                          placeholder="Height"
+                          autocomplete="off"
+                          data-prompt-key="user.height" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="userBirthInput">Birth</label
+                        ><input
+                          type="text"
+                          id="userBirthInput"
+                          placeholder="Birthday / birth date"
+                          autocomplete="off"
+                          data-prompt-key="user.birth" />
+                      </div>
+                      <div class="char-setting-field">
+                        <label for="userIdentityInput">Identity</label
+                        ><input
+                          type="text"
+                          id="userIdentityInput"
+                          placeholder="Occupation / identity"
+                          autocomplete="off"
+                          data-prompt-key="user.identity" />
+                      </div>
+                      <div class="char-setting-field full">
+                        <label for="userDescriptionInput">Description</label>
+                        <div class="char-setting-description-wrap">
+                          <textarea
+                            id="userDescriptionInput"
+                            placeholder="Basic user description..."
+                            data-prompt-key="user.description"></textarea
+                          ><button
+                            type="button"
+                            class="char-setting-expand-btn"
+                            onclick="
+                              openCSSExpand(
+                                'userDescriptionInput',
+                                'User Description',
+                                null,
+                              )
+                            "
+                            title="Expand">
+                            <svg
+                              width="13"
+                              height="13"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2">
+                              <polyline points="15 3 21 3 21 9"></polyline>
+                              <polyline points="9 21 3 21 3 15"></polyline>
+                              <line x1="21" y1="3" x2="14" y2="10"></line>
+                              <line x1="3" y1="21" x2="10" y2="14"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-actions">
+                  <button
+                    class="modal-btn btn-cancel"
+                    onclick="closeModal('charSettingModal')">
+                    Cancel</button
+                  ><button
+                    class="modal-btn btn-save"
+                    onclick="saveUserSettings()">
+                    Save
+                  </button>
+                </div>
+              </section>
+            </div>
           </div>
         </div>
       </div>
@@ -5329,6 +5667,11 @@
         tagFilterBar: document.getElementById("tagFilterBar"),
         savesList: document.getElementById("savesList"),
         charSettingModal: document.getElementById("charSettingModal"),
+        charSettingFlipCard: document.getElementById("charSettingFlipCard"),
+        userAvatarPreview: document.getElementById("userAvatarPreview"),
+        userAvatarUrl: document.getElementById("userAvatarUrl"),
+        userAvatarFile: document.getElementById("userAvatarFile"),
+        userAvatarResetBtn: document.getElementById("userAvatarResetBtn"),
         charAvatarPreview: document.getElementById("charAvatarPreview"),
         charAvatarUrl: document.getElementById("charAvatarUrl"),
         charAvatarFile: document.getElementById("charAvatarFile"),
@@ -5340,6 +5683,13 @@
         charBirthInput: document.getElementById("charBirthInput"),
         charIdentityInput: document.getElementById("charIdentityInput"),
         charDescriptionInput: document.getElementById("charDescriptionInput"),
+        userNameInput: document.getElementById("userNameInput"),
+        userAgeInput: document.getElementById("userAgeInput"),
+        userGenderInput: document.getElementById("userGenderInput"),
+        userHeightInput: document.getElementById("userHeightInput"),
+        userBirthInput: document.getElementById("userBirthInput"),
+        userIdentityInput: document.getElementById("userIdentityInput"),
+        userDescriptionInput: document.getElementById("userDescriptionInput"),
         charPersonalityInput: document.getElementById("charPersonalityInput"),
         charScenarioInput: document.getElementById("charScenarioInput"),
         charSpeechStyleInput: document.getElementById("charSpeechStyleInput"),
@@ -5555,9 +5905,43 @@
         };
       }
 
+      /* ====== [TOC-3.2] User Profile Schema ====== */
+      // 功能：稳定保存 User 长期资料；canonical storage key = userProfile。
+      // 字段与 Char Profile 一一对应；头像拆分为 URL / 本地缓存 / 当前头像三层。
+      // Prompt 标识：字段统一使用 user.<field> 命名空间，方便后续 AI Prompt 直接调用。
+      const DEFAULT_USER_PROFILE = {
+        name: "",
+        age: "",
+        gender: "",
+        height: "",
+        birth: "",
+        identity: "",
+        description: "",
+        avatarUrl: "",
+        avatarLocal: "",
+        avatar: "",
+      };
+      function getStoredUserProfile() {
+        const stored = Storage.get("userProfile");
+        if (stored && typeof stored === "object") {
+          const profile = { ...DEFAULT_USER_PROFILE, ...stored };
+          if (!profile.avatarLocal && profile.avatar?.startsWith("data:"))
+            profile.avatarLocal = profile.avatar;
+          if (
+            !profile.avatarUrl &&
+            profile.avatar &&
+            !profile.avatar.startsWith("data:")
+          )
+            profile.avatarUrl = profile.avatar;
+          return profile;
+        }
+        return { ...DEFAULT_USER_PROFILE };
+      }
+
       // ====== [TOC-3] State Management ======
       // 功能：全局运行时状态（当前视角、正在编辑/引用的消息、自动回复相关标记等）
       let state = {
+        userProfile: getStoredUserProfile(),
         lastTimestamp: "",
         activeMessage: null,
         editingMessage: null,
@@ -5788,6 +6172,8 @@
       // 通用弹窗关闭方法，按id移除active类
       function closeModal(modalId) {
         document.getElementById(modalId).classList.remove("active");
+        if (modalId === "charSettingModal")
+          DOM.charSettingFlipCard?.classList.remove("is-flipped");
       }
 
       const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -8066,8 +8452,100 @@
       // 点击左上角头像统一进入 Char Setting。
       DOM.avatarBtn.addEventListener("click", () => {
         loadCharSettingsForm();
+        loadUserSettingsForm();
+        DOM.charSettingFlipCard?.classList.remove("is-flipped");
         DOM.charSettingModal.classList.add("active");
       });
+
+      // 2026-08-28 ADD: Char/User 双面卡片切换；翻转本身不保存任何数据。
+      function toggleCharUserSetting() {
+        DOM.charSettingFlipCard?.classList.toggle("is-flipped");
+      }
+
+      // 2026-08-28 ADD: User Profile 持久化；与 charProfile 完全隔离。
+      function saveUserProfile(profile) {
+        state.userProfile = { ...DEFAULT_USER_PROFILE, ...profile };
+        Storage.set("userProfile", state.userProfile);
+      }
+
+      function loadUserSettingsForm() {
+        const p = state.userProfile || DEFAULT_USER_PROFILE;
+        DOM.userNameInput.value = p.name || "";
+        DOM.userAgeInput.value = p.age || "";
+        DOM.userGenderInput.value = p.gender || "";
+        DOM.userHeightInput.value = p.height || "";
+        DOM.userBirthInput.value = p.birth || "";
+        DOM.userIdentityInput.value = p.identity || "";
+        DOM.userDescriptionInput.value = p.description || "";
+        DOM.userAvatarUrl.value =
+          p.avatarUrl ||
+          (p.avatar && !p.avatar.startsWith("data:") ? p.avatar : "");
+        DOM.userAvatarPreview.style.backgroundImage = p.avatar
+          ? `url(${p.avatar})`
+          : "";
+        DOM.userAvatarFile.value = "";
+      }
+
+      DOM.userAvatarFile.addEventListener("change", () => {
+        const file = DOM.userAvatarFile.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          DOM.userAvatarPreview.style.backgroundImage = `url(${e.target.result})`;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      DOM.userAvatarUrl.addEventListener("input", () => {
+        const url = DOM.userAvatarUrl.value.trim();
+        if (url) DOM.userAvatarPreview.style.backgroundImage = `url(${url})`;
+        else if (state.userProfile?.avatarLocal)
+          DOM.userAvatarPreview.style.backgroundImage = `url(${state.userProfile.avatarLocal})`;
+        else DOM.userAvatarPreview.style.backgroundImage = "";
+      });
+
+      DOM.userAvatarResetBtn.addEventListener("click", () => {
+        const url =
+          DOM.userAvatarUrl.value.trim() || state.userProfile?.avatarUrl || "";
+        saveUserProfile({
+          ...state.userProfile,
+          avatarUrl: url,
+          avatarLocal: "",
+          avatar: url,
+        });
+        DOM.userAvatarFile.value = "";
+        DOM.userAvatarPreview.style.backgroundImage = url ? `url(${url})` : "";
+      });
+
+      function saveUserSettings() {
+        const file = DOM.userAvatarFile.files?.[0];
+        const avatarUrl = DOM.userAvatarUrl.value.trim();
+        const commit = (avatarLocal) => {
+          saveUserProfile({
+            ...state.userProfile,
+            name: DOM.userNameInput.value.trim(),
+            age: DOM.userAgeInput.value.trim(),
+            gender: DOM.userGenderInput.value.trim(),
+            height: DOM.userHeightInput.value.trim(),
+            birth: DOM.userBirthInput.value.trim(),
+            identity: DOM.userIdentityInput.value.trim(),
+            description: DOM.userDescriptionInput.value.trim(),
+            avatarUrl,
+            avatarLocal: avatarLocal || state.userProfile?.avatarLocal || "",
+            avatar:
+              avatarLocal || avatarUrl || state.userProfile?.avatarLocal || "",
+          });
+          DOM.userAvatarFile.value = "";
+          closeModal("charSettingModal");
+        };
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => commit(e.target.result);
+          reader.readAsDataURL(file);
+          return;
+        }
+        commit(avatarUrl ? "" : state.userProfile?.avatarLocal || "");
+      }
 
       // 本地图片只在保存时写入 charProfile.avatarLocal；选择后先实时预览。
       DOM.charAvatarFile.addEventListener("change", () => {
