@@ -16,7 +16,46 @@
     <title>CardChat</title>
 
     <style>
-      /* ====== 全局CSS变量：浅色/暗色主题配色 ====== */
+      /* ====
+       *  CSS TABLE OF CONTENTS  (Ctrl+F 搜索 [CSS-TOC-xx] 快速跳转)
+       * ====
+       *
+       *  [CSS-TOC-01] 全局变量与主题
+       *  [CSS-TOC-02] 全局重置与滚动条
+       *  [CSS-TOC-03] 页面与手机外框布局
+       *  [CSS-TOC-04] 顶部导航栏
+       *  [CSS-TOC-05] 聊天消息区域与时间戳
+       *  [CSS-TOC-06] 消息气泡与消息状态
+       *  [CSS-TOC-07] 消息引用框
+       *  [CSS-TOC-08] 消息操作工具栏
+       *  [CSS-TOC-09] 底部输入栏
+       *  [CSS-TOC-10] “+”号功能菜单
+       *  [CSS-TOC-11] 通用弹窗与遮罩
+       *  [CSS-TOC-12] 存档列表
+       *  [CSS-TOC-13] 设置项与开关
+       *  [CSS-TOC-14] 字卡筛选与管理
+       *  [CSS-TOC-15] 自动回复速度控件
+       *  [CSS-TOC-16] 消息已读状态
+       *  [CSS-TOC-17] 音乐：歌单卡片与歌曲列表
+       *  [CSS-TOC-18] 音乐：歌单详情弹窗
+       *  [CSS-TOC-19] 音乐：下拉菜单与播放模式
+       *  [CSS-TOC-20] 字体管理
+       *  [CSS-TOC-21] 音乐模块：Dynamic Island
+       *  [CSS-TOC-22] 音乐模块：Mini Bar
+       *  [CSS-TOC-23] 音乐模块：Toast
+       *  [CSS-TOC-24] 正在输入动画
+       *  [CSS-TOC-25] CSS 全屏编辑器
+       *  [CSS-TOC-26] HTML 内联样式抽离：通用工具
+       *  [CSS-TOC-27] HTML 内联样式抽离：数据/设置/字卡
+       *  [CSS-TOC-28] HTML 内联样式抽离：主题与 CSS 编辑器
+       *  [CSS-TOC-29] HTML 内联样式抽离：音乐
+       *  [CSS-TOC-30] HTML 内联样式抽离：弹窗尺寸与层级
+       *  [CSS-TOC-31] Char Setting：角色信息表与头像设置
+       *  [CSS-TOC-32] Char Setting：长文本展开编辑器|复用[CSS-TOC-25] CSS 全屏编辑器
+       *
+       * ==== */
+
+      /* ====== [CSS-TOC-01] 全局变量与主题 ====== */
       :root {
         --bg-color: #ffffff;
 
@@ -59,6 +98,8 @@
         --music-island-text: #d0d0d0;
       }
 
+      /* ====== [CSS-TOC-02] 全局重置与滚动条 ====== */
+      /* --- 基础重置：统一外边距、内边距、盒模型与默认字体 --- */
       * {
         margin: 0;
         padding: 0;
@@ -69,6 +110,7 @@
         -webkit-font-smoothing: antialiased;
       }
 
+      /* --- 滚动条隐藏：WebKit / Chrome / Safari --- */
       *::-webkit-scrollbar {
         display: none;
       }
@@ -77,6 +119,7 @@
         scrollbar-width: none; /* Firefox */
       }
 
+      /* --- 主题过渡：统一背景、文字与边框颜色动画 --- */
       body,
       .phone-container,
       .chat-header,
@@ -90,6 +133,7 @@
       .modal-input,
       .msg-toolbar,
       .toolbar-btn,
+      /* --- 功能菜单容器 --- */
       .plus-menu {
         transition:
           background-color 0.4s ease,
@@ -97,8 +141,9 @@
           border-color 0.4s ease;
       }
 
+      /* ====== [CSS-TOC-03] 页面与手机外框布局 ====== */
+      /* --- 页面根节点与高度约束 --- */
       html,
-      /* ====== 页面与手机外框布局（含桌面端居中卡片、iOS安全区适配） ====== */
       body {
         height: 100%;
       }
@@ -117,48 +162,42 @@
         height: 100dvh;
         margin: 0;
         overflow: hidden;
-        top: 0;
-        left: 0;
         transition: background-color 0.4s ease;
       }
-
+      /* --- 手机外框：桌面端居中卡片 --- */
       .phone-container {
         background-color: var(--bg-color);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        position: relative;
         width: 100%;
         max-width: 480px;
         height: 100dvh;
         max-height: 900px;
+
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        overflow: hidden;
         border-radius: 24px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
         border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
       }
 
+      /* --- 移动端适配：取消圆角、边框与桌面阴影 --- */
       @media (max-width: 480px) {
         body {
           background-color: var(--bg-color);
           align-items: stretch;
-          height: 100dvh;
         }
         .phone-container {
-          width: 100%;
           max-width: none;
-          height: 100dvh;
           max-height: none;
-          position: relative;
-          display: flex;
-          flex-direction: column;
           border-radius: 0;
           border: none;
           box-shadow: none;
-          overflow: hidden;
         }
       }
 
-      /* ====== 顶部导航栏（头像/昵称/主题切换按钮） ====== */
+      /* ====== [CSS-TOC-04] 顶部导航栏 ====== */
       .chat-header {
         display: flex;
         align-items: center;
@@ -169,16 +208,19 @@
         z-index: 10;
         flex-shrink: 0;
       }
+      /* --- 左侧用户信息区域 --- */
       .header-left {
         display: flex;
         align-items: center;
         gap: 12px;
       }
+      /* --- 右侧操作按钮区域 --- */
       .header-right {
         display: flex;
         align-items: center;
         gap: 12px;
       }
+      /* --- 头像 --- */
       .avatar {
         width: 32px;
         height: 32px;
@@ -192,6 +234,7 @@
       .avatar:hover {
         opacity: 0.8;
       }
+      /* --- 昵称与在线状态 --- */
       .user-info {
         display: flex;
         flex-direction: column;
@@ -201,17 +244,13 @@
         font-weight: 600;
         color: var(--text-main);
         letter-spacing: 0.5px;
-        cursor: pointer;
-        transition: opacity 0.2s;
-      }
-      .user-name:hover {
-        opacity: 0.6;
       }
       .status {
         font-size: 10px;
         color: var(--text-sub);
       }
 
+      /* --- 设置/主题按钮 --- */
       .theme-toggle {
         background: none;
         border: none;
@@ -222,7 +261,8 @@
         justify-content: center;
       }
 
-      /* ====== 聊天消息滚动区域 & 时间戳分隔条 ====== */
+      /* ====== [CSS-TOC-05] 聊天消息区域与时间戳 ====== */
+      /* --- 消息滚动容器 --- */
       .chat-main {
         flex: 1;
         padding: 15px;
@@ -241,10 +281,12 @@
         width: 0px;
       }
 
+      /* --- 不同发送方之间增加视觉间距 --- */
       .message.received + .message.sent,
       .message.sent + .message.received {
         margin-top: 12px;
       }
+      /* --- 时间戳分隔条 --- */
       .timestamp {
         text-align: center;
         font-size: 10px;
@@ -267,7 +309,8 @@
         }
       }
 
-      /* ====== 消息气泡与状态 ====== */
+      /* ====== [CSS-TOC-06] 消息气泡与消息状态 ====== */
+      /* --- 消息基础容器与入场动画 --- */
       .message {
         display: flex;
         flex-direction: column;
@@ -276,14 +319,17 @@
         animation: fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         cursor: pointer;
       }
+      /* --- 收到的消息：左侧对齐 --- */
       .message.received {
         align-items: flex-start;
         align-self: flex-start;
       }
+      /* --- 发送的消息：右侧对齐 --- */
       .message.sent {
         align-items: flex-end;
         align-self: flex-end;
       }
+      /* --- 消息高亮背景层 --- */
       .message::after {
         content: "";
         position: absolute;
@@ -308,6 +354,7 @@
         }
       }
 
+      /* --- 气泡基础样式 --- */
       .bubble {
         padding: 8px 14px;
         border-radius: 16px;
@@ -317,18 +364,21 @@
         position: relative;
         transition: background-color 0.3s;
       }
+      /* --- 收到消息气泡 --- */
       .received .bubble {
         background-color: var(--msg-received-bg);
         color: var(--msg-received-text);
         border-bottom-left-radius: 4px;
       }
+      /* --- 发出消息气泡 --- */
       .sent .bubble {
         background-color: var(--msg-sent-bg);
         color: var(--msg-sent-text);
         border-bottom-right-radius: 4px;
       }
 
-      /* ====== 消息引用框样式 ====== */
+      /* ====== [CSS-TOC-07] 消息引用框 ====== */
+      /* --- 引用内容基础样式 --- */
       .quote-box {
         font-size: 11px;
         color: var(--text-sub);
@@ -347,6 +397,7 @@
         opacity: 0.8;
       }
       /* 引用的原消息已被撤回/删除后使用：斜体弱化展示，且不可再点击跳转 */
+      /* --- 引用目标不可用时的弱化状态 --- */
       .quote-box.quote-unavailable {
         font-style: italic;
         opacity: 0.65;
@@ -355,6 +406,7 @@
       .quote-box.quote-unavailable:hover {
         opacity: 0.65;
       }
+      /* --- 已撤回消息提示 --- */
       .message.recalled-msg {
         max-width: 100%;
         align-self: center;
@@ -370,7 +422,8 @@
         border-radius: 12px;
       }
 
-      /* ====== 消息操作工具栏（编辑/引用/插入/撤回/删除按钮） ====== */
+      /* ====== [CSS-TOC-08] 消息操作工具栏 ====== */
+      /* --- 工具栏容器与弹出动画 --- */
       .msg-toolbar {
         position: absolute;
         bottom: 100%;
@@ -395,12 +448,14 @@
           transform: translateY(0) scale(1);
         }
       }
+      /* --- 工具栏左右定位 --- */
       .message.sent .msg-toolbar {
         right: 0;
       }
       .message.received .msg-toolbar {
         left: 0;
       }
+      /* --- 工具栏按钮 --- */
       .toolbar-btn {
         background: none;
         border: none;
@@ -421,7 +476,8 @@
         height: 14px;
       }
 
-      /* ====== 底部输入栏（输入框、发送按钮、“+”菜单入口） ====== */
+      /* ====== [CSS-TOC-09] 底部输入栏 ====== */
+      /* --- 输入栏容器与 iOS 安全区 --- */
       .chat-footer {
         padding: 12px 15px;
         padding-bottom: max(12px, env(safe-area-inset-bottom));
@@ -434,6 +490,7 @@
         position: relative;
         bottom: 0;
       }
+      /* --- “+”与辅助图标按钮 --- */
       .icon-btn {
         font-size: 20px;
         color: var(--icon-color);
@@ -450,6 +507,7 @@
         display: none;
         padding: 0 4px;
       }
+      /* --- 输入框背景容器 --- */
       .input-wrapper {
         flex: 1;
         background-color: var(--input-bg);
@@ -458,6 +516,7 @@
         display: flex;
         align-items: center;
       }
+      /* --- 文本输入框 --- */
       .chat-input {
         width: 100%;
         border: none;
@@ -469,6 +528,7 @@
       .chat-input::placeholder {
         color: var(--text-sub);
       }
+      /* --- 发送按钮 --- */
       .send-btn {
         background: none;
         border: none;
@@ -483,7 +543,7 @@
         opacity: 0.5;
       }
 
-      /* ====== “+”号功能菜单（图片/位置/文件等功能入口） ====== */
+      /* ====== [CSS-TOC-10] “+”号功能菜单 ====== */
       .plus-menu {
         position: absolute;
         bottom: 65px;
@@ -504,11 +564,13 @@
           opacity 0.2s ease,
           transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       }
+      /* --- 功能菜单展开状态 --- */
       .plus-menu.active {
         transform: translateY(0);
         opacity: 1;
         pointer-events: auto;
       }
+      /* --- 功能菜单项目 --- */
       .plus-menu-item {
         display: flex;
         align-items: center;
@@ -525,12 +587,9 @@
         background-color: var(--input-bg);
       }
 
-      /* ====== 通用弹窗基础样式（遮罩层/内容容器/标题/按钮） ====== */
-      /* ====== 共享磨砂遮罩层 ======
-         2026-07-17 ADD：原来每个 .modal-overlay 各自带一份 background + 磨砂，
-         子弹窗叠在父弹窗上面时，两层磨砂会叠加，透明度越叠越深，视觉上很脏。
-         现在把"磨砂背景"单独拆成一个页面级共享元素，所有弹窗共用同一份磨砂，
-         不管叠多少层弹窗，视觉上磨砂只会出现一次。 */
+      /* ====== [CSS-TOC-11] 通用弹窗与遮罩 ====== */
+      /* 2026-07-17 FIXED: 多弹窗磨砂遮罩层叠加->共享磨砂遮罩层 */
+      /* --- 共用磨砂遮罩 --- */
       .shared-modal-backdrop {
         position: absolute;
         top: 0;
@@ -550,6 +609,7 @@
         pointer-events: auto;
       }
 
+      /* --- 弹窗外层与显示状态 --- */
       .modal-overlay {
         position: absolute;
         top: 0;
@@ -568,8 +628,6 @@
         opacity: 1;
         pointer-events: auto;
       }
-      /* 子弹窗打开时，底层弹窗（modal-stack-hidden）整体淡出、禁止点击，
-         但不清除它的 active 状态，所以关闭子弹窗后能原样恢复显示 */
       .modal-overlay > * {
         transition:
           opacity 0.25s ease,
@@ -582,6 +640,7 @@
         opacity: 0;
         pointer-events: none;
       }
+      /* --- 弹窗内容容器 --- */
       .modal-content {
         background-color: var(--bg-color);
         width: 280px;
@@ -603,6 +662,7 @@
       .modal-overlay.active .modal-content {
         transform: translateY(0);
       }
+      /* --- 弹窗标题与副标题 --- */
       .modal-title {
         font-size: 14px;
         font-weight: 600;
@@ -620,6 +680,7 @@
         border-bottom: 1px solid var(--border-color);
         padding-bottom: 4px;
       }
+      /* --- 弹窗输入控件 --- */
       .modal-input {
         width: 100%;
         background-color: var(--input-bg);
@@ -631,6 +692,7 @@
         outline: none;
       }
 
+      /* --- 文件上传控件 --- */
       .file-upload-wrapper {
         position: relative;
         overflow: hidden;
@@ -657,6 +719,7 @@
         cursor: pointer;
       }
 
+      /* --- 弹窗操作按钮行 --- */
       .modal-actions {
         display: flex;
         gap: 10px;
@@ -701,7 +764,8 @@
         font-size: 11px;
       }
 
-      /* ====== 存档列表通用样式（聊天/字卡/主题存档共用） ====== */
+      /* ====== [CSS-TOC-12] 存档列表 ====== */
+      /* --- 存档列表容器 --- */
       .saves-list {
         display: flex;
         flex-direction: column;
@@ -712,6 +776,7 @@
       .saves-list::-webkit-scrollbar {
         width: 0;
       }
+      /* --- 单个存档项目 --- */
       .save-item {
         display: flex;
         justify-content: space-between;
@@ -720,6 +785,7 @@
         padding: 8px 10px;
         border-radius: 8px;
       }
+      /* --- 存档名称与时间信息 --- */
       .save-info {
         display: flex;
         flex-direction: column;
@@ -733,6 +799,7 @@
         font-size: 10px;
         color: var(--text-sub);
       }
+      /* --- 存档操作按钮 --- */
       .save-actions {
         display: flex;
         gap: 6px;
@@ -746,7 +813,8 @@
       }
 
       /* Settings & Word Card styles */
-      /* ====== 设置页列表项与开关控件样式 ====== */
+      /* ====== [CSS-TOC-13] 设置项与开关 ====== */
+      /* --- 设置项行 --- */
       .setting-item {
         display: flex;
         justify-content: space-between;
@@ -754,12 +822,14 @@
         padding: 12px 0;
         border-bottom: 1px solid var(--border-color);
       }
+      /* --- 设置项分隔线 --- */
       .setting-item-divider {
         padding-top: 4px;
         padding-bottom: 12px;
         margin-bottom: 2px;
         border-bottom: 1px solid var(--border-color);
       }
+      /* --- 设置项文字 --- */
       .setting-label {
         font-size: 13px;
         color: var(--text-main);
@@ -770,6 +840,7 @@
         color: var(--text-sub);
         cursor: pointer;
       }
+      /* --- 开关基础状态 --- */
       .toggle-switch {
         width: 36px;
         height: 20px;
@@ -791,6 +862,7 @@
         transition: transform 0.3s;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
+      /* --- 开关启用状态 --- */
       .toggle-switch.active {
         background: var(--text-main);
       }
@@ -799,7 +871,8 @@
       }
 
       /* Word Card filter bar */
-      /* ====== 字卡标签筛选栏样式 ====== */
+      /* ====== [CSS-TOC-14] 字卡筛选与管理 ====== */
+      /* --- 标签横向筛选栏 --- */
       .card-filter-bar {
         display: flex;
         overflow-x: auto;
@@ -812,6 +885,7 @@
       .card-filter-bar::-webkit-scrollbar {
         height: 0;
       }
+      /* --- 单个筛选标签 --- */
       .filter-tag {
         display: flex;
         align-items: center;
@@ -840,6 +914,8 @@
       }
 
       /* Tag Dropdown */
+      /* 标签下拉菜单 */
+      /* --- 标签下拉菜单 --- */
       .tag-dropdown {
         position: absolute;
         top: 90px;
@@ -858,6 +934,7 @@
       .tag-dropdown.active {
         display: flex;
       }
+      /* --- 下拉菜单项目 --- */
       .tag-dropdown-item {
         padding: 8px 12px;
         font-size: 12px;
@@ -869,7 +946,8 @@
       }
 
       /* Word Card Right Top Toolbar */
-      /* ====== 字卡管理顶部工具图标 ====== */
+      /* --- 字卡管理：顶部工具栏 --- */
+      /* --- 字卡顶部操作图标 --- */
       .card-top-icons {
         display: flex;
         gap: 10px;
@@ -887,7 +965,8 @@
       }
 
       /* Word Card List & Folders */
-      /* ====== 字卡列表/文件夹/单张卡片样式 ====== */
+      /* --- 字卡管理：列表、文件夹与单张字卡 --- */
+      /* --- 字卡列表滚动容器 --- */
       .card-list {
         flex: 1;
         overflow-y: auto;
@@ -900,9 +979,11 @@
         width: 0;
       }
 
+      /* --- 文件夹分组 --- */
       .folder-group {
         margin-bottom: 4px;
       }
+      /* --- 文件夹标题与展开状态 --- */
       .folder-header {
         display: flex;
         align-items: center;
@@ -933,6 +1014,7 @@
       .folder-title {
         flex: 1;
       }
+      /* --- 文件夹内容 --- */
       .folder-content {
         display: none;
         flex-direction: column;
@@ -944,6 +1026,7 @@
         display: flex;
       }
 
+      /* --- 单张字卡 --- */
       .card-item {
         display: flex;
         align-items: center;
@@ -966,6 +1049,7 @@
         border-color: var(--bg-color);
       }
 
+      /* --- 字卡内容与标签 --- */
       .card-content {
         flex: 1;
         display: flex;
@@ -1000,7 +1084,8 @@
       }
 
       /* Reply Frequency segmented control */
-      /* ====== 自动回复速度分段选择器样式 ====== */
+      /* ====== [CSS-TOC-15] 自动回复速度控件 ====== */
+      /* --- 回复速度分段按钮 --- */
       .freq-segmented {
         display: flex;
         width: 100%;
@@ -1029,6 +1114,7 @@
         color: var(--bg-color);
         font-weight: 600;
       }
+      /* --- 数值步进器 --- */
       .stepper {
         display: flex;
         align-items: center;
@@ -1072,14 +1158,16 @@
         background: var(--border-color);
       }
 
-      /* ====== Message read ticks ====== */
+      /* ====== [CSS-TOC-16] 消息已读状态 ====== */
       /* 消息已读状态勾选图标样式（2026-07-07 改动） */
+      /* --- 已读状态容器 --- */
       .msg-status {
         display: flex;
         justify-content: flex-end;
         padding: 2px 3px 0;
         height: 10px;
       }
+      /* --- 已读勾选图标 --- */
       .msg-ticks {
         color: var(--text-sub);
         opacity: 0.5;
@@ -1096,8 +1184,9 @@
         color: var(--text-main);
       }
 
-      /* ====== Playlist card ====== */
+      /* ====== [CSS-TOC-17] 音乐：歌单卡片与歌曲列表 ====== */
       /* 2026-07-07 歌单卡片列表 */
+      /* --- 歌单网格 --- */
       .playlist-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1115,6 +1204,7 @@
         display: none;
       }
       /* 歌单列表弹窗内的"在播列表"面板：向上展开，盖住歌单网格原本的位置，固定显示8首歌高度 */
+      /* --- 歌单弹窗内的迷你播放队列 --- */
       .mini-queue-panel {
         max-height: 0;
         opacity: 0;
@@ -1153,6 +1243,7 @@
       #miniQueueList .mi-queue-empty {
         color: var(--text-sub);
       }
+      /* --- 歌单卡片封面与标题 --- */
       .playlist-card {
         position: relative;
         aspect-ratio: 1; /* 正方形 */
@@ -1208,9 +1299,10 @@
         text-overflow: ellipsis;
       }
 
-      /* ====== Song rows (playlist detail) ====== */
+      /* --- 音乐：歌曲列表行 --- */
       /* 2026-07-12 重做：改为与 .card-item 一致的"圆角色块行"风格，
          而不是原来带分隔线的列表，与字卡/文件夹列表统一视觉语言 */
+      /* --- 歌曲列表行 --- */
       .song-row {
         display: flex;
         align-items: center;
@@ -1222,6 +1314,7 @@
         cursor: pointer;
         transition: background-color 0.2s;
       }
+      /* --- 正在播放状态 --- */
       .song-row.playing {
         background: var(--highlight-bg);
       }
@@ -1229,6 +1322,7 @@
         font-weight: 600;
       }
       /* 多选模式：不用勾选框，用深浅背景表示选中（与字卡 .card-item.selected 一致） */
+      /* --- 多选状态 --- */
       .song-row.selected {
         background-color: var(--text-sub);
       }
@@ -1241,6 +1335,7 @@
         background: var(--bg-color);
       }
       /* 序号 / 正在播放的迷你均衡器动画（呼应 .typing-dots 的拟真动效风格） */
+      /* --- 歌曲序号 / 播放指示器 --- */
       .song-row-index {
         flex-shrink: 0;
         width: 16px;
@@ -1255,6 +1350,7 @@
         color: var(--text-main);
       }
 
+      /* --- 迷你均衡器动画 --- */
       .song-row-eq {
         display: flex;
         align-items: flex-end;
@@ -1306,6 +1402,7 @@
         }
       }
 
+      /* --- 歌曲标题与艺术家信息 --- */
       .song-row-info {
         flex: 1;
         min-width: 0;
@@ -1326,6 +1423,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
+      /* --- 歌曲操作菜单按钮 --- */
       .song-row-menu-btn {
         background: none;
         border: none;
@@ -1342,7 +1440,9 @@
         background: var(--border-color);
       }
 
-      /* ====== Playlist detail modal ====== */
+      /* ====== [CSS-TOC-18] 音乐：歌单详情弹窗 ====== */
+      /* 歌单详情弹窗 */
+      /* --- 歌单详情弹窗容器 --- */
       .playlist-detail-content {
         position: relative;
         width: 280px !important; /* 统一宽度 */
@@ -1356,6 +1456,7 @@
         background-color: var(--bg-color);
       }
 
+      /* --- 歌单详情头部区域 --- */
       .playlist-detail-header {
         position: relative;
         min-height: 180px;
@@ -1363,6 +1464,7 @@
         cursor: pointer;
       }
 
+      /* --- 详情头部封面背景 --- */
       .playlist-detail-header-bg {
         /* old version, 2026-07-12
         position: absolute;
@@ -1386,6 +1488,7 @@
         z-index: 0;
       }
 
+      /* --- 封面渐变遮罩 --- */
       .playlist-detail-header-gradient {
         /* old version, 2026-07-12
         position: absolute;
@@ -1417,6 +1520,7 @@
         z-index: 1;
       }
 
+      /* --- 歌单标题与歌曲数量 --- */
       .playlist-detail-header-info {
         position: absolute;
         bottom: 0;
@@ -1443,6 +1547,7 @@
         text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
       }
 
+      /* --- 歌曲滚动列表 --- */
       .playlist-detail-songs {
         flex: 1;
         overflow-y: auto;
@@ -1460,6 +1565,7 @@
       }
 
       /* 沉底的主按钮行：Back + Play All + More，同一行 */
+      /* --- 底部主操作栏 --- */
       .playlist-detail-bottom-bar {
         display: flex;
         align-items: stretch;
@@ -1467,6 +1573,7 @@
         margin: 0px 15px 15px;
         flex-shrink: 0;
       }
+      /* --- Play All 主按钮 --- */
       .playlist-detail-play-all {
         flex: 1;
         min-width: 0;
@@ -1489,6 +1596,7 @@
         border-color: var(--text-sub);
       }
       /* Back 和 More 共用同一套圆形图标按钮样式，分别放在这一行的左右两端 */
+      /* --- Back / Cover / More 圆形操作按钮 --- */
       .playlist-detail-back-btn,
       .playlist-detail-cover-btn,
       .playlist-detail-more-btn {
@@ -1513,6 +1621,7 @@
       }
 
       /* 多选栏：顶部显示已选数量，底部一行操作按钮 */
+      /* --- 多选模式操作栏 --- */
       .playlist-detail-select-bar {
         display: none;
         flex-direction: column;
@@ -1526,6 +1635,7 @@
         display: flex;
       }
 
+      /* --- 已选数量 --- */
       .playlist-select-bar-count {
         font-size: 13px;
         font-weight: 600;
@@ -1533,6 +1643,7 @@
         text-align: center;
       }
 
+      /* --- 多选操作按钮 --- */
       .playlist-select-bar-actions {
         display: flex;
         gap: 8px;
@@ -1559,7 +1670,8 @@
         border-color: rgba(229, 57, 53, 0.35);
       }
 
-      /* Dropdown menus (playlist / song) */
+      /* ====== [CSS-TOC-19] 音乐：下拉菜单与播放模式 ====== */
+      /* --- 音乐下拉菜单：统一竖排菜单与上下展开动画 --- */
       /* 2026-07-12 重做：统一改为普通竖排（列）菜单，不再用横向图标胶囊；
          用 .expand-up 区分"从下往上展开"还是默认的"从上往下展开" */
       .music-dropdown {
@@ -1605,6 +1717,7 @@
           transform: scale(1) translateY(0);
         }
       }
+      /* --- 下拉菜单项目 --- */
       .music-dropdown-item {
         padding: 10px 14px;
         font-size: 12px;
@@ -1620,6 +1733,7 @@
       .music-dropdown-item.danger {
         color: #e53935;
       }
+      /* --- 播放模式按钮 --- */
       .play-mode-btn {
         cursor: pointer;
         display: flex;
@@ -1635,7 +1749,8 @@
       }
 
       /* Font card */
-      /* ====== 字体卡片样式（横向滑动列表用） ====== */
+      /* ====== [CSS-TOC-20] 字体管理 ====== */
+      /* --- 字体卡片基础状态 --- */
       .font-card {
         position: relative;
         flex-shrink: 0;
@@ -1663,6 +1778,7 @@
       .font-card.active .font-card-check {
         display: block;
       }
+      /* --- 字体预览区域 --- */
       .font-card-preview {
         font-size: 20px;
         color: var(--text-main);
@@ -1676,6 +1792,7 @@
         padding-bottom: 6px;
         border-bottom: 1px solid var(--border-color);
       }
+      /* --- 字体名称 --- */
       .font-card-name {
         font-size: 10px;
         color: var(--text-sub);
@@ -1684,6 +1801,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+      /* --- 字体删除按钮 --- */
       .font-card-delete {
         position: absolute;
         bottom: 2px;
@@ -1696,10 +1814,11 @@
         color: var(--text-main);
       }
 
-      /* ====== Music Dynamic Island Styles ====== */
+      /* ====== [CSS-TOC-21] 音乐模块：Dynamic Island ====== */
+      /* 功能：收起态灵动岛、展开面板、播放控制、进度条、队列与歌单切换 */
       /* Optimized & Reorganized Date: 2026-07-20 */
 
-      /* 1. Base Island (基础容器) */
+      /* --- 1. 基础容器与激活状态 --- */
       .music-island {
         position: absolute;
         top: 10px;
@@ -1711,8 +1830,8 @@
           --music-island-bg,
           rgba(0, 0, 0, 0.85)
         ); /* 增加默认后备颜色 */
-        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
         color: var(--music-island-text, #fff);
         z-index: 90;
 
@@ -1761,7 +1880,7 @@
         display: none;
       }
 
-      /* 2. Collapsed State (收起态: 跑马灯与唱片) */
+      /* --- 2. 收起态：唱片、跑马灯与底部进度条 --- */
       .mi-row {
         display: flex;
         align-items: center;
@@ -1917,7 +2036,7 @@
         opacity: 0;
       }
 
-      /* 3. Expanded State (展开态: 封面与控制面板) */
+      /* --- 3. 展开态：封面、歌曲信息与控制区域 --- */
       .mi-expand {
         max-height: 0;
         opacity: 0;
@@ -2019,7 +2138,7 @@
         justify-content: flex-end;
       }
 
-      /* 4. Progress Bar & Controls (进度条与按钮) */
+      /* --- 4. 进度条与播放控制 --- */
       .progress-bar {
         position: relative;
         width: 100%;
@@ -2047,7 +2166,7 @@
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background: var(--text-main);
+        background: var(--text-sub);
         transform: translate(-50%, -50%);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
         opacity: 0;
@@ -2112,7 +2231,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--text-sub);
+        color: var(--text-main);
         padding: 4px;
         border-radius: 6px;
         flex-shrink: 0;
@@ -2173,7 +2292,7 @@
         color: var(--text-main);
       }
 
-      /* 5. Sub-panels & Utilities (子面板与工具) */
+      /* --- 5. 子面板与播放队列 --- */
       .mi-sub-panel {
         max-height: 0;
         opacity: 0;
@@ -2227,7 +2346,8 @@
         background: var(--highlight-bg);
       }
 
-      /* 6. Mini Bar in Modal (歌单弹窗底部迷你播放条) */
+      /* ====== [CSS-TOC-22] 音乐模块：Mini Bar ====== */
+      /* --- 歌单弹窗底部迷你播放条 --- */
 
       /* 进度条在弹窗表面 (Surface) 上的颜色反转适配 */
       .progress-bar.on-surface {
@@ -2280,7 +2400,8 @@
         margin-bottom: 1px;
       }
 
-      /* Toast 轻提示 */
+      /* ====== [CSS-TOC-23] 音乐模块：Toast ====== */
+      /* --- Toast 轻提示 --- */
       .mp-toast {
         position: absolute;
         top: 54px;
@@ -2308,8 +2429,8 @@
         transform: translateX(-50%) translateY(0);
       }
 
-      /* Typing indicator animation */
-      /* ====== “对方正在输入...”动画样式 ====== */
+      /* ====== [CSS-TOC-24] 正在输入动画 ====== */
+      /* --- “对方正在输入...”动画 --- */
       .typing-dots {
         display: flex;
         gap: 4px;
@@ -2344,7 +2465,7 @@
         }
       }
 
-      /* ====== CSS全屏编辑器文本框样式 ====== */
+      /* ====== [CSS-TOC-25] CSS 全屏编辑器 ====== */
       .css-expand-textarea {
         flex: 1;
         width: 100%;
@@ -2359,8 +2480,572 @@
         resize: none;
         box-sizing: border-box;
       }
+
+      /* ====== [CSS-TOC-26] HTML 内联样式抽离：通用工具 ====== */
+      /* 静态 HTML 内联样式集中管理；动态 JS .style 写入保持不变。 */
+      .inline-element-26-e7ff40 {
+        font-size: 11px;
+        color: var(--text-sub);
+      }
+
+      /* ====== [CSS-TOC-27] HTML 内联样式抽离：数据/设置/字卡 ====== */
+      .inline-datamodal-27-c1684a {
+        z-index: 110;
+      }
+      .inline-modal-subtitle-27-8f3066 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .inline-element-27-3bb9ab {
+        cursor: pointer;
+        color: var(--text-main);
+      }
+      .inline-modal-actions-27-18125b {
+        flex-direction: column;
+      }
+      .inline-modal-btn-27-16000c {
+        width: 100%;
+      }
+      .inline-savenamemodal-27-37541c {
+        z-index: 120;
+      }
+      .inline-proactivedetails-27-496eb5 {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        padding: 4px 0 8px;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 4px;
+      }
+      .inline-element-27-4cef96 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .inline-setting-label-27-11fcdc {
+        font-size: 12px;
+      }
+      .inline-modal-btn-27-cb2102 {
+        width: 100%;
+        font-size: 12px;
+      }
+      .inline-setting-item-27-6133bb {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .inline-modal-actions-27-c0e2fd {
+        margin-top: 15px;
+      }
+      .inline-modal-content-27-24174d {
+        width: 320px;
+        height: 80%;
+        padding: 15px;
+      }
+      .inline-element-27-f2f24f {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        flex-shrink: 0;
+      }
+      .inline-element-27-5a761c {
+        cursor: pointer;
+        color: var(--icon-color);
+      }
+      .inline-modal-title-27-6ddff6 {
+        margin: 0;
+        flex: 1;
+        text-align: left;
+        padding-left: 10px;
+        cursor: pointer;
+      }
+      .inline-icon-tag-27-5790ff {
+        display: none;
+      }
+      .inline-sleek-actions-27-5fbdc8 {
+        display: flex;
+        margin-top: 10px;
+        flex-shrink: 0;
+      }
+      .inline-newcardinput-27-ff0354 {
+        flex: 1;
+        padding: 6px;
+      }
+      .inline-tagpromptmodal-27-6bd154 {
+        z-index: 130;
+      }
+      .inline-modal-content-27-84691b {
+        width: 240px;
+      }
+      .inline-quicktaglist-27-509aa5 {
+        max-height: 100px;
+        margin-top: 5px;
+      }
+      .inline-element-27-387836 {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+      }
+      .inline-savecardnamemodal-27-487297 {
+        z-index: 140;
+      }
+      .inline-setting-label-27-e7ff40 {
+        font-size: 11px;
+        color: var(--text-sub);
+      }
+
+      /* ====== [CSS-TOC-28] HTML 内联样式抽离：主题与 CSS 编辑器 ====== */
+      .inline-thememodal-28-add77b {
+        z-index: 160;
+      }
+      .inline-modal-content-28-6ec229 {
+        width: 320px;
+        max-height: 80%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .inline-element-28-d6231f {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 16px 0;
+      }
+      .inline-modal-subtitle-28-11fff8 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+      }
+      .inline-element-28-3b43fe {
+        cursor: pointer;
+        color: var(--text-main);
+        font-size: 11px;
+      }
+      .inline-themesaveslist-28-6b00b4 {
+        max-height: 100px;
+      }
+      .inline-modal-actions-28-a5595d {
+        margin-top: 6px;
+      }
+      .inline-file-upload-wrapper-28-634a28 {
+        flex: 1;
+      }
+      .inline-modal-subtitle-28-4bb900 {
+        margin-top: 12px;
+      }
+      .inline-element-28-83f360 {
+        font-size: 10px;
+        color: var(--text-sub);
+        margin-bottom: 6px;
+      }
+      .inline-element-28-a8a903 {
+        position: relative;
+      }
+      .inline-themecustomcss-28-41dd52 {
+        width: 100%;
+        height: 80px;
+        resize: none;
+        font-family: monospace;
+        font-size: 11px;
+        line-height: 1.5;
+        padding: 8px;
+        box-sizing: border-box;
+        display: block;
+      }
+      .inline-element-28-d929b2 {
+        position: absolute;
+        bottom: 6px;
+        right: 6px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-sub);
+        padding: 2px;
+        display: flex;
+        align-items: center;
+      }
+      .inline-modal-actions-28-6b1f0d {
+        margin-top: 4px;
+      }
+      .inline-element-28-435550 {
+        font-size: 10px;
+      }
+      .inline-themebubblecss-28-c43669 {
+        width: 100%;
+        height: 72px;
+        resize: none;
+        font-family: monospace;
+        font-size: 11px;
+        line-height: 1.5;
+        padding: 8px;
+        box-sizing: border-box;
+        display: block;
+      }
+      .inline-modal-subtitle-28-77fdf4 {
+        margin-top: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .inline-fontlist-28-924a93 {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 4px 2px 8px;
+        margin-bottom: 4px;
+      }
+      .inline-element-28-f4f4fe {
+        display: flex;
+        gap: 10px;
+        margin-top: 4px;
+        padding-top: 5px;
+      }
+      .inline-element-28-514f8d {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .inline-element-28-6a28c5 {
+        padding: 12px 16px;
+        border-top: 1px solid var(--border-color);
+        flex-shrink: 0;
+        background: var(--bg-color);
+      }
+      .inline-modal-btn-28-16000c {
+        width: 100%;
+      }
+      .inline-cssexpandmodal-28-ff6e6b {
+        z-index: 180;
+        align-items: stretch;
+        justify-content: stretch;
+        padding: 0;
+      }
+      .inline-element-28-24b1fe {
+        width: 100%;
+        height: 100%;
+        background: var(--bg-color);
+        display: flex;
+        flex-direction: column;
+      }
+      .inline-element-28-9e719d {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border-color);
+        flex-shrink: 0;
+      }
+      .inline-cssexpandtitle-28-f544a6 {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+      .inline-cssexpandsavebtn-28-fddb15 {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+      }
+      .inline-savethememodal-28-8f8f84 {
+        z-index: 170;
+      }
+      .inline-modal-content-28-84691b {
+        width: 240px;
+      }
+      .inline-modal-content-28-8a2624 {
+        width: 270px;
+      }
+      .inline-fontnameinput-28-16949d {
+        margin-bottom: 8px;
+      }
+      .inline-fonturlinput-28-e7b130 {
+        margin-bottom: 6px;
+      }
+      .inline-element-28-c3cb9b {
+        text-align: center;
+        font-size: 10px;
+        color: var(--text-sub);
+        margin-bottom: 6px;
+      }
+      .inline-modal-actions-28-e5a6d3 {
+        margin-top: 10px;
+      }
+      .inline-renamefontmodal-28-3f831d {
+        z-index: 180;
+      }
+      .inline-element-28-38abd7 {
+        font-size: 12px;
+        text-align: center;
+        color: var(--text-sub);
+      }
+
+      /* ====== [CSS-TOC-29] HTML 内联样式抽离：音乐 ====== */
+      .inline-mivinyl-29-5790ff {
+        display: none;
+      }
+      .inline-musiclistmodal-29-37541c {
+        z-index: 120;
+      }
+      .inline-modal-title-29-d78e0a {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      .inline-modal-title-29-6ddff6 {
+        margin: 0;
+        flex: 1;
+        text-align: left;
+        padding-left: 10px;
+        cursor: pointer;
+      }
+      .inline-element-29-9f9502 {
+        display: flex;
+        gap: 14px;
+      }
+      .inline-element-29-74fa97 {
+        cursor: pointer;
+      }
+      .inline-element-29-2c0002 {
+        margin: 0 0 6px;
+      }
+      .inline-musiclinkmodal-29-6bd154 {
+        z-index: 130;
+      }
+      .inline-modal-subtitle-29-0d69e4 {
+        margin-top: 8px;
+      }
+      .inline-musiclinkplaylistcheckboxes-29-2808ec {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-height: 100px;
+        overflow-y: auto;
+      }
+      .inline-element-29-fdd496 {
+        vertical-align: -2px;
+        margin-right: 6px;
+      }
+      .inline-playlistcovermodal-29-487297 {
+        z-index: 140;
+      }
+      .inline-element-29-e65d40 {
+        text-align: center;
+        font-size: 10px;
+        color: var(--text-sub);
+      }
+      .inline-addtoplaylistlist-29-07040e {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-height: 180px;
+        overflow-y: auto;
+      }
+      .inline-element-29-38abd7 {
+        font-size: 12px;
+        text-align: center;
+        color: var(--text-sub);
+      }
+
+      /* ====== [CSS-TOC-30] HTML 内联样式抽离：弹窗尺寸与层级 ====== */
+      .inline-element-30-e65d40 {
+        text-align: center;
+        font-size: 10px;
+        color: var(--text-sub);
+      }
+      .inline-confirmclearmodal-30-37541c {
+        z-index: 120;
+      }
+      .inline-element-30-38abd7 {
+        font-size: 12px;
+        text-align: center;
+        color: var(--text-sub);
+      }
+      .inline-alertmodal-30-bc1ff5 {
+        z-index: 300;
+      }
+      .inline-modal-content-30-30080b {
+        width: 220px;
+      }
+      .inline-modal-title-30-39ae4d {
+        margin-bottom: 10px;
+      }
+      .inline-alertmessage-30-870bb2 {
+        font-size: 12px;
+        text-align: center;
+        color: var(--text-sub);
+        margin-bottom: 10px;
+      }
+      .inline-file-upload-btn-30-c570c3 {
+        padding: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .inline-element-30-c1003c {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      /* ====== [CSS-TOC-31] Char Setting：角色信息表与头像设置 ====== */
+      /* --- Char Setting 弹窗尺寸：与 Theme Modal 保持一致 --- */
+      .char-setting-modal-content {
+        width: 320px;
+        max-height: 80%;
+        padding: 16px;
+      }
+
+      /* --- 第一行：头像预览 + URL / 本地上传 / Reset --- */
+      .char-setting-avatar-row {
+        display: grid;
+        grid-template-columns: 76px minmax(0, 1fr);
+        gap: 12px;
+        align-items: center;
+      }
+      .char-setting-avatar-preview {
+        width: 76px;
+        height: 76px;
+        border-radius: 12px;
+        background-color: var(--input-bg);
+        background-size: cover;
+        background-position: center;
+        border: 1px solid var(--border-color);
+      }
+      .char-setting-avatar-tools {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .char-setting-avatar-file-row {
+        display: grid;
+        grid-template-columns: 7fr 3fr;
+        gap: 6px;
+      }
+      .char-setting-upload-btn,
+      .char-setting-reset-btn {
+        width: 100%;
+        background-color: var(--input-bg);
+        color: var(--text-main);
+        border-radius: 8px;
+        padding: 9px 6px;
+        font-size: 11px;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        border: 1px dashed var(--text-sub);
+      }
+      .char-setting-reset-btn {
+        border-style: solid;
+        color: var(--text-sub);
+      }
+      .char-setting-upload-btn input[type="file"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      /* --- 第二行：角色资料表单 --- */
+      .char-setting-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .char-setting-section-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--text-sub);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 5px;
+      }
+      .char-setting-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .char-setting-field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        min-width: 0;
+      }
+      .char-setting-field.full {
+        grid-column: 1 / -1;
+      }
+      .char-setting-field label {
+        font-size: 10px;
+        color: var(--text-sub);
+        font-weight: 600;
+      }
+      .char-setting-field input,
+      .char-setting-field textarea {
+        width: 100%;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--input-bg);
+        color: var(--text-main);
+        outline: none;
+        padding: 8px 9px;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .char-setting-field textarea {
+        min-height: 80px;
+        resize: none;
+        font-family: monospace;
+        font-size: 11px;
+        line-height: 1.5;
+      }
+      .char-setting-field input:focus,
+      .char-setting-field textarea:focus,
+      .char-setting-avatar-tools .modal-input:focus {
+        border-color: var(--text-sub);
+      }
+      .char-setting-description-wrap {
+        position: relative;
+      }
+      .char-setting-description-wrap textarea {
+        padding-right: 34px;
+      }
+      .char-setting-expand-btn {
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-sub);
+        padding: 2px;
+        display: flex;
+        align-items: center;
+      }
+
+      @media (max-width: 360px) {
+        .char-setting-grid {
+          grid-template-columns: 1fr;
+        }
+        .char-setting-field.full {
+          grid-column: auto;
+        }
+      }
+
+      /* ====== [CSS-TOC-32] Char Setting：长文本展开编辑器 ====== */
+      /* 功能：Description 复用 Theme Modal 的 Custom CSS / Bubble CSS 全屏展开编辑器 */
     </style>
   </head>
+
   <!-- ====== 页面主体 ====== -->
   <body>
     <div class="phone-container" id="phoneContainer">
@@ -2433,7 +3118,7 @@
         <!-- 收起态：单击打开歌单列表；长按展开快捷面板 -->
         <div class="mi-row" id="musicIslandRow">
           <div class="music-island-icon" id="musicIslandIconWrap">
-            <div class="mi-vinyl" id="miVinyl" style="display: none">
+            <div class="mi-vinyl inline-mivinyl-29-5790ff" id="miVinyl">
               <img id="miVinylImg" src="" alt="Album Cover" />
               <span class="mi-vinyl-hole"></span>
             </div>
@@ -2459,9 +3144,8 @@
                 >No music added yet</span
               >
               <span
-                class="music-title-copy"
+                class="music-title-copy inline-mivinyl-29-5790ff"
                 id="musicTitleCopy2"
-                style="display: none"
                 >No music added yet</span
               >
             </div>
@@ -2643,7 +3327,7 @@
         </div>
       </div>
 
-      <audio id="bgAudio" style="display: none"></audio>
+      <audio id="bgAudio" class="inline-mivinyl-29-5790ff"></audio>
       <div class="mp-toast" id="mpToast"></div>
 
       <!-- 聊天消息滚动区域：所有消息气泡/时间戳/撤回提示都渲染在这里 -->
@@ -2782,59 +3466,134 @@
       </footer>
 
       <!-- Modals -->
-      <!-- 弹窗：头像设置（本地上传 / 网络URL） -->
-      <div class="modal-overlay" id="avatarModal">
-        <div class="modal-content">
-          <div class="modal-title">Change Avatar</div>
-          <input
-            type="text"
-            class="modal-input"
-            id="avatarUrl"
-            placeholder="Paste image URL here..." />
-          <div
-            style="text-align: center; font-size: 10px; color: var(--text-sub)">
-            OR
+
+      <!-- ====== [HTML-TOC-31] Char Setting Modal ====== -->
+      <!-- 功能：统一管理 Char 的头像与长期角色资料 -->
+      <div class="modal-overlay" id="charSettingModal">
+        <div class="modal-content char-setting-modal-content">
+          <div class="modal-title">Char Setting</div>
+
+          <!-- 第一行：头像预览、图片 URL、本地图片与 Reset -->
+          <div class="char-setting-avatar-row">
+            <div
+              class="char-setting-avatar-preview"
+              id="charAvatarPreview"></div>
+            <div class="char-setting-avatar-tools">
+              <input
+                type="text"
+                class="modal-input"
+                id="charAvatarUrl"
+                placeholder="Image URL..."
+                autocomplete="off" />
+              <div class="char-setting-avatar-file-row">
+                <label class="char-setting-upload-btn">
+                  Upload from device
+                  <input
+                    type="file"
+                    id="charAvatarFile"
+                    accept="image/*"
+                    title="Upload Image" />
+                </label>
+                <button
+                  type="button"
+                  class="char-setting-reset-btn"
+                  id="charAvatarResetBtn">
+                  Reset
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="file-upload-wrapper">
-            <div class="file-upload-btn">Upload from device</div>
-            <input
-              type="file"
-              id="avatarFile"
-              accept="image/*"
-              title="Upload Image"
-              onchange="
-                if (this.files[0]) {
-                  saveAvatar();
-                }
-              " />
+
+          <!-- 第二行：固定角色资料字段；后续功能直接调用 state.charProfile -->
+          <div class="char-setting-form">
+            <div class="char-setting-section-label">Character Information</div>
+            <div class="char-setting-grid">
+              <div class="char-setting-field">
+                <label for="charNameInput">Name</label>
+                <input
+                  type="text"
+                  id="charNameInput"
+                  placeholder="Character name"
+                  autocomplete="off" />
+              </div>
+              <div class="char-setting-field">
+                <label for="charAgeInput">Age</label>
+                <input
+                  type="text"
+                  id="charAgeInput"
+                  placeholder="Age"
+                  autocomplete="off" />
+              </div>
+              <div class="char-setting-field">
+                <label for="charGenderInput">Gender</label>
+                <input
+                  type="text"
+                  id="charGenderInput"
+                  placeholder="Gender"
+                  autocomplete="off" />
+              </div>
+              <div class="char-setting-field">
+                <label for="charHeightInput">Height</label>
+                <input
+                  type="text"
+                  id="charHeightInput"
+                  placeholder="Height"
+                  autocomplete="off" />
+              </div>
+              <div class="char-setting-field">
+                <label for="charBirthInput">Birth</label>
+                <input
+                  type="text"
+                  id="charBirthInput"
+                  placeholder="Birthday / birth date"
+                  autocomplete="off" />
+              </div>
+              <div class="char-setting-field">
+                <label for="charIdentityInput">Identity</label>
+                <input
+                  type="text"
+                  id="charIdentityInput"
+                  placeholder="Occupation / identity"
+                  autocomplete="off" />
+              </div>
+              <div class="char-setting-field full">
+                <label for="charDescriptionInput">Description</label>
+                <div class="char-setting-description-wrap">
+                  <textarea
+                    id="charDescriptionInput"
+                    placeholder="Basic character description..."></textarea>
+                  <button
+                    type="button"
+                    class="char-setting-expand-btn"
+                    onclick="
+                      openCSSExpand('charDescriptionInput', 'Description', null)
+                    "
+                    title="Expand">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2">
+                      <polyline points="15 3 21 3 21 9" />
+                      <polyline points="9 21 3 21 3 15" />
+                      <line x1="21" y1="3" x2="14" y2="10" />
+                      <line x1="3" y1="21" x2="10" y2="14" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
+
           <div class="modal-actions">
             <button
               class="modal-btn btn-cancel"
-              onclick="closeModal('avatarModal')">
-              Cancel</button
-            ><button class="modal-btn btn-save" onclick="saveAvatar()">
-              Save
+              onclick="closeModal('charSettingModal')">
+              Cancel
             </button>
-          </div>
-        </div>
-      </div>
-      <!-- 弹窗：用户昵称设置 -->
-      <div class="modal-overlay" id="nameModal">
-        <div class="modal-content">
-          <div class="modal-title">Change Name</div>
-          <input
-            type="text"
-            class="modal-input"
-            id="nameInput"
-            placeholder="Enter new name..."
-            autocomplete="off" />
-          <div class="modal-actions">
-            <button
-              class="modal-btn btn-cancel"
-              onclick="closeModal('nameModal')">
-              Cancel</button
-            ><button class="modal-btn btn-save" onclick="saveName()">
+            <button class="modal-btn btn-save" onclick="saveCharSettings()">
               Save
             </button>
           </div>
@@ -2864,21 +3623,13 @@
 
       <!-- Data management modal -->
       <!-- 弹窗：聊天存档管理（存档列表/加载/删除/导出/清空） -->
-      <div class="modal-overlay" id="dataModal" style="z-index: 110">
+      <div class="modal-overlay inline-datamodal-27-c1684a" id="dataModal">
         <div class="modal-content">
           <div class="modal-title">Data Management</div>
 
-          <div
-            class="modal-subtitle"
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-            ">
+          <div class="modal-subtitle inline-modal-subtitle-27-8f3066">
             <span>Saves</span>
-            <span
-              style="cursor: pointer; color: var(--text-main)"
-              onclick="openSaveNameModal()"
+            <span onclick="openSaveNameModal()" class="inline-element-27-3bb9ab"
               >+ Save Current</span
             >
           </div>
@@ -2896,8 +3647,7 @@
 
           <div class="modal-subtitle">Danger Zone</div>
           <div
-            class="modal-actions sleek-actions"
-            style="flex-direction: column">
+            class="modal-actions sleek-actions inline-modal-actions-27-18125b">
             <button class="modal-btn btn-danger" onclick="openConfirmClear()">
               Clear Chat
             </button>
@@ -2908,9 +3658,8 @@
 
           <div class="modal-actions">
             <button
-              class="modal-btn btn-save"
-              onclick="closeModal('dataModal')"
-              style="width: 100%">
+              class="modal-btn btn-save inline-modal-btn-27-16000c"
+              onclick="closeModal('dataModal')">
               Done
             </button>
           </div>
@@ -2919,7 +3668,9 @@
 
       <!-- Save name modal -->
       <!-- 弹窗：聊天存档命名 -->
-      <div class="modal-overlay" id="saveNameModal" style="z-index: 120">
+      <div
+        class="modal-overlay inline-savenamemodal-27-37541c"
+        id="saveNameModal">
         <div class="modal-content">
           <div class="modal-title">Name Your Save</div>
           <input
@@ -2947,11 +3698,12 @@
 
       <!-- Confirm clear chat modal -->
       <!-- 弹窗：清空当前聊天 二次确认 -->
-      <div class="modal-overlay" id="confirmClearModal" style="z-index: 120">
+      <div
+        class="modal-overlay inline-confirmclearmodal-30-37541c"
+        id="confirmClearModal">
         <div class="modal-content">
           <div class="modal-title">Clear Chat?</div>
-          <div
-            style="font-size: 12px; text-align: center; color: var(--text-sub)">
+          <div class="inline-element-30-38abd7">
             This will remove all messages from the current screen. Saves will
             not be deleted.
           </div>
@@ -2970,11 +3722,12 @@
 
       <!-- Confirm reset modal -->
       <!-- 弹窗：重置全部数据 二次确认 -->
-      <div class="modal-overlay" id="confirmResetModal" style="z-index: 120">
+      <div
+        class="modal-overlay inline-confirmclearmodal-30-37541c"
+        id="confirmResetModal">
         <div class="modal-content">
           <div class="modal-title">Reset All Data?</div>
-          <div
-            style="font-size: 12px; text-align: center; color: var(--text-sub)">
+          <div class="inline-element-30-38abd7">
             This will permanently delete everything including settings, avatars,
             and all saves.
           </div>
@@ -2993,7 +3746,7 @@
 
       <!-- Settings modal -->
       <!-- 弹窗：设置（已读不回开关、自动回复速度、字卡数量统计入口） -->
-      <div class="modal-overlay" id="settingsModal" style="z-index: 110">
+      <div class="modal-overlay inline-datamodal-27-c1684a" id="settingsModal">
         <div class="modal-content">
           <div class="modal-title">Chat Settings</div>
           <div class="setting-item">
@@ -3003,23 +3756,9 @@
               id="proactiveToggle"
               onclick="toggleProactiveMessages()"></div>
           </div>
-          <div
-            id="proactiveDetails"
-            style="
-              display: none;
-              flex-direction: column;
-              gap: 10px;
-              padding: 4px 0 8px;
-              border-bottom: 1px solid var(--border-color);
-              margin-bottom: 4px;
-            ">
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-              ">
-              <span class="setting-label" style="font-size: 12px"
+          <div id="proactiveDetails" class="inline-proactivedetails-27-496eb5">
+            <div class="inline-element-27-4cef96">
+              <span class="setting-label inline-setting-label-27-11fcdc"
                 >Check every (seconds)</span
               >
               <div class="stepper">
@@ -3060,13 +3799,8 @@
                 </div>
               </div>
             </div>
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-              ">
-              <span class="setting-label" style="font-size: 12px"
+            <div class="inline-element-27-4cef96">
+              <span class="setting-label inline-setting-label-27-11fcdc"
                 >Background Notifications</span
               >
               <div
@@ -3075,8 +3809,7 @@
                 onclick="toggleProactiveNotify()"></div>
             </div>
             <button
-              class="modal-btn btn-cancel"
-              style="width: 100%; font-size: 12px"
+              class="modal-btn btn-cancel inline-modal-btn-27-cb2102"
               onclick="testProactiveNotification()">
               Test Notification
             </button>
@@ -3088,9 +3821,7 @@
               id="readNoReplyToggle"
               onclick="toggleReadNoReply()"></div>
           </div>
-          <div
-            class="setting-item"
-            style="flex-direction: column; align-items: flex-start; gap: 8px">
+          <div class="setting-item inline-setting-item-27-6133bb">
             <span class="setting-label">Reply Frequency</span>
             <div class="freq-segmented" id="replyFreqSegmented">
               <button
@@ -3134,11 +3865,10 @@
               >0 Active ⟩</span
             >
           </div>
-          <div class="modal-actions" style="margin-top: 15px">
+          <div class="modal-actions inline-modal-actions-27-c0e2fd">
             <button
-              class="modal-btn btn-save"
-              onclick="closeModal('settingsModal')"
-              style="width: 100%">
+              class="modal-btn btn-save inline-modal-btn-27-16000c"
+              onclick="closeModal('settingsModal')">
               Done
             </button>
           </div>
@@ -3147,19 +3877,12 @@
 
       <!-- Word card library modal -->
       <!-- 弹窗：字卡（自动回复语料）管理，含标签筛选栏与字卡列表 -->
-      <div class="modal-overlay" id="wordCardModal" style="z-index: 120">
-        <div
-          class="modal-content"
-          style="width: 320px; height: 80%; padding: 15px">
+      <div
+        class="modal-overlay inline-savenamemodal-27-37541c"
+        id="wordCardModal">
+        <div class="modal-content inline-modal-content-27-24174d">
           <!-- Header: Back Btn, Title, Top Icons -->
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              margin-bottom: 12px;
-              flex-shrink: 0;
-            ">
+          <div class="inline-element-27-f2f24f">
             <!-- Back Button -->
             <svg
               width="20"
@@ -3168,20 +3891,13 @@
               fill="none"
               stroke="currentColor"
               stroke-width="2"
-              style="cursor: pointer; color: var(--icon-color)"
-              onclick="backToSettings()">
+              onclick="backToSettings()"
+              class="inline-element-27-5a761c">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
 
             <div
-              class="modal-title"
-              style="
-                margin: 0;
-                flex: 1;
-                text-align: left;
-                padding-left: 10px;
-                cursor: pointer;
-              "
+              class="modal-title inline-modal-title-27-6ddff6"
               onclick="scrollToTagStart()"
               title="Scroll to All">
               Word Cards
@@ -3192,13 +3908,13 @@
               <!-- Tag Batch -->
               <svg
                 id="icon-tag"
-                style="display: none"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
                 onclick="batchTagCards()"
-                title="Batch Tag">
+                title="Batch Tag"
+                class="inline-icon-tag-27-5790ff">
                 <path
                   d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
                 <line x1="7" y1="7" x2="7.01" y2="7"></line>
@@ -3206,13 +3922,13 @@
               <!-- Delete Batch -->
               <svg
                 id="icon-delete"
-                style="display: none"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
                 onclick="batchDeleteCards()"
-                title="Delete Selected">
+                title="Delete Selected"
+                class="inline-icon-tag-27-5790ff">
                 <polyline points="3 6 5 6 21 6"></polyline>
                 <path
                   d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -3220,13 +3936,13 @@
               <!-- Select All Batch -->
               <svg
                 id="icon-select-all"
-                style="display: none"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
                 onclick="selectAllCards()"
-                title="Select All">
+                title="Select All"
+                class="inline-icon-tag-27-5790ff">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="8 12 11 15 16 9"></polyline>
               </svg>
@@ -3289,8 +4005,8 @@
                 type="file"
                 id="importCardFile"
                 accept=".txt"
-                style="display: none"
-                onchange="handleImportCards(event)" />
+                onchange="handleImportCards(event)"
+                class="inline-icon-tag-27-5790ff" />
             </div>
           </div>
 
@@ -3304,15 +4020,12 @@
           <div class="card-list" id="cardList"></div>
 
           <!-- Add card input bar -->
-          <div
-            class="sleek-actions"
-            style="display: flex; margin-top: 10px; flex-shrink: 0">
+          <div class="sleek-actions inline-sleek-actions-27-5fbdc8">
             <input
               type="text"
-              class="modal-input"
+              class="modal-input inline-newcardinput-27-ff0354"
               id="newCardInput"
               placeholder="Add new card..."
-              style="flex: 1; padding: 6px"
               onkeydown="
                 if (event.key === 'Enter' && !event.isComposing) addWordCard();
               " />
@@ -3325,8 +4038,10 @@
 
       <!-- Batch tag modal -->
       <!-- 弹窗：批量打标签（含已有标签快速选择列表） -->
-      <div class="modal-overlay" id="tagPromptModal" style="z-index: 130">
-        <div class="modal-content" style="width: 240px">
+      <div
+        class="modal-overlay inline-tagpromptmodal-27-6bd154"
+        id="tagPromptModal">
+        <div class="modal-content inline-modal-content-27-84691b">
           <div class="modal-title">Set Tag</div>
           <input
             type="text"
@@ -3339,9 +4054,8 @@
                 confirmBatchTag();
             " />
           <div
-            class="saves-list"
-            id="quickTagList"
-            style="max-height: 100px; margin-top: 5px"></div>
+            class="saves-list inline-quicktaglist-27-509aa5"
+            id="quickTagList"></div>
           <div class="modal-actions sleek-actions">
             <button
               class="modal-btn btn-cancel"
@@ -3357,8 +4071,10 @@
 
       <!-- Add custom tag modal -->
       <!-- 弹窗：新增标签 -->
-      <div class="modal-overlay" id="addTagModal" style="z-index: 130">
-        <div class="modal-content" style="width: 240px">
+      <div
+        class="modal-overlay inline-tagpromptmodal-27-6bd154"
+        id="addTagModal">
+        <div class="modal-content inline-modal-content-27-84691b">
           <div class="modal-title">New Tag</div>
           <input
             type="text"
@@ -3384,8 +4100,10 @@
 
       <!-- Manage single tag modal -->
       <!-- 弹窗：标签管理（重命名 / 删除标签） -->
-      <div class="modal-overlay" id="tagManageModal" style="z-index: 130">
-        <div class="modal-content" style="width: 240px">
+      <div
+        class="modal-overlay inline-tagpromptmodal-27-6bd154"
+        id="tagManageModal">
+        <div class="modal-content inline-modal-content-27-84691b">
           <div class="modal-title">Manage Tag</div>
           <input
             type="text"
@@ -3397,9 +4115,8 @@
             "
             aria-label="manageTag" />
           <div
-            class="modal-actions sleek-actions"
-            style="flex-direction: column">
-            <div style="display: flex; gap: 8px; width: 100%">
+            class="modal-actions sleek-actions inline-modal-actions-27-18125b">
+            <div class="inline-element-27-387836">
               <button
                 class="modal-btn btn-cancel"
                 onclick="closeModal('tagManageModal')">
@@ -3410,8 +4127,7 @@
               </button>
             </div>
             <button
-              class="modal-btn btn-danger"
-              style="width: 100%"
+              class="modal-btn btn-danger inline-modal-btn-27-16000c"
               onclick="deleteCurrentTag()">
               Delete Tag
             </button>
@@ -3420,20 +4136,16 @@
       </div>
       <!-- Card Data & Tools Modal -->
       <!-- 弹窗：字卡存档管理 -->
-      <div class="modal-overlay" id="cardDataModal" style="z-index: 130">
+      <div
+        class="modal-overlay inline-tagpromptmodal-27-6bd154"
+        id="cardDataModal">
         <div class="modal-content">
           <div class="modal-title">Card Presets & Tools</div>
-          <div
-            class="modal-subtitle"
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-            ">
+          <div class="modal-subtitle inline-modal-subtitle-27-8f3066">
             <span>Presets</span>
             <span
-              style="cursor: pointer; color: var(--text-main)"
               onclick="openSaveCardNameModal()"
+              class="inline-element-27-3bb9ab"
               >+ Save Current</span
             >
           </div>
@@ -3446,9 +4158,8 @@
           </div>
           <div class="modal-actions">
             <button
-              class="modal-btn btn-save"
-              onclick="closeModal('cardDataModal')"
-              style="width: 100%">
+              class="modal-btn btn-save inline-modal-btn-27-16000c"
+              onclick="closeModal('cardDataModal')">
               Done
             </button>
           </div>
@@ -3457,7 +4168,9 @@
 
       <!-- Save Card Preset Name Modal -->
       <!-- 弹窗：字卡存档命名 -->
-      <div class="modal-overlay" id="saveCardNameModal" style="z-index: 140">
+      <div
+        class="modal-overlay inline-savecardnamemodal-27-487297"
+        id="saveCardNameModal">
         <div class="modal-content">
           <div class="modal-title">Name Your Preset</div>
           <input
@@ -3485,22 +4198,14 @@
 
       <!-- Alert Modal -->
       <!-- 弹窗：通用提示/警告信息弹窗 -->
-      <div class="modal-overlay" id="alertModal" style="z-index: 300">
-        <div class="modal-content" style="width: 220px">
-          <div class="modal-title" style="margin-bottom: 10px">Notice</div>
-          <div
-            id="alertMessage"
-            style="
-              font-size: 12px;
-              text-align: center;
-              color: var(--text-sub);
-              margin-bottom: 10px;
-            "></div>
+      <div class="modal-overlay inline-alertmodal-30-bc1ff5" id="alertModal">
+        <div class="modal-content inline-modal-content-30-30080b">
+          <div class="modal-title inline-modal-title-30-39ae4d">Notice</div>
+          <div id="alertMessage" class="inline-alertmessage-30-870bb2"></div>
           <div class="modal-actions sleek-actions">
             <button
-              class="modal-btn btn-save"
-              onclick="closeModal('alertModal')"
-              style="width: 100%">
+              class="modal-btn btn-save inline-modal-btn-27-16000c"
+              onclick="closeModal('alertModal')">
               OK
             </button>
           </div>
@@ -3509,19 +4214,10 @@
 
       <!-- Theme Modal -->
       <!-- 弹窗：主题设置（深色/浅色、自定义全局CSS、气泡CSS、字体管理入口） -->
-      <div class="modal-overlay" id="themeModal" style="z-index: 160">
-        <div
-          class="modal-content"
-          style="
-            width: 320px;
-            max-height: 80%;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-          ">
+      <div class="modal-overlay inline-thememodal-28-add77b" id="themeModal">
+        <div class="modal-content inline-modal-content-28-6ec229">
           <!-- Scrollable body -->
-          <div style="flex: 1; overflow-y: auto; padding: 16px 16px 0">
+          <div class="inline-element-28-d6231f">
             <!-- 1. Dark / Light toggle -->
             <div class="setting-item setting-item-divider">
               <span class="setting-label">Dark Mode</span>
@@ -3541,42 +4237,25 @@
             </div>
 
             <!-- 2. Theme Presets -->
-            <div
-              class="modal-subtitle"
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 12px;
-              ">
+            <div class="modal-subtitle inline-modal-subtitle-28-11fff8">
               <span>Presets</span>
               <span
-                style="
-                  cursor: pointer;
-                  color: var(--text-main);
-                  font-size: 11px;
-                "
                 onclick="openSaveThemeModal()"
+                class="inline-element-28-3b43fe"
                 >+ Save Current</span
               >
             </div>
             <div
-              class="saves-list"
-              id="themeSavesList"
-              style="max-height: 100px"></div>
-            <div class="modal-actions sleek-actions" style="margin-top: 6px">
+              class="saves-list inline-themesaveslist-28-6b00b4"
+              id="themeSavesList"></div>
+            <div
+              class="modal-actions sleek-actions inline-modal-actions-28-a5595d">
               <button class="modal-btn btn-cancel" onclick="exportTheme()">
                 Export
               </button>
-              <div class="file-upload-wrapper" style="flex: 1">
-                <div
-                  class="file-upload-btn"
-                  style="
-                    padding: 6px;
-                    font-size: 11px;
-                    font-weight: 600;
-                    text-align: center;
-                  ">
+              <div
+                class="file-upload-wrapper inline-file-upload-wrapper-28-634a28">
+                <div class="file-upload-btn inline-file-upload-btn-30-c570c3">
                   Import
                 </div>
                 <input
@@ -3589,51 +4268,24 @@
             </div>
 
             <!-- 3. Global CSS -->
-            <div class="modal-subtitle" style="margin-top: 12px">
+            <div class="modal-subtitle inline-modal-subtitle-28-4bb900">
               Custom CSS
             </div>
-            <div
-              style="
-                font-size: 10px;
-                color: var(--text-sub);
-                margin-bottom: 6px;
-              ">
+            <div class="inline-element-28-83f360">
               Replaces the entire &lt;style&gt; block. Leave blank to use
               default.
             </div>
-            <div style="position: relative">
+            <div class="inline-element-28-a8a903">
               <textarea
                 id="themeCustomCSS"
-                class="modal-input"
-                placeholder="/* paste full CSS here */"
-                style="
-                  width: 100%;
-                  height: 80px;
-                  resize: none;
-                  font-family: monospace;
-                  font-size: 11px;
-                  line-height: 1.5;
-                  padding: 8px;
-                  box-sizing: border-box;
-                  display: block;
-                "></textarea>
+                class="modal-input inline-themecustomcss-28-41dd52"
+                placeholder="/* paste full CSS here */"></textarea>
               <button
                 onclick="
                   openCSSExpand('themeCustomCSS', 'Custom CSS', applyCustomCSS)
                 "
                 title="Expand"
-                style="
-                  position: absolute;
-                  bottom: 6px;
-                  right: 6px;
-                  background: none;
-                  border: none;
-                  cursor: pointer;
-                  color: var(--text-sub);
-                  padding: 2px;
-                  display: flex;
-                  align-items: center;
-                ">
+                class="inline-element-28-d929b2">
                 <svg
                   width="13"
                   height="13"
@@ -3648,7 +4300,8 @@
                 </svg>
               </button>
             </div>
-            <div class="modal-actions sleek-actions" style="margin-top: 4px">
+            <div
+              class="modal-actions sleek-actions inline-modal-actions-28-6b1f0d">
               <button class="modal-btn btn-cancel" onclick="resetCustomCSS()">
                 Reset
               </button>
@@ -3658,52 +4311,26 @@
             </div>
 
             <!-- 4. Bubble CSS -->
-            <div class="modal-subtitle" style="margin-top: 12px">
+            <div class="modal-subtitle inline-modal-subtitle-28-4bb900">
               Bubble CSS
             </div>
-            <div
-              style="
-                font-size: 10px;
-                color: var(--text-sub);
-                margin-bottom: 6px;
-              ">
-              Extra styles for <code style="font-size: 10px">.bubble</code>,
-              <code style="font-size: 10px">.received .bubble</code>,
-              <code style="font-size: 10px">.sent .bubble</code>.
+            <div class="inline-element-28-83f360">
+              Extra styles for
+              <code class="inline-element-28-435550">.bubble</code>,
+              <code class="inline-element-28-435550">.received .bubble</code>,
+              <code class="inline-element-28-435550">.sent .bubble</code>.
             </div>
-            <div style="position: relative">
+            <div class="inline-element-28-a8a903">
               <textarea
                 id="themeBubbleCSS"
-                class="modal-input"
-                placeholder=".bubble { border-radius: 20px; }&#10;.sent .bubble { background: #7c3aed; }&#10;.received .bubble { background: #1e1e1e; }"
-                style="
-                  width: 100%;
-                  height: 72px;
-                  resize: none;
-                  font-family: monospace;
-                  font-size: 11px;
-                  line-height: 1.5;
-                  padding: 8px;
-                  box-sizing: border-box;
-                  display: block;
-                "></textarea>
+                class="modal-input inline-themebubblecss-28-c43669"
+                placeholder=".bubble { border-radius: 20px; }&#10;.sent .bubble { background: #7c3aed; }&#10;.received .bubble { background: #1e1e1e; }"></textarea>
               <button
                 onclick="
                   openCSSExpand('themeBubbleCSS', 'Bubble CSS', applyBubbleCSS)
                 "
                 title="Expand"
-                style="
-                  position: absolute;
-                  bottom: 6px;
-                  right: 6px;
-                  background: none;
-                  border: none;
-                  cursor: pointer;
-                  color: var(--text-sub);
-                  padding: 2px;
-                  display: flex;
-                  align-items: center;
-                ">
+                class="inline-element-28-d929b2">
                 <svg
                   width="13"
                   height="13"
@@ -3718,7 +4345,8 @@
                 </svg>
               </button>
             </div>
-            <div class="modal-actions sleek-actions" style="margin-top: 4px">
+            <div
+              class="modal-actions sleek-actions inline-modal-actions-28-6b1f0d">
               <button class="modal-btn btn-cancel" onclick="resetBubbleCSS()">
                 Reset
               </button>
@@ -3728,56 +4356,22 @@
             </div>
 
             <!-- 5. Font -->
-            <div
-              class="modal-subtitle"
-              style="
-                margin-top: 12px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-              ">
+            <div class="modal-subtitle inline-modal-subtitle-28-77fdf4">
               <span>Fonts</span>
               <span
-                style="
-                  cursor: pointer;
-                  color: var(--text-main);
-                  font-size: 11px;
-                "
                 onclick="openAddFontModal()"
+                class="inline-element-28-3b43fe"
                 >+ Add</span
               >
             </div>
 
-            <div
-              id="fontList"
-              style="
-                display: flex;
-                flex-direction: row;
-                gap: 8px;
-                overflow-x: auto;
-                padding: 4px 2px 8px;
-                margin-bottom: 4px;
-              "></div>
-            <div
-              style="
-                display: flex;
-                gap: 10px;
-                margin-top: 4px;
-                padding-top: 5px;
-              ">
-              <div
-                style="
-                  flex: 1;
-                  display: flex;
-                  flex-direction: column;
-                  gap: 4px;
-                ">
-                <span
-                  class="setting-label"
-                  style="font-size: 11px; color: var(--text-sub)"
+            <div id="fontList" class="inline-fontlist-28-924a93"></div>
+            <div class="inline-element-28-f4f4fe">
+              <div class="inline-element-28-514f8d">
+                <span class="setting-label inline-setting-label-27-e7ff40"
                   >Font Size</span
                 >
-                <div style="display: flex; align-items: center; gap: 4px">
+                <div class="inline-element-30-c1003c">
                   <div class="stepper">
                     <input
                       type="text"
@@ -3821,22 +4415,12 @@
                         <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" /></svg>
                       </button>
                     </div>
-                    <span style="font-size: 11px; color: var(--text-sub)"
-                      >px</span
-                    >
+                    <span class="inline-element-26-e7ff40">px</span>
                   </div>
                 </div>
               </div>
-              <div
-                style="
-                  flex: 1;
-                  display: flex;
-                  flex-direction: column;
-                  gap: 4px;
-                ">
-                <span
-                  class="setting-label"
-                  style="font-size: 11px; color: var(--text-sub)"
+              <div class="inline-element-28-514f8d">
+                <span class="setting-label inline-setting-label-27-e7ff40"
                   >Line Height</span
                 >
                 <div class="freq-segmented" id="lineHeightSegmented">
@@ -3871,17 +4455,10 @@
           <!-- end scrollable body -->
 
           <!-- Fixed Done button -->
-          <div
-            style="
-              padding: 12px 16px;
-              border-top: 1px solid var(--border-color);
-              flex-shrink: 0;
-              background: var(--bg-color);
-            ">
+          <div class="inline-element-28-6a28c5">
             <button
-              class="modal-btn btn-save"
-              onclick="closeModal('themeModal')"
-              style="width: 100%">
+              class="modal-btn btn-save inline-modal-btn-28-16000c"
+              onclick="closeModal('themeModal')">
               Done
             </button>
           </div>
@@ -3890,50 +4467,18 @@
 
       <!-- CSS Full-screen expand overlay (inside phone frame) -->
       <div
-        class="modal-overlay"
-        id="cssExpandModal"
-        style="
-          z-index: 180;
-          align-items: stretch;
-          justify-content: stretch;
-          padding: 0;
-        ">
-        <div
-          style="
-            width: 100%;
-            height: 100%;
-            background: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-          ">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              padding: 14px 16px;
-              border-bottom: 1px solid var(--border-color);
-              flex-shrink: 0;
-            ">
+        class="modal-overlay inline-cssexpandmodal-28-ff6e6b"
+        id="cssExpandModal">
+        <div class="inline-element-28-24b1fe">
+          <div class="inline-element-28-9e719d">
             <span
               id="cssExpandTitle"
-              style="
-                font-size: 13px;
-                font-weight: 600;
-                color: var(--text-main);
-              "></span>
+              class="inline-cssexpandtitle-28-f544a6"></span>
             <button
               id="cssExpandSaveBtn"
               onclick="saveCSSExpand()"
-              style="
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: var(--text-main);
-                display: flex;
-                align-items: center;
-              "
-              title="Save">
+              title="Save"
+              class="inline-cssexpandsavebtn-28-fddb15">
               <svg
                 width="20"
                 height="20"
@@ -3956,8 +4501,10 @@
 
       <!-- Save Theme Name Modal -->
       <!-- 弹窗：主题存档命名 -->
-      <div class="modal-overlay" id="saveThemeModal" style="z-index: 170">
-        <div class="modal-content" style="width: 240px">
+      <div
+        class="modal-overlay inline-savethememodal-28-8f8f84"
+        id="saveThemeModal">
+        <div class="modal-content inline-modal-content-28-84691b">
           <div class="modal-title">Name This Theme</div>
           <input
             type="text"
@@ -3984,32 +4531,24 @@
 
       <!-- Add Font Modal -->
       <!-- 弹窗：添加自定义字体（URL 或本地文件） -->
-      <div class="modal-overlay" id="addFontModal" style="z-index: 170">
-        <div class="modal-content" style="width: 270px">
+      <div
+        class="modal-overlay inline-savethememodal-28-8f8f84"
+        id="addFontModal">
+        <div class="modal-content inline-modal-content-28-8a2624">
           <div class="modal-title">Add Font</div>
           <input
             type="text"
-            class="modal-input"
+            class="modal-input inline-fontnameinput-28-16949d"
             id="fontNameInput"
             placeholder="Font name (e.g. My Font)"
-            autocomplete="off"
-            style="margin-bottom: 8px" />
+            autocomplete="off" />
           <input
             type="text"
-            class="modal-input"
+            class="modal-input inline-fonturlinput-28-e7b130"
             id="fontUrlInput"
             placeholder="URL to .ttf / .woff2 file"
-            autocomplete="off"
-            style="margin-bottom: 6px" />
-          <div
-            style="
-              text-align: center;
-              font-size: 10px;
-              color: var(--text-sub);
-              margin-bottom: 6px;
-            ">
-            OR
-          </div>
+            autocomplete="off" />
+          <div class="inline-element-28-c3cb9b">OR</div>
           <div class="file-upload-wrapper">
             <div class="file-upload-btn">Upload font file</div>
             <input
@@ -4023,7 +4562,8 @@
                 }
               " />
           </div>
-          <div class="modal-actions sleek-actions" style="margin-top: 10px">
+          <div
+            class="modal-actions sleek-actions inline-modal-actions-28-e5a6d3">
             <button
               class="modal-btn btn-cancel"
               onclick="closeModal('addFontModal')">
@@ -4037,27 +4577,15 @@
       <!-- Music List Modal -->
       <!-- 弹窗：歌单列表 -->
       <!-- 2026-07-20 OPTIMIZE: 增加 role="button" 和 aria-label 提升无障碍访问 -->
-      <div class="modal-overlay" id="musicListModal" style="z-index: 120">
+      <div
+        class="modal-overlay inline-musiclistmodal-29-37541c"
+        id="musicListModal">
         <div class="modal-content">
-          <div
-            class="modal-title"
-            style="
-              display: flex;
-              justify-content: flex-end;
-              align-items: center;
-            ">
-            <div
-              class="modal-title"
-              style="
-                margin: 0;
-                flex: 1;
-                text-align: left;
-                padding-left: 10px;
-                cursor: pointer;
-              ">
+          <div class="modal-title inline-modal-title-29-d78e0a">
+            <div class="modal-title inline-modal-title-29-6ddff6">
               Music List
             </div>
-            <div style="display: flex; gap: 14px">
+            <div class="inline-element-29-9f9502">
               <!-- 2026-07-20 OPTIMIZE: 将 span 改为更具语义的按键属性 -->
               <span
                 role="button"
@@ -4065,7 +4593,7 @@
                 onclick="openMusicLinkModal()"
                 title="Add by link"
                 aria-label="Add music by link"
-                style="cursor: pointer">
+                class="inline-element-29-74fa97">
                 <svg
                   width="16"
                   height="16"
@@ -4084,7 +4612,7 @@
                 onclick="openMusicSearchPlaceholder()"
                 title="Search online"
                 aria-label="Search music online"
-                style="cursor: pointer">
+                class="inline-element-29-74fa97">
                 <svg
                   width="16"
                   height="16"
@@ -4102,7 +4630,7 @@
                 onclick="openCreatePlaylistModal()"
                 title="New playlist"
                 aria-label="Create new playlist"
-                style="cursor: pointer">
+                class="inline-element-29-74fa97">
                 <svg
                   width="16"
                   height="16"
@@ -4132,7 +4660,7 @@
           <!-- 2026-07-20 ADD: 底部迷你播放条（适配无障碍标签） -->
           <div class="music-mini-bar" id="musicMiniBar">
             <div class="music-mini-title" id="miniBarTitle"></div>
-            <div style="margin: 0 0 6px">
+            <div class="inline-element-29-2c0002">
               <!-- on-surface 类用于在弹窗背景下反转进度条颜色 -->
               <div class="progress-bar on-surface" id="miniProgressBar">
                 <div class="progress-bar-fill" id="miniProgressFill"></div>
@@ -4219,7 +4747,9 @@
       </div>
 
       <!-- Add Song by Link Modal -->
-      <div class="modal-overlay" id="musicLinkModal" style="z-index: 130">
+      <div
+        class="modal-overlay inline-musiclinkmodal-29-6bd154"
+        id="musicLinkModal">
         <div class="modal-content">
           <div class="modal-title">Add Song by Link</div>
           <input
@@ -4240,18 +4770,12 @@
             id="musicLinkUrl"
             placeholder="Direct audio link (https://...)"
             autocomplete="off" />
-          <div class="modal-subtitle" style="margin-top: 8px">
+          <div class="modal-subtitle inline-modal-subtitle-29-0d69e4">
             Add to playlist (optional)
           </div>
           <div
             id="musicLinkPlaylistCheckboxes"
-            style="
-              display: flex;
-              flex-direction: column;
-              gap: 6px;
-              max-height: 100px;
-              overflow-y: auto;
-            "></div>
+            class="inline-musiclinkplaylistcheckboxes-29-2808ec"></div>
           <div class="modal-actions sleek-actions">
             <button
               class="modal-btn btn-cancel"
@@ -4266,7 +4790,9 @@
       </div>
 
       <!-- New Playlist Modal -->
-      <div class="modal-overlay" id="createPlaylistModal" style="z-index: 130">
+      <div
+        class="modal-overlay inline-musiclinkmodal-29-6bd154"
+        id="createPlaylistModal">
         <div class="modal-content">
           <div class="modal-title">New Playlist</div>
           <input
@@ -4293,7 +4819,9 @@
       </div>
 
       <!-- Playlist Detail Modal -->
-      <div class="modal-overlay" id="playlistDetailModal" style="z-index: 130">
+      <div
+        class="modal-overlay inline-musiclinkmodal-29-6bd154"
+        id="playlistDetailModal">
         <div class="modal-content playlist-detail-content">
           <!-- 头部区域 -->
           <div class="playlist-detail-header" id="playlistDetailHeader">
@@ -4365,7 +4893,7 @@
                 height="14"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                style="vertical-align: -2px; margin-right: 6px">
+                class="inline-element-29-fdd496">
                 <polygon points="5,3 19,12 5,21" />
               </svg>
               Play All
@@ -4504,7 +5032,9 @@
       </div>
 
       <!-- Playlist Cover Modal（与头像弹窗一致：URL 或 相册/图库） -->
-      <div class="modal-overlay" id="playlistCoverModal" style="z-index: 140">
+      <div
+        class="modal-overlay inline-playlistcovermodal-29-487297"
+        id="playlistCoverModal">
         <div class="modal-content">
           <div class="modal-title">Change Playlist Cover</div>
           <input
@@ -4513,10 +5043,7 @@
             id="playlistCoverUrl"
             placeholder="Paste image URL here..."
             autocomplete="off" />
-          <div
-            style="text-align: center; font-size: 10px; color: var(--text-sub)">
-            OR
-          </div>
+          <div class="inline-element-29-e65d40">OR</div>
           <div class="file-upload-wrapper">
             <div class="file-upload-btn">Upload from device</div>
             <input
@@ -4546,7 +5073,9 @@
       </div>
 
       <!-- Edit Song Modal -->
-      <div class="modal-overlay" id="editSongModal" style="z-index: 140">
+      <div
+        class="modal-overlay inline-playlistcovermodal-29-487297"
+        id="editSongModal">
         <div class="modal-content">
           <div class="modal-title">Edit Song</div>
           <input
@@ -4581,18 +5110,14 @@
       </div>
 
       <!-- Add Song to Playlist Modal -->
-      <div class="modal-overlay" id="addToPlaylistModal" style="z-index: 140">
+      <div
+        class="modal-overlay inline-playlistcovermodal-29-487297"
+        id="addToPlaylistModal">
         <div class="modal-content">
           <div class="modal-title">Add to Playlist</div>
           <div
             id="addToPlaylistList"
-            style="
-              display: flex;
-              flex-direction: column;
-              gap: 6px;
-              max-height: 180px;
-              overflow-y: auto;
-            "></div>
+            class="inline-addtoplaylistlist-29-07040e"></div>
           <div class="modal-actions sleek-actions">
             <button
               class="modal-btn btn-cancel"
@@ -4607,7 +5132,9 @@
       </div>
 
       <!-- Rename Playlist Modal -->
-      <div class="modal-overlay" id="renamePlaylistModal" style="z-index: 140">
+      <div
+        class="modal-overlay inline-playlistcovermodal-29-487297"
+        id="renamePlaylistModal">
         <div class="modal-content">
           <div class="modal-title">Rename Playlist</div>
           <input
@@ -4638,13 +5165,11 @@
 
       <!-- Confirm Delete Song Modal -->
       <div
-        class="modal-overlay"
-        id="confirmDeleteSongModal"
-        style="z-index: 140">
+        class="modal-overlay inline-playlistcovermodal-29-487297"
+        id="confirmDeleteSongModal">
         <div class="modal-content">
           <div class="modal-title">Delete Song?</div>
-          <div
-            style="font-size: 12px; text-align: center; color: var(--text-sub)">
+          <div class="inline-element-29-38abd7">
             This will remove the song from your entire library and all
             playlists.
           </div>
@@ -4665,7 +5190,9 @@
 
       <!-- Rename Font Modal -->
       <!-- 弹窗：重命名字体 -->
-      <div class="modal-overlay" id="renameFontModal" style="z-index: 180">
+      <div
+        class="modal-overlay inline-renamefontmodal-28-3f831d"
+        id="renameFontModal">
         <div class="modal-content">
           <div class="modal-title">Rename Font</div>
           <input
@@ -4693,13 +5220,11 @@
       <!-- Confirm Delete Font Modal -->
       <!-- 弹窗：确认删除字体 -->
       <div
-        class="modal-overlay"
-        id="confirmDeleteFontModal"
-        style="z-index: 180">
+        class="modal-overlay inline-renamefontmodal-28-3f831d"
+        id="confirmDeleteFontModal">
         <div class="modal-content">
           <div class="modal-title">Delete Font?</div>
-          <div
-            style="font-size: 12px; text-align: center; color: var(--text-sub)">
+          <div class="inline-element-28-38abd7">
             This font will be permanently removed.
           </div>
           <div class="modal-actions sleek-actions">
@@ -4728,57 +5253,37 @@
        *  [TOC-3]  State Management
        *  [TOC-4]  Initialization
        *  [TOC-5]  Utility Functions
-       *           - generateId
-       *           - escapeHtml
-       *           - createMessageElement
-       *           - getTimeString
-       *           - addTimestampIfNeeded
-       *           - ensureMessageIds
-       *           - updateLastTimestamp
-       *           - scrollToBottom
-       *           - saveChatHistory
-       *           - closeModal
-       *           - sleep
-       *           - Modal Stack Manager (2026-07-17：子弹窗自动隐藏/恢复底层弹窗, 并把磨砂遮罩拆成全局共用一份，配合 CSS 中的 .shared-modal-backdrop)
-       *  [TOC-6]  window.onload  (主题/头像/历史恢复)
-       *  [TOC-7]  Menu & Perspective Toggle
-       *  [TOC-8]  Event Delegation (全局点击关闭)
-       *  [TOC-9]  Message Interaction (点击/工具栏)
-       *  [TOC-10] Edit / Insert Message
-       *  [TOC-11] Quote / Recall / Delete
-       *  [TOC-12] Auto Reply Engine
-       *           - showTypingIndicator
-       *           - hideTypingIndicator
-       *           - receiveAutoMessage
-       *           - findOlderMessageTarget
-       *           - processInterrupt
-       *           - generateCharContent
+       *           - generateId / escapeHtml / createMessageElement
+       *           - getTimeString / timestamp / message helpers
+       *           - Modal Stack Manager
+       *  [TOC-6]  window.onload (主题/头像/历史恢复)
+       *  [TOC-7]  Music Module
+       *           - 播放模式与音乐状态
+       *           - 播放队列 / 歌单 / 单曲管理
+       *           - 音频播放控制
+       *           - Dynamic Island 交互
+       *           - Mini Bar / Queue
+       *  [TOC-8]  Menu & Perspective Toggle
+       *  [TOC-9]  Event Delegation (全局点击关闭)
+       *  [TOC-10] Message Interaction (点击/工具栏)
+       *  [TOC-11] Edit / Insert Message
+       *  [TOC-12] Quote / Recall / Delete
+       *  [TOC-13] Auto Reply Engine
+       *           - showTypingIndicator / hideTypingIndicator
+       *           - receiveAutoMessage / findOlderMessageTarget
+       *           - processInterrupt / generateCharContent
        *           - triggerAutoReply
-       *  [TOC-13] Send Message
-       *  [TOC-14] Avatar & Name Management
-       *  [TOC-15] Data Management (存档/导出/清空)
-       *  [TOC-16] Settings & Word Cards
-       *  [TOC-17] Word Card Management
-       *           - openWordCardModal
-       *           - updateTopIcons
-       *           - selectAllCards
-       *           - renderTagFilterBar
-       *           - handleTagClick / toggleAllDropdown
-       *           - addWordCard / toggleCardEnable
-       *           - batchDeleteCards / batchTagCards
-       *           - handleCardClick / handleFolderClick
-       *           - renderCardList / renderCardsChunked
-       *           - exportCardsTxt / importCardsTxt
-       *  [TOC-18] Card Presets & Tools
-       *  [TOC-19] Theme Modal
-       *           - Lock Zoom(2026-7-12): toggleLockZoom
-       *           - toggleTheme
-       *           - applyCustomCSS / resetCustomCSS
-       *           - applyBubbleCSS / resetBubbleCSS
-       *           - Theme Presets (save/load/export/import)
-       *  [TOC-20] Font Management
-       *  [TOC-21] initTheme (CSS/字体启动恢复)
-       *  [TOC-22] CSS Fullscreen Expand
+       *  [TOC-14] Send Message
+       *  [TOC-15] Char Setting & Profile Management
+       *           - Char Profile / Avatar / Character Information
+       *  [TOC-16] Data Management (存档/导出/清空)
+       *  [TOC-17] Settings & Word Cards
+       *  [TOC-18] Word Card Management
+       *  [TOC-19] Card Presets & Tools
+       *  [TOC-20] Theme Modal
+       *  [TOC-21] Font Management
+       *  [TOC-22] initTheme (CSS/字体启动恢复)
+       *  [TOC-23] CSS Fullscreen Expand
        *
        * ==== */
 
@@ -4809,7 +5314,6 @@
         plusMenu: document.getElementById("plusMenu"),
         avatarBtn: document.getElementById("avatarBtn"),
         userNameBtn: document.getElementById("userNameBtn"),
-        nameInput: document.getElementById("nameInput"),
         editInput: document.getElementById("editInput"),
         editModalTitle: document.getElementById("editModalTitle"),
         readNoReplyToggle: document.getElementById("readNoReplyToggle"),
@@ -4824,10 +5328,21 @@
         newCardInput: document.getElementById("newCardInput"),
         tagFilterBar: document.getElementById("tagFilterBar"),
         savesList: document.getElementById("savesList"),
-        avatarUrl: document.getElementById("avatarUrl"),
-        avatarFile: document.getElementById("avatarFile"),
-        avatarModal: document.getElementById("avatarModal"),
-        nameModal: document.getElementById("nameModal"),
+        charSettingModal: document.getElementById("charSettingModal"),
+        charAvatarPreview: document.getElementById("charAvatarPreview"),
+        charAvatarUrl: document.getElementById("charAvatarUrl"),
+        charAvatarFile: document.getElementById("charAvatarFile"),
+        charAvatarResetBtn: document.getElementById("charAvatarResetBtn"),
+        charNameInput: document.getElementById("charNameInput"),
+        charAgeInput: document.getElementById("charAgeInput"),
+        charGenderInput: document.getElementById("charGenderInput"),
+        charHeightInput: document.getElementById("charHeightInput"),
+        charBirthInput: document.getElementById("charBirthInput"),
+        charIdentityInput: document.getElementById("charIdentityInput"),
+        charDescriptionInput: document.getElementById("charDescriptionInput"),
+        charPersonalityInput: document.getElementById("charPersonalityInput"),
+        charScenarioInput: document.getElementById("charScenarioInput"),
+        charSpeechStyleInput: document.getElementById("charSpeechStyleInput"),
         editModal: document.getElementById("editModal"),
         dataModal: document.getElementById("dataModal"),
         saveNameModal: document.getElementById("saveNameModal"),
@@ -4994,6 +5509,52 @@
         },
       };
 
+      /* ====== [TOC-3.1] Char Profile Schema ====== */
+      // 功能：稳定的角色资料结构；后续 AI / 角色卡 / 世界书功能直接调用 charProfile。
+      // canonical storage key：charProfile；旧头像/昵称键仅作为兼容层保留。
+      const DEFAULT_CHAR_PROFILE = {
+        name: "Char",
+        age: "",
+        gender: "",
+        height: "",
+        birth: "",
+        identity: "",
+        description: "",
+        avatarUrl: "",
+        avatarLocal: "",
+        avatar: "",
+      };
+
+      function getStoredCharProfile() {
+        const stored = Storage.get("charProfile");
+        if (stored && typeof stored === "object") {
+          const profile = { ...DEFAULT_CHAR_PROFILE, ...stored };
+          // 兼容上一版：旧的 data URL 头像自动归入本地头像缓存。
+          if (!profile.avatarLocal && profile.avatar?.startsWith("data:")) {
+            profile.avatarLocal = profile.avatar;
+          }
+          if (
+            !profile.avatarUrl &&
+            profile.avatar &&
+            !profile.avatar.startsWith("data:")
+          ) {
+            profile.avatarUrl = profile.avatar;
+          }
+          return profile;
+        }
+
+        // 兼容旧版：首次升级时把旧头像 / 昵称迁移到新的 Char Profile。
+        return {
+          ...DEFAULT_CHAR_PROFILE,
+          name: Storage.get("chatUserName", "Char") || "Char",
+          avatarUrl: "",
+          avatarLocal: Storage.get("chatAvatarImg", "")?.startsWith("data:")
+            ? Storage.get("chatAvatarImg", "")
+            : "",
+          avatar: Storage.get("chatAvatarImg", "") || "",
+        };
+      }
+
       // ====== [TOC-3] State Management ======
       // 功能：全局运行时状态（当前视角、正在编辑/引用的消息、自动回复相关标记等）
       let state = {
@@ -5019,6 +5580,7 @@
         interruptFlag: false, // 用户打断标记
         userSpamCount: 0, // 用户连续发送消息次数
         lastUserMessageText: "",
+        charProfile: getStoredCharProfile(), // Char 设定
         wordCards: Storage.get("wordCards", []),
         customTags: Storage.get("customTags", []),
         expandedFolders: new Set(),
@@ -5314,12 +5876,13 @@
             );
         }
 
-        const avatarImg = Storage.get("chatAvatarImg");
-        if (avatarImg)
-          DOM.avatarBtn.style.backgroundImage = `url(${avatarImg})`;
+        const charProfile = state.charProfile;
+        if (charProfile.avatar) {
+          DOM.avatarBtn.style.backgroundImage = `url(${charProfile.avatar})`;
+        }
+        DOM.userNameBtn.textContent = charProfile.name || "Char";
 
-        const userName = Storage.get("chatUserName");
-        if (userName) DOM.userNameBtn.textContent = userName;
+        Storage.set("charProfile", charProfile);
 
         const chatHistory = Storage.get("chatHistory");
         if (chatHistory) DOM.chatMain.innerHTML = chatHistory;
@@ -5332,8 +5895,11 @@
         restoreMusicPlaybackState();
       };
 
-      /* [TOC-7] Menu & Perspective */
-      /* Music module: dynamic island, playlists, playback engine */
+      /* ====== [TOC-7] Music Module ====== */
+      /* 功能：音乐播放引擎、歌单/歌曲管理、Dynamic Island、Mini Bar 与播放队列 */
+
+      /* ====== [TOC-7.1] Music Playback & Queue ====== */
+      /* 功能：播放模式、播放队列、歌单与歌曲数据管理 */
 
       const PLAY_MODES = ["sequential", "shuffle", "single", "list"];
       const PLAY_MODE_LABELS = {
@@ -5344,11 +5910,12 @@
       };
       const PLAY_MODE_SVGS = {
         // 顺序播放 (图标：标准音乐列表 + 播放小三角)
-        sequential: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="6" x2="20" y2="6"/>
-          <line x1="4" y1="12" x2="20" y2="12"/>
-          <line x1="4" y1="18" x2="12" y2="18"/>
-          <path d="M15 15l6 3-6 3v-6z" fill="currentColor" stroke="none"/>
+        sequential: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16"/>
+          <path d="M4 12h16"/>
+          <path d="M4 18h8"/>
+          <path d="m15 15 6 3-6 3z" fill="currentColor" stroke="none"/>
         </svg>`,
 
         // 随机播放 (图标：平滑过渡的交叉箭头)
@@ -6235,7 +6802,7 @@
         // sequential 模式播完就停止（无操作）
       }
 
-      // ====== [TOC-4b] 基础控制：togglePlay / nextSong / prevSong ======
+      // ====== [TOC-7.2] 基础播放控制：togglePlay / nextSong / prevSong ======
       // 播放/暂停无缝切换（不重新加载歌曲），带 0.3s 音量渐变
       function togglePlay() {
         if (!DOM.bgAudio.src) {
@@ -6678,7 +7245,7 @@
         togglePlay();
       });
 
-      // ====== [TOC-4c] 灵动岛长按展开 / 收起 ======
+      // ====== [TOC-7.3] Dynamic Island 交互：长按展开 / 短按打开 ======
       // 短按（<450ms 且几乎无移动）：收起态 -> 打开歌单列表；展开态 -> 收起面板
       // 长按（>=450ms）：收起态 -> 展开快捷操作面板
       const ISLAND_LONG_PRESS_MS = 450;
@@ -6941,6 +7508,9 @@
         }
       }
 
+      /* ====== [TOC-8] Menu & Perspective Toggle ====== */
+      /* 功能：底部“+”菜单与我方/角色方发言视角切换 */
+
       // 关闭底部“+”号功能菜单
       function closePlusMenu() {
         DOM.plusMenu.classList.remove("active");
@@ -6957,7 +7527,7 @@
         closePlusMenu();
       }
 
-      // ====== [TOC-8] Event Delegation ======
+      // ====== [TOC-9] Event Delegation ======
       // 功能：全局点击事件委托，用于点击空白处时关闭工具栏 / 菜单 / 下拉框等浮层
       document.addEventListener("click", (e) => {
         if (!e.target.closest(".message") && !e.target.closest(".msg-toolbar"))
@@ -6979,7 +7549,7 @@
         }
       });
 
-      /* [TOC-9] Message Interaction */
+      /* ====== [TOC-10] Message Interaction ====== */
       /* 功能：点击消息弹出操作工具栏；点击引用块跳转并高亮定位到原消息 */
       DOM.chatMain.addEventListener("click", (e) => {
         const quoteBox = e.target.closest(".quote-box");
@@ -7025,7 +7595,7 @@
         state.activeMessage = null;
       }
 
-      /* [TOC-10] Edit/Insert */
+      /* ====== [TOC-11] Edit / Insert Message ====== */
       /* 功能：编辑已发送的消息内容 / 在指定消息之后插入一条新消息 */
       function openEditModal(e) {
         e.stopPropagation();
@@ -7075,7 +7645,7 @@
         if (e.key === "Enter" && !e.isComposing) saveEdit();
       });
 
-      /* [TOC-11] Quote/Recall/Delete */
+      /* ====== [TOC-12] Quote / Recall / Delete ====== */
       /* 功能：引用消息（写入输入框上方提示）、撤回消息、删除消息 */
       // 引用消息：记录被引用消息的 id/文本，并在输入框上方给出"正在回复：xxx"提示
       function actionQuote(e) {
@@ -7150,7 +7720,7 @@
         updateLastTimestamp();
       }
 
-      /* === [TOC-12] Auto Reply & Typing === */
+      /* ====== [TOC-13] Auto Reply Engine ====== */
       /* 功能：自动回复引擎 —— 模拟阅读延迟、已读不回判定、连发概率衰减、
          抽字卡组句、打字延迟、被用户新消息打断后重新思考 */
 
@@ -7388,7 +7958,7 @@
         state.charReplying = false;
       }
 
-      /* [TOC-13] Send Message */
+      /* ====== [TOC-14] Send Message ====== */
       /* 功能：发送消息主流程；发送后决定触发/打断自动回复；回车发送已做输入法安全处理 */
       // 发送一条消息：生成消息DOM、处理引用状态、存档，并根据当前视角决定是否触发/打断自动回复
       function sendMessage() {
@@ -7456,64 +8026,124 @@
         });
       }
 
-      /* === [TOC-14] Avatar & Name Management === */
-      /* 功能：头像（本地文件 / URL 两种方式）与用户昵称的修改与保存 */
+      /* ====== [TOC-15] Char Setting & Profile Management ====== */
+      /* 功能：统一管理 Char 的长期角色资料；canonical storage key = charProfile */
+
+      // 保存完整 Char Profile，并同步旧版头像/昵称键，避免其他旧逻辑失效。
+      function saveCharProfile(profile) {
+        state.charProfile = { ...DEFAULT_CHAR_PROFILE, ...profile };
+        Storage.set("charProfile", state.charProfile);
+        Storage.set("chatUserName", state.charProfile.name || "Char");
+        Storage.set("chatAvatarImg", state.charProfile.avatar || "");
+
+        DOM.userNameBtn.textContent = state.charProfile.name || "Char";
+        DOM.avatarBtn.style.backgroundImage = state.charProfile.avatar
+          ? `url(${state.charProfile.avatar})`
+          : "";
+      }
+
+      // 打开 Char Setting 时，把已保存资料填回表单。
+      function loadCharSettingsForm() {
+        const p = state.charProfile || DEFAULT_CHAR_PROFILE;
+
+        DOM.charNameInput.value = p.name || "";
+        DOM.charAgeInput.value = p.age || "";
+        DOM.charGenderInput.value = p.gender || "";
+        DOM.charHeightInput.value = p.height || "";
+        DOM.charBirthInput.value = p.birth || "";
+        DOM.charIdentityInput.value = p.identity || "";
+        DOM.charDescriptionInput.value = p.description || "";
+
+        DOM.charAvatarUrl.value =
+          p.avatarUrl ||
+          (p.avatar && !p.avatar.startsWith("data:") ? p.avatar : "");
+        DOM.charAvatarPreview.style.backgroundImage = p.avatar
+          ? `url(${p.avatar})`
+          : "";
+        DOM.charAvatarFile.value = "";
+      }
+
+      // 点击左上角头像统一进入 Char Setting。
       DOM.avatarBtn.addEventListener("click", () => {
-        const savedAvatar = Storage.get("chatAvatarImg");
-        // URL 长期储存
-        if (savedAvatar && !savedAvatar.startsWith("data:")) {
-          DOM.avatarUrl.value = savedAvatar;
-        }
-        DOM.avatarModal.classList.add("active");
+        loadCharSettingsForm();
+        DOM.charSettingModal.classList.add("active");
       });
 
-      // 从本地文件读取头像图片，转base64后应用并持久化
-      function saveAvatar() {
-        if (DOM.avatarFile.files && DOM.avatarFile.files[0]) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            applyAndSaveAvatar(e.target.result);
-            // BUG FIX: 将 closeModal 移到 onload 回调内，确保异步读取完成后再关闭
-            closeModal("avatarModal");
-            DOM.avatarFile.value = "";
+      // 本地图片只在保存时写入 charProfile.avatarLocal；选择后先实时预览。
+      DOM.charAvatarFile.addEventListener("change", () => {
+        const file = DOM.charAvatarFile.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          DOM.charAvatarPreview.style.backgroundImage = `url(${e.target.result})`;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // URL 输入实时更新预览；URL 与本地图片是两套独立来源。
+      DOM.charAvatarUrl.addEventListener("input", () => {
+        const url = DOM.charAvatarUrl.value.trim();
+        if (url) DOM.charAvatarPreview.style.backgroundImage = `url(${url})`;
+        else if (state.charProfile?.avatarLocal) {
+          DOM.charAvatarPreview.style.backgroundImage = `url(${state.charProfile.avatarLocal})`;
+        } else {
+          DOM.charAvatarPreview.style.backgroundImage = "";
+        }
+      });
+
+      // Reset 只清除本地导入图片缓存，不修改 Image URL。
+      DOM.charAvatarResetBtn.addEventListener("click", () => {
+        const url =
+          DOM.charAvatarUrl.value.trim() || state.charProfile?.avatarUrl || "";
+        saveCharProfile({
+          ...state.charProfile,
+          avatarUrl: url,
+          avatarLocal: "",
+          avatar: url,
+        });
+        DOM.charAvatarFile.value = "";
+        DOM.charAvatarPreview.style.backgroundImage = url ? `url(${url})` : "";
+      });
+
+      // 保存 Char Setting：角色资料与头像来源统一写入长期存储。
+      function saveCharSettings() {
+        const file = DOM.charAvatarFile.files?.[0];
+        const avatarUrl = DOM.charAvatarUrl.value.trim();
+
+        const commit = (avatarLocal) => {
+          const profile = {
+            ...state.charProfile,
+            name: DOM.charNameInput.value.trim() || "Char",
+            age: DOM.charAgeInput.value.trim(),
+            gender: DOM.charGenderInput.value.trim(),
+            height: DOM.charHeightInput.value.trim(),
+            birth: DOM.charBirthInput.value.trim(),
+            identity: DOM.charIdentityInput.value.trim(),
+            description: DOM.charDescriptionInput.value.trim(),
+            avatarUrl,
+            avatarLocal: avatarLocal || state.charProfile?.avatarLocal || "",
+            avatar:
+              avatarLocal || avatarUrl || state.charProfile?.avatarLocal || "",
           };
-          reader.readAsDataURL(DOM.avatarFile.files[0]);
-        } else if (DOM.avatarUrl.value.trim()) {
-          applyAndSaveAvatar(DOM.avatarUrl.value.trim());
-          closeModal("avatarModal");
-          DOM.avatarFile.value = "";
+
+          saveCharProfile(profile);
+          DOM.charAvatarFile.value = "";
+          closeModal("charSettingModal");
+        };
+
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => commit(e.target.result);
+          reader.readAsDataURL(file);
+          return;
         }
-        // BUG FIX: 原代码无论是否有内容都会立即关闭，现在仅在有内容时关闭
+
+        // 没有重新选择本地图片时：有 URL 就使用 URL，否则保留已有本地缓存。
+        commit(avatarUrl ? "" : state.charProfile?.avatarLocal || "");
       }
 
-      // 把头像图片应用到按钮背景，并存入localStorage
-      function applyAndSaveAvatar(imgSrc) {
-        DOM.avatarBtn.style.backgroundImage = `url(${imgSrc})`;
-        Storage.set("chatAvatarImg", imgSrc);
-      }
-
-      DOM.userNameBtn.addEventListener("click", () => {
-        DOM.nameInput.value = DOM.userNameBtn.textContent;
-        DOM.nameModal.classList.add("active");
-        DOM.nameInput.focus();
-      });
-
-      // 保存用户昵称到界面与localStorage
-      function saveName() {
-        const newName = DOM.nameInput.value.trim();
-        if (newName) {
-          DOM.userNameBtn.textContent = newName;
-          Storage.set("chatUserName", newName);
-        }
-        closeModal("nameModal");
-      }
-
-      // BUG FIX: 同上，避免输入法选字回车被误判为保存
-      DOM.nameInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.isComposing) saveName();
-      });
-
-      /* === [TOC-15] Data Management === */
+      /* ====== [TOC-16] Data Management ====== */
       /* 功能：聊天记录存档列表的增删改查、导出(txt/json)、清空当前聊天、重置全部数据 */
       function getSaves() {
         return Storage.get("chatSaves", []);
@@ -7677,7 +8307,7 @@
         }
       }
 
-      /* === [TOC-16] Settings & Word Cards === */
+      /* ====== [TOC-17] Settings & Word Cards ====== */
       /* 功能：设置弹窗 —— 已读不回开关、回复频率滑块、已启用字卡数量统计 */
       function openSettingsModal() {
         closeModal("wordCardModal");
@@ -7820,7 +8450,7 @@
         DOM.activeCardCount.innerHTML = `${activeCount} Active ⟩`;
       }
 
-      /* === [TOC-17] Word Card Management === */
+      /* ====== [TOC-18] Word Card Management ====== */
       /* 功能：字卡（自动回复语料库）的增删改查、标签筛选、文件夹分组、批量操作、导入导出、去重 */
       let cardObserver = null;
 
@@ -8451,7 +9081,7 @@
         reader.readAsText(file);
       }
 
-      /* === [TOC-18] Card Presets & Tools === */
+      /* ====== [TOC-19] Card Presets & Tools ====== */
       /* 功能：字卡相关的预设方案与辅助工具 */
       function getCardSaves() {
         return Storage.get("cardSaves", []);
@@ -8568,7 +9198,7 @@
         DOM.alertModal.classList.add("active");
       }
 
-      /* === [TOC-19] Theme Modal === */
+      /* ====== [TOC-20] Theme Modal ====== */
       /* 功能：深色/浅色主题切换、自定义全局CSS与气泡CSS、主题方案存档、主题导入导出 */
 
       // IDs for the injected style tags
@@ -8923,7 +9553,7 @@
         event.target.value = "";
       }
 
-      /* [TOC-20] Font Management */
+      /* ====== [TOC-21] Font Management ====== */
       /* 功能：自定义字体的添加（URL 或本地文件）、删除、应用、列表渲染 */
       function getFonts() {
         return Storage.get("chatFonts", []);
@@ -9121,7 +9751,7 @@
         applyFontById(id || null);
       });
 
-      /* [TOC-21] Init: restore saved CSS / fonts on load */
+      /* ====== [TOC-22] Init: restore saved CSS / fonts on load ====== */
       /* 功能：页面加载时恢复用户此前保存的自定义 CSS 与字体设置 */
       (function initTheme() {
         const customCSS = Storage.get("themeCustomCSS", "");
@@ -9143,7 +9773,7 @@
         updateTextStyleTag();
       })();
 
-      /* [TOC-22] CSS Fullscreen Expand */
+      /* ====== [TOC-23] CSS Fullscreen Expand ====== */
       /* 功能：CSS 输入框的全屏编辑弹窗（方便在小输入框里写长段 CSS） */
       let _cssExpandSourceId = null;
       let _cssExpandApplyFn = null;
