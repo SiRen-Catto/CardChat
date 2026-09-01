@@ -1,0 +1,70 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
+>
+    <style>
+        :root {
+            --bg: #f5f5f7;
+            --card: #111114;
+            --line: #f5f5f7;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #111114;
+                --card: #f5f5f7;
+                --line: #111114;
+            }
+        }
+    </style>
+
+    <!-- Background -->
+    <rect
+        width="512"
+        height="512"
+        rx="112"
+        fill="var(--bg)"
+    />
+
+    <!-- Card -->
+    <rect
+        x="112"
+        y="96"
+        width="288"
+        height="320"
+        rx="48"
+        fill="var(--card)"
+    />
+
+    <!-- Chat lines -->
+    <path
+        d="M176 176H336"
+        stroke="var(--line)"
+        stroke-width="28"
+        stroke-linecap="round"
+    />
+
+    <path
+        d="M176 240H288"
+        stroke="var(--line)"
+        stroke-width="28"
+        stroke-linecap="round"
+    />
+
+    <path
+        d="M176 304H240"
+        stroke="var(--line)"
+        stroke-width="28"
+        stroke-linecap="round"
+    />
+
+    <!-- Chat tail -->
+    <path
+        d="M336 304V352L384 384"
+        fill="none"
+        stroke="var(--line)"
+        stroke-width="28"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    />
+</svg>

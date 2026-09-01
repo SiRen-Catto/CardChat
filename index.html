@@ -10,9 +10,11 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <!-- 2026-08-24 UPDATE: Confirm icon -->
-    <link rel="apple-touch-icon" href="https://iili.io/CtlMg2f.jpg" />
+    <!-- 2026-09-01 UPDATE: CardChat SVG icon -->
+    <link rel="icon" type="image/svg+xml" href="icon.svg" />
+    <link rel="apple-touch-icon" href="icon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
+
     <title>CardChat</title>
 
     <style>
@@ -3045,14 +3047,8 @@
 
       /* ====== [CSS-TOC-32] Char Setting：长文本展开编辑器 ====== */
       /* 功能：Description 复用 Theme Modal 的 Custom CSS / Bubble CSS 全屏展开编辑器 */
+
       /* ====== [CSS-TOC-33] Char Setting / User Setting：3D卡片翻转、统一图标与用户设定 ====== */
-      /*
-       * 2026-08-28 微调：
-       * 1. User Setting 底部不显示 Prompt namespace 文案；data-prompt-key 仍保留，供后续调用。
-       * 2. Char / User 两面共用同一枚线性 SVG 翻转图标，保持尺寸、描边和视觉语言一致。
-       * 3. 使用独立 3D stage 承载翻转卡片；弹窗外层允许 3D 透视溢出，避免 rotateY 中途被 overflow 裁掉。
-       * 4. 动画采用更柔和的 cubic-bezier，并在 90°附近稍微放慢，使“卡片翻面”更自然。
-       */
       .char-setting-modal-content {
         width: 320px;
         max-height: none;
@@ -3098,12 +3094,13 @@
         border: 1px solid var(--border-color);
         border-radius: 16px;
         overflow: hidden;
-        backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
         transform-style: preserve-3d;
       }
 
       .char-setting-face.user-setting-face {
+        -webkit-transform: translateZ(0);
         transform: rotateY(180deg);
       }
 
