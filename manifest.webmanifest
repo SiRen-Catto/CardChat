@@ -1,0 +1,14 @@
+{
+  "name": "CardChat",
+  "short_name": "CardChat",
+  "start_url": ".",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
